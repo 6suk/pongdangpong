@@ -1,17 +1,21 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { AnyAction, Middleware, configureStore } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 
-export default configureStore({
-  reducer: {},
-  middleware:
-    process.env.NODE_ENV === 'development'
-      ? (getDefaultMiddleware:any) =>
-          getDefaultMiddleware({
-            serializableCheck: false,
-          }).concat(logger)
-      : (getDefaultMiddleware:any) =>
-          getDefaultMiddleware({
-            serializableCheck: false,
-          }).concat(),
+import counterReducer from 'stores/counterSlice';
+
+const middlewares: Middleware<AnyAction>[] = [];
+
+if (process.env.NODE_ENV === 'development') {
+  middlewares.push(logger);
+}
+
+export const store = configureStore({
+  reducer: {
+    counter: counterReducer,
+  },
   devTools: process.env.NODE_ENV === 'development',
+  middleware: [...middlewares],
 });
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

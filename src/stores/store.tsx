@@ -1,7 +1,7 @@
 import { AnyAction, Middleware, configureStore } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 
-import counterReducer from 'stores/counterSlice';
+import counterReducer from '@stores/counterSlice';
 
 const middlewares: Middleware<AnyAction>[] = [];
 

@@ -1,10 +1,10 @@
 import { Route, Routes } from 'react-router-dom';
 
+
 import { styled } from 'styled-components';
 
-import { Counter } from 'components/Counter';
-import NewProject from 'components/NewProject';
-import GlobalStyle from 'styles/GlobalStyle';
+import GlobalStyle from '@/styles/GlobalStyle';
+import { Counter, NewProject} from '@components/index.tsx';
 
 function App() {
   return (

@@ -1,22 +1,29 @@
 import { Route, Routes } from 'react-router-dom';
 
-
-import { styled } from 'styled-components';
+import { styled, ThemeProvider } from 'styled-components';
 
 import GlobalStyle from '@/styles/GlobalStyle';
-import { Counter, NewProject} from '@components/index.tsx';
+import { theme } from '@/styles/theme';
+import Button from '@components/Button';
+import { Counter, NewProject } from '@components/index.tsx';
 
 function App() {
   return (
     <>
-      <GlobalStyle />
-      <AppStyle>
-        {/* =============== react-router-dom Test ===============  */}
-        <Routes>
-          <Route element={<NewProject />} path="/" />
-          <Route element={<Counter />} path="/redux" />
-        </Routes>
-      </AppStyle>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <AppStyle>
+          {/* Test button */}
+          <Button $themeColor="Pri-500" size="bodyText">
+            Click Me!
+          </Button>
+          {/* =============== react-router-dom Test ===============  */}
+          <Routes>
+            <Route element={<NewProject />} path="/" />
+            <Route element={<Counter />} path="/redux" />
+          </Routes>
+        </AppStyle>
+      </ThemeProvider>
     </>
   );
 }

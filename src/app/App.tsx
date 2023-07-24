@@ -1,31 +1,44 @@
+import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 
 import { styled, ThemeProvider } from 'styled-components';
 
-import GlobalStyle from '@/styles/GlobalStyle';
-import { theme } from '@/styles/theme';
+import { GlobalStyle, Header, Home, Login, Me, PrivateRoute, PublicRoute, Ticket } from '@/index';
+import theme from '@/styles/theme';
 import Button from '@components/Button';
-import { Counter, NewProject } from '@components/index.tsx';
+import { RootState } from '@stores/store';
 
 function App() {
+  const isLogin = useSelector((state: RootState) => state.tokens.isLogin);
+
   return (
     <>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
+        {isLogin && <Header />}
         <AppStyle>
           {/* Test button */}
           <Button $themeColor="Pri-500" size="bodyText">
             Click Me!
           </Button>
-          {/* =============== react-router-dom Test ===============  */}
           <Routes>
-            <Route element={<NewProject />} path="/" />
-            <Route element={<Counter />} path="/redux" />
+            <Route element={<PublicRoute isLogin={isLogin} />}>
+              <Route element={<Login />} path="login" />
+            </Route>
+            <Route element={<PrivateRoute isLogin={isLogin} />}>
+              <Route element={<Home />} path="/" />
+              <Route element={<Ticket />} path="tickets/*" />
+              <Route element={<Me />} path="me" />
+            </Route>
           </Routes>
         </AppStyle>
       </ThemeProvider>
     </>
   );
+}
+
+export interface PropsState {
+  isLogin: boolean;
 }
 
 const AppStyle = styled.div`

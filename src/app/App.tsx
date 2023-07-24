@@ -1,9 +1,11 @@
 import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 
-import { styled } from 'styled-components';
+import { styled, ThemeProvider } from 'styled-components';
 
 import { GlobalStyle, Header, Home, Login, Me, PrivateRoute, PublicRoute, Ticket } from '@/index';
+import theme from '@/styles/theme';
+import Button from '@components/Button';
 import { RootState } from '@stores/store';
 
 function App() {
@@ -11,20 +13,26 @@ function App() {
 
   return (
     <>
-      <GlobalStyle />
-      {isLogin && <Header />}
-      <AppStyle>
-        <Routes>
-          <Route element={<PublicRoute isLogin={isLogin} />}>
-            <Route element={<Login />} path="login" />
-          </Route>
-          <Route element={<PrivateRoute isLogin={isLogin} />}>
-            <Route element={<Home />} path="/" />
-            <Route element={<Ticket />} path="tickets/*" />
-            <Route element={<Me />} path="me" />
-          </Route>
-        </Routes>
-      </AppStyle>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        {isLogin && <Header />}
+        <AppStyle>
+          {/* Test button */}
+          <Button $themeColor="Pri-500" size="bodyText">
+            Click Me!
+          </Button>
+          <Routes>
+            <Route element={<PublicRoute isLogin={isLogin} />}>
+              <Route element={<Login />} path="login" />
+            </Route>
+            <Route element={<PrivateRoute isLogin={isLogin} />}>
+              <Route element={<Home />} path="/" />
+              <Route element={<Ticket />} path="tickets/*" />
+              <Route element={<Me />} path="me" />
+            </Route>
+          </Routes>
+        </AppStyle>
+      </ThemeProvider>
     </>
   );
 }

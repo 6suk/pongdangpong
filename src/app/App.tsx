@@ -1,24 +1,36 @@
+import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 
 import { styled } from 'styled-components';
 
-import { Counter } from 'components/Counter';
-import NewProject from 'components/NewProject';
-import GlobalStyle from 'styles/GlobalStyle';
+import { GlobalStyle, Header, Home, Login, Me, PrivateRoute, PublicRoute, Ticket } from '@/index';
+import { RootState } from '@stores/store';
 
 function App() {
+  const isLogin = useSelector((state: RootState) => state.tokens.isLogin);
+
   return (
     <>
       <GlobalStyle />
+      {isLogin && <Header />}
       <AppStyle>
-        {/* =============== react-router-dom Test ===============  */}
         <Routes>
-          <Route element={<NewProject />} path="/" />
-          <Route element={<Counter />} path="/redux" />
+          <Route element={<PublicRoute isLogin={isLogin} />}>
+            <Route element={<Login />} path="login" />
+          </Route>
+          <Route element={<PrivateRoute isLogin={isLogin} />}>
+            <Route element={<Home />} path="/" />
+            <Route element={<Ticket />} path="tickets/*" />
+            <Route element={<Me />} path="me" />
+          </Route>
         </Routes>
       </AppStyle>
     </>
   );
+}
+
+export interface PropsState {
+  isLogin: boolean;
 }
 
 const AppStyle = styled.div`

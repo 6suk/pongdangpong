@@ -8,6 +8,3 @@ export { Header } from '@components/header/Header';
 /** Routes */
 export { PrivateRoute } from './app/routes/PrivateRoute ';
 export { PublicRoute } from './app/routes/PublicRoute';
-
-/** Styles */
-export { GlobalStyle } from './styles/GlobalStyle';

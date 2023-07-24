@@ -5,10 +5,7 @@
   },
   "settings": {
     "import/resolver": {
-      "node": {},
-      "typescript": {
-        "directory": "./src"
-      }
+      "typescript": {}
     },
     "import/parsers": { "@typescript-eslint/parser": [".ts", ".tsx"] },
     "react": {
@@ -40,6 +37,7 @@
     "sourceType": "module"
   },
   "rules": {
+    "import/default": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "no-console": "warn",

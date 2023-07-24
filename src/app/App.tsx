@@ -3,21 +3,20 @@ import { Route, Routes } from 'react-router-dom';
 
 import { styled, ThemeProvider } from 'styled-components';
 
-import { GlobalStyle, Header, Home, Login, Me, PrivateRoute, PublicRoute, Ticket } from '@/index';
+import { SubHeader, Home, Login, Me, PrivateRoute, PublicRoute, Ticket } from '@/index';
 import theme from '@/styles/theme';
 import Button from '@components/Button';
-import Tailwind from '@components/Tailwind';
 import { RootState } from '@stores/store';
+import { GlobalHeader } from '@/index';
 
 function App() {
   const isLogin = useSelector((state: RootState) => state.tokens.isLogin);
-
+  
   return (
     <>
-      <Tailwind />
       <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        {isLogin && <Header />}
+        <GlobalHeader isLogin={isLogin} />
+        {isLogin && <SubHeader isLogin={isLogin}/>}
         <AppStyle>
           {/* Test button */}
           <Button $themeColor="Pri-500" size="bodyText">
@@ -41,6 +40,7 @@ function App() {
 
 export interface PropsState {
   isLogin: boolean;
+  info?: string;
 }
 
 const AppStyle = styled.div`

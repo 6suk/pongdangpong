@@ -1,7 +1,7 @@
 export default function Tailwind() {
   return (
     <div>
-      <label className="block text-sm font-medium leading-6 text-gray-900" htmlFor="price">
+      <label className="block text-sm font-medium leading-6 text-gray-900 hidden" htmlFor="price">
         Price
       </label>
       <div className="relative mt-2 rounded-md shadow-sm">

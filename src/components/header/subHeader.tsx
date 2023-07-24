@@ -13,29 +13,25 @@ export const SubHeader: React.FC<PropsState> = (props) => {
 
   const activeTarget = (idx:number) => () => setActive(idx); 
 
-  // Data
+  useEffect(()=>{
+      isLogin && headerActiveSet('on');
+  },[isLogin])
+
   const list =[
     {id:1, content: "티켓 리스트" , path:"/tickets/list"},
     {id:2, content: "티켓 생성" , path:"/tickets/create"},
     {id:3, content: "내 정보 보기" , path:"/me"},
   ]
 
-  useEffect(()=>{
-      isLogin && headerActiveSet('on');
-      
-  },[isLogin])
-
   return (
     <>
     <S.subheader className={headerActive} theme={theme}>
       <div className="wrap">        
         {
-          list.map(({id, content, path}, idx)=>{
-            let isOn = ""
-            if(active === idx) isOn = "on"
+          list.map(({id, content, path}, i)=>{
               return(
-              <li key={id} className={isOn}>
-                <Link to={path} onClick={activeTarget(idx)}>
+              <li key={id} className={active === i ? "on" : ""}>
+                <Link to={path} onClick={activeTarget(i)}>
                   {content}
                 </Link>
               </li>)}                  
@@ -67,11 +63,12 @@ const S = {
         max-width: 1280px;
         margin: 0 auto;
         display: flex;
-        justify-content: space-around;        
+        justify-content: center;
         align-items: center;
 
         li {
           position: relative;
+          margin: 0 20px;
 
           &::after{
             display: block;
@@ -97,3 +94,4 @@ const S = {
       }
     `
 }
+

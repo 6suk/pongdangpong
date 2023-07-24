@@ -33,7 +33,11 @@ export const Login = () => {
             value={inputValues.password}
             onChange={handleInputChange}
           />
-          <input type="submit" value="로그인" />
+          <input
+            type="submit"
+            value="로그인"
+            className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded mr-2"
+          />
         </form>
       ) : (
         <div>Loading...</div>

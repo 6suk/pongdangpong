@@ -22,8 +22,6 @@ export const GlobalHeader: React.FC<PropsState> = (props) =>{
 
   const {
     name = '',
-    loginId = '',
-    isLoading
   } = data ?? ({} as Me_info_response);
 
   
@@ -40,17 +38,19 @@ export const GlobalHeader: React.FC<PropsState> = (props) =>{
       <div className="container">
       <h1 className='logo'>
         <Link to={"/"}>
-          로고
-            <img src="" alt="" />
+            <img src="/imgs/logo.png" alt="로고" />
         </Link>
       </h1>
 
-      <nav>
+      <S.nav>
         <ul>
           <li className="user">
             {isLogin ? 
             <> 
+            <div className="pic">
+              <img src="/imgs/profile.png" alt="프로필 사진" />
               {name}
+            </div>
               <button type="button" onClick={handleLogOutClick} style={{cursor:"pointer"}} >          
                 로그아웃      
               </button>
@@ -61,7 +61,7 @@ export const GlobalHeader: React.FC<PropsState> = (props) =>{
 
           </li>
         </ul>
-      </nav>
+      </S.nav>
       </div>
     </S.header>
   )
@@ -74,6 +74,8 @@ const S = {
       background-color: #fff;
       border-bottom: 2px solid #E7E7E7;
       position: fixed;
+      left: 0;
+      top: 0;
       z-index: 999;
       
       & > .container{
@@ -85,5 +87,20 @@ const S = {
          align-items: center;
         justify-content: space-between;
     }
+  `,
+  nav: styled.nav`
+  
+    .user{
+      height: 100%;
+      display: flex;
+      align-items: center;
+
+      .pic{
+        display: flex;
+        height: 100%;
+        align-items: center;
+      }
+    }
+      
   `
 }

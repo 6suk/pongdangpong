@@ -55,12 +55,25 @@ export const TicketItem = ({ ticket }: TicketProps) => {
           <p>maxServiceCount : {maxServiceCount}</p>
 
           <form onSubmit={handleDelete(id)}>
-            <input type="submit" value="삭제하기" />
+            <input
+              type="submit"
+              value="삭제하기"
+              className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded mr-2"
+            />
           </form>
-          <button type="button" onClick={() => setIsEdit(true)}>
+          <button
+            type="button"
+            onClick={() => setIsEdit(true)}
+            className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded mr-2"
+          >
             수정하기
           </button>
-          <Link to={`/tickets/${id}/issued-tickets`}>부여내역보기</Link>
+          <Link
+            to={`/tickets/${id}/issued-tickets`}
+            className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded mr-2"
+          >
+            부여내역보기
+          </Link>
         </li>
       ) : (
         <TicketUpdate request={request} setIsEdit={setIsEdit} ticket={ticket} />

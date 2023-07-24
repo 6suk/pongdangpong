@@ -1,12 +1,7 @@
 import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 
-import { styled, ThemeProvider } from 'styled-components';
-
-import { GlobalStyle, Header, Home, Login, Me, PrivateRoute, PublicRoute, Ticket } from '@/index';
-import theme from '@/styles/theme';
-import Button from '@components/Button';
-import Tailwind from '@components/Tailwind';
+import { Header, Home, Login, Me, PrivateRoute, PublicRoute, Ticket } from '@/index';
 import { RootState } from '@stores/store';
 
 function App() {
@@ -14,15 +9,9 @@ function App() {
 
   return (
     <>
-      <Tailwind />
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        {isLogin && <Header />}
-        <AppStyle>
-          {/* Test button */}
-          <Button $themeColor="Pri-500" size="bodyText">
-            Click Me!
-          </Button>
+      <div className="container mx-auto max-w-md flex items-center mt-10">
+        <div className="content text-center">
+          {isLogin && <Header />}
           <Routes>
             <Route element={<PublicRoute isLogin={isLogin} />}>
               <Route element={<Login />} path="login" />
@@ -33,8 +22,8 @@ function App() {
               <Route element={<Me />} path="me" />
             </Route>
           </Routes>
-        </AppStyle>
-      </ThemeProvider>
+        </div>
+      </div>
     </>
   );
 }
@@ -42,48 +31,5 @@ function App() {
 export interface PropsState {
   isLogin: boolean;
 }
-
-const AppStyle = styled.div`
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
-  }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-  }
-  .logo.react:hover {
-    filter: drop-shadow(0 0 2em #61dafbaa);
-  }
-
-  @keyframes logo-spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    a:nth-of-type(2) .logo {
-      animation: logo-spin infinite 20s linear;
-    }
-  }
-
-  .card {
-    padding: 2em;
-  }
-
-  .read-the-docs {
-    color: #888;
-  }
-`;
 
 export default App;

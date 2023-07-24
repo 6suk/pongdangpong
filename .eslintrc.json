@@ -1,5 +1,6 @@
 {
   "env": {
+    "module": true,
     "browser": true,
     "es2021": true
   },
@@ -12,14 +13,7 @@
       "version": "detect"
     }
   },
-  "plugins": [
-    "@typescript-eslint",
-    "react",
-    "react-hooks",
-    "prettier",
-    "import",
-    "jsx-a11y"
-  ],
+  "plugins": ["@typescript-eslint", "react", "react-hooks", "prettier", "import", "jsx-a11y"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -63,14 +57,7 @@
     "import/order": [
       "error",
       {
-        "groups": [
-          "builtin",
-          "external",
-          "internal",
-          ["sibling", "parent", "index"],
-          "type",
-          "unknown"
-        ],
+        "groups": ["builtin", "external", "internal", ["sibling", "parent", "index"], "type", "unknown"],
         "pathGroups": [
           {
             "pattern": "{react*,react*/**}",

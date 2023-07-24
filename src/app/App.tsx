@@ -6,6 +6,7 @@ import { styled, ThemeProvider } from 'styled-components';
 import { GlobalStyle, Header, Home, Login, Me, PrivateRoute, PublicRoute, Ticket } from '@/index';
 import theme from '@/styles/theme';
 import Button from '@components/Button';
+import Tailwind from '@components/Tailwind';
 import { RootState } from '@stores/store';
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
 
   return (
     <>
+      <Tailwind />
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         {isLogin && <Header />}

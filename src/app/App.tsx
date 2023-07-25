@@ -1,11 +1,10 @@
 import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 
-import { lazy, Suspense } from 'react';
-
-import { Header, PrivateRoute, PublicRoute } from '@/index';
+import { GlobalHeader, GlobalNavigation, PrivateRoute, PublicRoute, SubHeader } from '@/index';
 import { RootState } from '@stores/store';
 import theme from '@styles/theme';
+import { Suspense, lazy } from 'react';
 import { ThemeProvider } from 'styled-components';
 
 function App() {
@@ -20,9 +19,10 @@ function App() {
     <>
       <ThemeProvider theme={theme}>
         <Suspense fallback={<div>Loading...</div>}>
-          <div className="container mx-auto max-w-md flex items-center mt-10">
-            <div className="content text-center">
-              {isLogin && <Header />}
+          <div className="container mx-auto max-w-md flex justify-center mt-10 pt-[6.5rem]">
+            <div className="content text-center mt-10">
+              <GlobalHeader isLogin={isLogin} />
+              <SubHeader isLogin={isLogin} />
               <Routes>
                 <Route element={<PublicRoute isLogin={isLogin} />}>
                   <Route element={<Login />} path="login" />
@@ -33,6 +33,7 @@ function App() {
                   <Route element={<Me />} path="me" />
                 </Route>
               </Routes>
+              <GlobalNavigation />
             </div>
           </div>
         </Suspense>
@@ -43,6 +44,7 @@ function App() {
 
 export interface PropsState {
   isLogin: boolean;
+  info?: string;
 }
 
 export default App;

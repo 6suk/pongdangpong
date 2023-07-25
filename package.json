@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.15",
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.4.0",
     "react": "^18.2.0",
@@ -47,6 +48,7 @@
     "tailwindcss": "^3.3.3",
     "typescript": "^5.1.6",
     "vite": "^4.4.0",
+    "vite-plugin-svgr": "^3.2.0",
     "vite-tsconfig-paths": "^4.2.0"
   }
 }

@@ -5,6 +5,7 @@ import sessionStorage from 'redux-persist/lib/storage/session';
 
 import { counterReducer } from '@stores/counterSlice';
 import { tokenReducer } from '@stores/tokenSilce';
+import { menuReducer } from '@stores/menuSlice';
 
 const middlewares: Middleware<AnyAction>[] = [];
 
@@ -15,6 +16,7 @@ if (process.env.NODE_ENV === 'development') {
 const reducers = combineReducers({
   counter: counterReducer,
   tokens: tokenReducer,
+  menu: menuReducer,
 });
 
 const persistConfig = {

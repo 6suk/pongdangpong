@@ -1,11 +1,12 @@
-import React,{useEffect, useState} from 'react'
+import React from 'react'
 import { styled } from 'styled-components'
 import { Link } from 'react-router-dom';
 import { PropsState } from '@/app/App';
 import { useAuth } from '@hooks/apis/useAuth';
 import { useSwrData } from '@hooks/apis/useSwrData';
 import { me_info, Me_info_response } from '@apis/meApis';
-
+import { Notifications } from '@assets/icons/indexIcons';
+import theme from '@styles/theme';
 
 
 export const GlobalHeader: React.FC<PropsState> = (props) =>{
@@ -24,14 +25,6 @@ export const GlobalHeader: React.FC<PropsState> = (props) =>{
     name = '',
   } = data ?? ({} as Me_info_response);
 
-  
-  useEffect(()=>{
-    const {log} = console;
-    
-    isLogin ? log('로그인!') : log('로그아웃!');
-
-  },[isLogin])
-
 
   return (
     <S.header>
@@ -42,23 +35,26 @@ export const GlobalHeader: React.FC<PropsState> = (props) =>{
         </Link>
       </h1>
 
-      <S.nav>
+      <S.nav theme={theme}>
         <ul>
           <li className="user">
             {isLogin ? 
-            <> 
-            <div className="pic">
-              <img src="/imgs/profile.png" alt="프로필 사진" />
-              {name}
-            </div>
+              <> 
+              <div className="pic">
+                <img src="/imgs/profile.png" alt="프로필 사진" />
+              </div>
+              <span className='userName'>
+                {name} 님 
+              </span>
               <button type="button" onClick={handleLogOutClick} style={{cursor:"pointer"}} >          
                 로그아웃      
               </button>
-            </> : <div>비로그인 상태</div>}
-          </li>
-       
-          <li className='icon'>
+              <Notifications onClick={()=>{
 
+              }} style={{cursor:"pointer"}}/>
+              </> 
+              : 
+              <div>비로그인 상태</div>}
           </li>
         </ul>
       </S.nav>
@@ -99,7 +95,40 @@ const S = {
         display: flex;
         height: 100%;
         align-items: center;
+        margin-right: 8px;
       }
+
+      .userName{
+        margin-right: 14px;
+      }
+
+      button{
+        padding: 6px 20px;
+        background-color: ${({theme})=> theme.colors["Gray-800"]};
+        color: ${({theme})=> theme.colors["Pri-400"]};
+        border-radius: 6px;
+        margin-right: 40px;
+        position: relative;
+        transition: all .4s;
+
+        &:hover{
+          background-color: ${({theme})=> theme.colors["Pri-400"]};
+           color: ${({theme})=> theme.colors["Gray-800"]};
+        }
+
+        &::after{
+          display: block;
+          position: absolute;
+          right: -26px;
+          top: 50%;
+          transform: translateY(-50%);
+          content: "|";
+          font-size: 2rem;
+          font-weight: 100;
+          color: ${({theme})=> theme.colors["Gray-700"]};
+        }
+      }
+      
     }
       
   `

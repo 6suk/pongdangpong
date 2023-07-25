@@ -4,8 +4,6 @@ import { Route, Routes } from 'react-router-dom';
 import { GlobalNavigation, GlobalHeader, SubHeader, Home, Login, Me, PrivateRoute, PublicRoute, Ticket } from '@/index';
 import { RootState } from '@stores/store';
 
-
-
 function App() {
   const isLogin = useSelector((state: RootState) => state.tokens.isLogin);
   
@@ -14,7 +12,7 @@ function App() {
     <div className="container mx-auto max-w-md flex justify-center mt-10 pt-[6.5rem]">
         <div className="content text-center">
           <GlobalHeader isLogin={isLogin}/>
-          {isLogin && <SubHeader  isLogin={isLogin}/>}
+          <SubHeader  isLogin={isLogin}/>
           <Routes>
             <Route element={<PublicRoute isLogin={isLogin} />}>
               <Route element={<Login />} path="login" />

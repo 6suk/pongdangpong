@@ -3,32 +3,33 @@ import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { PropsState } from '@/app/App';
 import theme from '@styles/theme';
+import { useSelector } from 'react-redux';
+import { TicketMenuItem } from '@stores/menuSlice'
 
 export const SubHeader: React.FC<PropsState> = (props) => {
 
   const {isLogin} = props;
-
+  
   const [active, setActive] = useState(0);
   const [headerActive, headerActiveSet] = useState('');
 
+  const state = useSelector((state:any) => state.menu);
+  
   const activeTarget = (idx:number) => () => setActive(idx); 
 
   useEffect(()=>{
       isLogin && headerActiveSet('on');
+      !isLogin && headerActiveSet('');
   },[isLogin])
 
-  const list =[
-    {id:1, content: "티켓 리스트" , path:"/tickets/list"},
-    {id:2, content: "티켓 생성" , path:"/tickets/create"},
-    {id:3, content: "내 정보 보기" , path:"/me"},
-  ]
 
   return (
     <>
     <S.subheader className={headerActive} theme={theme}>
       <div className="wrap">        
         {
-          list.map(({id, content, path}, i)=>{
+          // 어떤 메뉴를 출력할것인지 넣어주면 해당 메뉴출력
+          state["ticketMenu"].map(({id, content, path} : TicketMenuItem , i: number)=>{
               return(
               <li key={id} className={active === i ? "on" : ""}>
                 <Link to={path} onClick={activeTarget(i)}>
@@ -51,8 +52,8 @@ const S = {
       border-bottom: 2px solid #E7E7E7;
       position: fixed;
       left: 0;
-      top: 0;
-      transition: all .64s ease-in-out;
+      top: -22%;
+      transition: all .54s cubic-bezier(0.62, -0.12, 0.39, 1.19);
 
       &.on{
         top: 80px;

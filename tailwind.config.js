@@ -32,6 +32,7 @@ export default {
           50: '#1d1d1d',
         },
         black: '#141212',
+        dim: '#282828',
         white: '#ffffff',
         error: '#df291d',
         positive: '#1fb881',

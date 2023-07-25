@@ -27,3 +27,5 @@ export const Me = () => {
     </>
   );
 };
+
+export default Me;

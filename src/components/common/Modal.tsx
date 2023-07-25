@@ -1,4 +1,4 @@
-import x from '@assets/icon/x.svg';
+import x from '@assets/icons/x.svg';
 import theme from '@styles/theme';
 import { Dispatch, FC, SetStateAction, memo, useCallback } from 'react';
 import { css, keyframes, styled } from 'styled-components';

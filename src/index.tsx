@@ -3,7 +3,9 @@ export { Ticket } from './pages/Ticket';
 export { Home } from './pages/Home';
 export { Login } from './pages/Login';
 export { Me } from './pages/Me';
-export { Header } from '@components/header/Header';
+export { SubHeader } from '@components/header/SubHeader';
+export { GlobalHeader } from "@components/header/GlobalHeader.tsx"
+export { GlobalNavigation } from "@components/GlobalNavigation.tsx"
 
 /** Routes */
 export { PrivateRoute } from './app/routes/PrivateRoute ';

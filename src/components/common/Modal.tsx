@@ -152,23 +152,28 @@ const S = {
 };
 
 export const ModalButton = styled.button<{ $isPrimary?: boolean }>`
-  max-width: 10rem;
-  padding: 0.75rem;
-  background-color: ${$isPrimary => ($isPrimary ? theme.colors.pri[500] : theme.colors.gray[800])};
-  &:hover {
-    background-color: ${$isPrimary => ($isPrimary ? theme.colors.pri[400] : theme.colors.gray[700])};
-  }
-  color: ${$isPrimary => ($isPrimary ? theme.colors.White : theme.colors.gray[50])};
-  border-radius: 0.375rem;
-  width: 100%;
-  transition: background-color 0.2s ease-in-out;
-  outline: none;
-  &:focus {
-    ring: 2px;
-    ring-offset: 2px;
-    ring-color: ${$isPrimary => ($isPrimary ? theme.colors.pri[800] : theme.colors.gray[800])};
-  }
-  font-size: ${theme.font.sub};
+  ${({ theme, $isPrimary = false }) => {
+    const { colors, font } = theme;
+    return `
+      max-width: 10rem;
+      padding: 0.75rem;
+      background-color: ${$isPrimary ? colors.pri[500] : colors.gray[800]};
+      &:hover {
+        background-color: ${$isPrimary ? colors.pri[400] : colors.gray[700]};
+      }
+      color: ${$isPrimary ? colors.White : colors.gray[50]};
+      border-radius: 0.375rem;
+      width: 100%;
+      transition: background-color 0.2s ease-in-out;
+      outline: none;
+      &:focus {
+        ring: 2px;
+        ring-offset: 2px;
+        ring-color: ${$isPrimary ? colors.pri[800] : colors.gray[800]};
+      }
+      font-size: ${font.sub};
+    `;
+  }}
 `;
 
 export const Modal = memo(ModalComponent);

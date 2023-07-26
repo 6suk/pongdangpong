@@ -2,6 +2,9 @@
 export default {
   content: ['./src/**/*.{html,js,jsx,ts,tsx}'],
   theme: {
+    container: {
+      center: true,
+    },
     extend: {
       fontFamily: {
         sans: ['Pretendard', 'sans-serif'],

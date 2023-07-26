@@ -1,8 +1,9 @@
 import { Modal, ModalButton } from '@components/common/Modal';
+import Input from '@components/common/Input';
 import { useAuth } from '@hooks/apis/useAuth';
 import useInput from '@hooks/utils/useInput';
 import { useState } from 'react';
-
+import { Button } from '@components/common/Button';
 const initForm = {
   loginId: '',
   password: '',
@@ -35,11 +36,16 @@ export const Login = () => {
             value={inputValues.password}
             onChange={handleInputChange}
           />
-          <input
+
+          {/* ========input 대신 Button 컴포넌트 사용========*/}
+          <Button type="submit" primary bgColor="Pri-500" textColor="White" font="sub" size="small">
+            로그인
+          </Button>
+          {/* <input
             type="submit"
             value="로그인"
             className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded mr-2"
-          />
+          /> */}
         </form>
       ) : (
         <div>Loading...</div>
@@ -74,6 +80,7 @@ export const Login = () => {
         </Modal>
       )}
       {/* ========================== 모달 테스트 ========================== */}
+      <Input />
     </>
   );
 };

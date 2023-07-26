@@ -1,20 +1,63 @@
 import styled from 'styled-components';
+import theme from '@styles/theme';
 
-import { ColorsTypes, FontSizeTypes } from '@/styles/theme';
+interface ButtonProps {
+  onClick?: () => void;
+  primary?: boolean;
+  bgColor?: keyof typeof theme.colors;
+  textColor?: keyof typeof theme.colors;
+  font?: keyof typeof theme.font;
+  size?: 'small' | 'medium' | 'large';
+  children?: React.ReactNode;
+  disabled?: boolean;
+  type?: 'button' | 'submit' | 'reset';
+}
 
-type ButtonProps = {
-  $themeColor: keyof ColorsTypes;
-  size: keyof FontSizeTypes;
-  children: React.ReactNode;
+const sizes = {
+  small: { width: '5.625rem', height: '2.5rem' },
+  medium: { width: '10rem', height: '3.125rem' },
+  large: { width: '18.75rem', height: '3.125rem' },
 };
 
-const Button = styled.button<ButtonProps>`
-  background-color: ${({ theme, $themeColor }) => theme.colors[$themeColor]};
-  color: white;
-  font-size: ${({ theme, size }) => `${theme.fontSize[size]}px`};
-  width: 160px;
-  height: 50px;
+export const Button: React.FC<ButtonProps> = ({
+  primary = false,
+  children,
+  onClick,
+  bgColor,
+  textColor,
+  font,
+  ...rest
+}) => {
+  return (
+    <ButtonStyled primary={primary} onClick={onClick} bgColor={bgColor} textColor={textColor} font={font} {...rest}>
+      {children}
+    </ButtonStyled>
+  );
+};
+
+const ButtonStyled = styled.button<ButtonProps>`
+  ${({ primary, bgColor, textColor, font, theme }) => {
+    return `
+      background-color: ${bgColor ? theme.colors[bgColor] : primary ? theme.colors.pri[500] : theme.colors.gray[800]};
+      color: ${textColor ? theme.colors[textColor] : primary ? theme.colors.White : theme.colors.gray[50]};
+      font-size: ${font ? theme.font[font] : theme.font.body};
+      padding: 6px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-right: 40px;
+      position: relative;
+      transition: all .4s;
+      
+      &:disabled {
+        background-color: ${theme.colors.gray[700]};
+        cursor: not-allowed;
+      }
+      &:hover {
+        background-color: ${primary ? theme.colors.pri[400] : theme.colors.gray[700]};
+      }
+    `;
+  }}
 `;
-/* 필요한 스타일들 추가 */
 
 export default Button;

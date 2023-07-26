@@ -1,8 +1,8 @@
 import { Route, Routes } from 'react-router-dom';
 
-import { TicketForm } from '@components/tickets/TicketForm';
-import { TicketList } from '@components/tickets/TicketList';
-import { TicketQuery } from '@components/tickets/TicketQuery';
+import { TicketForm } from '@components/samples/TicketForm';
+import { TicketList } from '@components/samples/TicketList';
+import { TicketQuery } from '@components/samples/TicketQuery';
 
 export const Ticket = () => {
   return (

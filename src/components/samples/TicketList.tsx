@@ -1,5 +1,5 @@
 import { Ticket_response, tickets_list } from '@apis/ticketsAPIs';
-import { TicketItem } from '@components/tickets/TicketItem';
+import { TicketItem } from '@components/samples/TicketItem';
 
 import { useSwrData } from '@hooks/apis/useSwrData';
 

@@ -4,7 +4,7 @@ export const subMenuList ={
     {id:2, content: "내 정보 보기" , path:"/me"},
   ],
   schedule:[
-    {id:"수강권 관리", content: "수강권 관리" , path:"/schedule/management" , hide:false}, 
+    {id:"수강권 관리", content: "수강권 관리" , path:"/schedule/ticketManagement" , hide:true}, 
     {id:"회원 수정", content: "회원 수정" , path:"/schedule/member" ,  hide: true}, 
   ],
   members:[

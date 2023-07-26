@@ -1,7 +1,7 @@
 import x from '@assets/icons/x.svg';
 import theme from '@styles/theme';
 import { Dispatch, FC, SetStateAction, memo, useCallback } from 'react';
-import { css, keyframes, styled } from 'styled-components';
+import { keyframes, styled } from 'styled-components';
 
 interface ModalProps {
   children: React.ReactNode;
@@ -67,6 +67,7 @@ const S = {
     background: ${`rgba(${theme.colors.Dim}, 0.5)`};
     animation: ${fadeIn} 0.5s;
     transition: opacity 0.5s;
+    z-index: 999;
   `,
 
   ModalContent: styled.div`
@@ -79,6 +80,7 @@ const S = {
     overflow-y: auto;
     border-radius: 0.5rem;
     padding: 3rem 2.5rem 2.5rem 2.5rem;
+    text-align: center;
   `,
 
   ModalInnerContent: styled.div`

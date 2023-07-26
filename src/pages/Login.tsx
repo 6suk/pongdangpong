@@ -38,7 +38,7 @@ export const Login = () => {
           />
 
           {/* ========input 대신 Button 컴포넌트 사용========*/}
-          <Button type="submit" primary bgColor="Pri-500" textColor="White" font="sub" size="small">
+          <Button type="submit" bgColor="pri" textColor="White" font="sub">
             로그인
           </Button>
           {/* <input

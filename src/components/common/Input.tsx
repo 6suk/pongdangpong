@@ -11,6 +11,7 @@ type FormInputs = {
   birth: string;
   phone: string;
   email: string;
+  id: string;
   password: string;
 };
 
@@ -22,6 +23,7 @@ const initialInputs: FormInputs = {
   birth: '',
   phone: '',
   email: '',
+  id: '',
   password: '',
 };
 
@@ -62,24 +64,6 @@ const InputField = styled.input`
   }
 `;
 
-// const Button = styled.button`
-//   color: white;
-//   background-color: #2563eb;
-//   font-weight: 500;
-//   border-radius: 0.375rem;
-//   font-size: 0.875rem;
-//   width: 100%;
-//   padding: 0.625rem;
-//   text-align: center;
-//   &:hover {
-//     background-color: #1d4ed8;
-//   }
-//   &:focus {
-//     outline: none;
-//     box-shadow: 0 0 0 2px #a5b4fc;
-//   }
-// `;
-
 const Input: React.FC = () => {
   const [formInputs, setFormInputs] = useState<FormInputs>(initialInputs);
 
@@ -118,7 +102,6 @@ const Input: React.FC = () => {
             value={formInputs.name}
             onChange={handleInputChange}
             placeholder="이름을 입력해 주세요"
-            required
           />
         </div>
         <div>
@@ -130,7 +113,6 @@ const Input: React.FC = () => {
             onChange={handleInputChange}
             placeholder="0000.00.00"
             pattern="[0-9]{4}.[0-9]{2}.[0-9]{2}"
-            required
           />
         </div>
         <div>
@@ -142,19 +124,11 @@ const Input: React.FC = () => {
             onChange={handleInputChange}
             placeholder="000-0000-0000"
             pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}"
-            required
           />
         </div>
         <div>
-          <Label htmlFor="email">아이디</Label>
-          <InputField
-            type="email"
-            id="email"
-            value={formInputs.email}
-            onChange={handleInputChange}
-            placeholder="john.doe@company.com"
-            required
-          />
+          <Label htmlFor="id">아이디</Label>
+          <InputField type="text" id="id" value={formInputs.id} onChange={handleInputChange} placeholder="아이디" />
         </div>
         <div>
           <Label htmlFor="password">비밀번호</Label>
@@ -164,10 +138,9 @@ const Input: React.FC = () => {
             value={formInputs.password}
             onChange={handleInputChange}
             placeholder="*******"
-            required
           />
         </div>
-        <Button type="submit" primary bgColor="Pri-500" textColor="White" font="sub" size="small">
+        <Button type="submit" bgColor="pri" textColor="White" font="sub">
           로그인
         </Button>
       </Form>

@@ -1,19 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { menuData } from "@/data/menuData.ts";
+import { subMenuList } from "@/data/menuData.ts";
 
 export interface MenuState  {
-    ticketMenu: {id: number, content: string, path: string }[]
+  tickets: {id: number, content: string, path: string }[]
 }
 
 export interface TicketMenuItem {
   id: number;
   content: string;
   path: string;
+  hide: boolean;
 }
 
 const initialState: MenuState = {
-  ...menuData
+  ...subMenuList
 } 
 
 const menu = createSlice({

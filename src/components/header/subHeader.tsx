@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { PropsState } from '@/app/App';
 import theme from '@styles/theme';
@@ -9,30 +9,38 @@ import { TicketMenuItem } from '@stores/menuSlice'
 export const SubHeader: React.FC<PropsState> = (props) => {
 
   const {isLogin} = props;
-  
-  const [active, setActive] = useState(0);
-  const [headerActive, headerActiveSet] = useState('');
 
-  const state = useSelector((state:any) => state.menu);
+  const [active, setActive] = useState("");
+  const [headerActive, headerActiveSet] = useState('');
   
-  const activeTarget = (idx:number) => () => setActive(idx); 
+  const menuState = useSelector((state:any) => state.menu);
+  
+  const pathName = useLocation().pathname;
+
+  const pathTarget =(()=>{    
+    if(pathName === "/") return "home";
+    else return pathName.split('/')[1];
+  })()
 
   useEffect(()=>{
-      isLogin && headerActiveSet('on');
-      !isLogin && headerActiveSet('');
-  },[isLogin])
+    (isLogin && menuState[pathTarget]) && headerActiveSet('on');
+    (!isLogin || !menuState[pathTarget]?.length) && headerActiveSet('');    
+    (menuState[pathTarget]?.find((el:any)=> el.path === pathName)?.hide) && headerActiveSet('');
+  },[isLogin, pathName ])
 
-
+  useEffect(()=>{
+    setActive(pathName);    
+  },[pathName])
+  
   return (
     <>
     <S.subheader className={headerActive} theme={theme}>
       <div className="wrap">        
         {
-          // 어떤 메뉴를 출력할것인지 넣어주면 해당 메뉴출력
-          state["ticketMenu"].map(({id, content, path} : TicketMenuItem , i: number)=>{
+          menuState[pathTarget]?.map(({id, content, path } : TicketMenuItem)=>{
               return(
-              <li key={id} className={active === i ? "on" : ""}>
-                <Link to={path} onClick={activeTarget(i)}>
+              <li key={id} className={active === path ? "on" : ""}>
+                <Link to={path}>
                   {content}
                 </Link>
               </li>)}                  

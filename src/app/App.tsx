@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 
-import { GlobalHeader, GlobalNavigation, PrivateRoute, PublicRoute, SubHeader } from '@/index';
+import { GlobalHeader, PrivateRoute, PublicRoute, SubHeader } from '@/index';
 import { RootState } from '@stores/store';
 import theme from '@styles/theme';
 import { Suspense, lazy } from 'react';
@@ -33,7 +33,6 @@ function App() {
                   <Route element={<Me />} path="me" />
                 </Route>
               </Routes>
-              <GlobalNavigation />
             </div>
           </div>
         </Suspense>

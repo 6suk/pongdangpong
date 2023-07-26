@@ -64,8 +64,10 @@ export const GlobalHeader: React.FC<PropsState> = (props) =>{
 
       <S.nav theme={theme}>
         <S.menu>
+          {/* 만약 로그인이 안되어있으면 마이페이지를 렌더링하지 않는다 */}
           {
             globalMenu.map(({id, content, path})=>{              
+              if(!isLogin && path === "me") return; 
               return(
                 <li key={id} onClick={activeTarget(path)} className={checkActive(path)}>
                   {content}
@@ -180,26 +182,10 @@ const S = {
       margin: 0 14px;
       cursor:pointer;
       position: relative;
-
-      &::after{
-            display: block;
-            content:'';
-            position: absolute;
-            left: 0;
-            bottom: -120%;
-            width: 0;
-            height: 3px;
-            background-color: ${({theme})=> theme.colors["Pri-400"]};
-            transition: width 0.6s;
-          }
           
           &.on{
             color: ${({theme})=> theme.colors["Pri-400"]};
             font-weight: 600;
-
-            &::after{
-              width: 100%;
-            }
           }
     }
   `

@@ -6,13 +6,13 @@ import { Ticket_response, tickets_delete } from '@apis/ticketsAPIs';
 
 import { useRequests } from '@hooks/apis/useRequests';
 
-import { TicketUpdate } from './TicketUpdate';
+import { STicketUpdate } from './STicketUpdate';
 
 export interface TicketProps {
   ticket: Ticket_response;
 }
 
-export const TicketItem = ({ ticket }: TicketProps) => {
+export const STicketItem = ({ ticket }: TicketProps) => {
   const { request } = useRequests();
   const [isEdit, setIsEdit] = useState(false);
   const {
@@ -56,27 +56,27 @@ export const TicketItem = ({ ticket }: TicketProps) => {
 
           <form onSubmit={handleDelete(id)}>
             <input
+              className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded mr-2"
               type="submit"
               value="삭제하기"
-              className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded mr-2"
             />
           </form>
           <button
+            className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded mr-2"
             type="button"
             onClick={() => setIsEdit(true)}
-            className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded mr-2"
           >
             수정하기
           </button>
           <Link
-            to={`/tickets/${id}/issued-tickets`}
             className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded mr-2"
+            to={`/sample/${id}/issued-tickets`}
           >
             부여내역보기
           </Link>
         </li>
       ) : (
-        <TicketUpdate request={request} setIsEdit={setIsEdit} ticket={ticket} />
+        <STicketUpdate request={request} setIsEdit={setIsEdit} ticket={ticket} />
       )}
     </>
   );

@@ -1,7 +1,11 @@
+import { useSelector } from 'react-redux';
+
+import { Outlet } from 'react-router-dom';
+
+import { styled } from 'styled-components';
+
 import { GlobalHeader, SubHeader } from '@/index';
 import { RootState } from '@stores/store';
-import { useSelector } from 'react-redux';
-import { Outlet } from 'react-router-dom';
 
 export const Layout = () => {
   const isLogin = useSelector((state: RootState) => state.tokens.isLogin);
@@ -12,13 +16,23 @@ export const Layout = () => {
         <GlobalHeader isLogin={isLogin} />
         <SubHeader isLogin={isLogin} />
         <div className="sm:container sm:mx-auto mt-10 mb-40 2xl:max-w-screen-xl">
-          <section className="mx-auto w-fit">
+          {/* <section className="mx-auto"> */}
+          <Container>
             <Outlet />
-          </section>
+          </Container>
+          {/* </section> */}
         </div>
       </div>
     </>
   );
 };
+
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+`;
 
 export default Layout;

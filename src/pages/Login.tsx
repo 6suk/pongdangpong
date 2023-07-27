@@ -1,9 +1,11 @@
-import { Modal, ModalButton } from '@components/common/Modal';
+import { useState } from 'react';
+
+import { Button } from '@components/common/Button';
 import Input from '@components/common/Input';
+import { Modal, ModalButton } from '@components/common/Modal';
 import { useAuth } from '@hooks/apis/useAuth';
 import useInput from '@hooks/utils/useInput';
-import { useState } from 'react';
-import { Button } from '@components/common/Button';
+
 const initForm = {
   loginId: '',
   password: '',
@@ -38,21 +40,16 @@ export const Login = () => {
           />
 
           {/* ========input 대신 Button 컴포넌트 사용========*/}
-          <Button type="submit" bgColor="pri" textColor="White" font="sub">
+          <Button bgColor="pri" font="sub" textColor="White" type="submit">
             로그인
           </Button>
-          {/* <input
-            type="submit"
-            value="로그인"
-            className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded mr-2"
-          /> */}
         </form>
       ) : (
         <div>Loading...</div>
       )}
       {authError && <p>{String(authError)}</p>}
       {/* ========================== 모달 테스트 ========================== */}
-      <button onClick={() => setIsModalOpen(true)} className="mt-3 mr-3">
+      <button className="mt-3 mr-3" type="button" onClick={() => setIsModalOpen(true)}>
         첫번째 모달 열기
       </button>
       {isModalOpen && (
@@ -67,7 +64,7 @@ export const Login = () => {
           </div>
         </Modal>
       )}
-      <button onClick={() => setIsSecondModalOpen(true)} className="mt-3 mr-3">
+      <button className="mt-3 mr-3" type="button" onClick={() => setIsSecondModalOpen(true)}>
         두번째 모달 열기
       </button>
       {isSecondModalOpen && (

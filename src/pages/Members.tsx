@@ -1,11 +1,16 @@
 import React from 'react'
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 
 const Members = () => {
-  return (<>
-    <div>Member</div>
-    <Outlet/>
-    </>
+
+  const location = useLocation();
+  const pathSlice = location.pathname.split('/');
+  const currentPathname = pathSlice[pathSlice.length-1];
+
+  return (
+    <div style={{paddingTop:"40px"}}>         
+      <Outlet/>    
+    </div>
   )
 }
 

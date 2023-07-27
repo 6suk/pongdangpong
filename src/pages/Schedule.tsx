@@ -3,8 +3,8 @@ import { Outlet } from 'react-router-dom';
 
 const Schedule = () => {
   return (<>
-    <Outlet/>
     <div>Schedule</div>
+    <Outlet/>
     </>
   )
 }

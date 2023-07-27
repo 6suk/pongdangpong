@@ -19,7 +19,7 @@ export const subMenuList ={
 
   ],
   me:[
-    {id:"티켓 리스트", content: "티켓 리스트" , path:"/tickets/list", hide: false},
-    {id:"티켓 생성", content: "티켓 생성" , path:"/tickets/create", hide: false},
+    {id:"티켓 리스트", content: "티켓 리스트" , path:"/sample/list", hide: false},
+    {id:"티켓 생성", content: "티켓 생성" , path:"/sample/create", hide: false},
   ],
 }

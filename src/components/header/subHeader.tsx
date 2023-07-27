@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { styled } from 'styled-components';
-import { PropsState } from '@/app/App';
-import theme from '@styles/theme';
+
 import { useSelector } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
+
+import { styled } from 'styled-components';
+
+import { PropsState } from '@/app/App';
 import { TicketMenuItem } from '@stores/menuSlice'
+
+import theme from '@styles/theme';
 
 export const SubHeader: React.FC<PropsState> = (props) => {
 

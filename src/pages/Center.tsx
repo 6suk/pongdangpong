@@ -1,9 +1,15 @@
-import React from 'react'
+import { Route, Routes } from 'react-router-dom';
 
-const Center = () => {
+import { TicketList } from '@components/center/ticket/TicketList';
+
+export const Center = () => {
   return (
-    <div>Center</div>
-  )
-}
+    <>
+      <Routes>
+        <Route element={<TicketList />} path="tickets" />
+      </Routes>
+    </>
+  );
+};
 
-export default Center
+export default Center;

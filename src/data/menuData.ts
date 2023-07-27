@@ -11,8 +11,8 @@ export const subMenuList = {
   ],
   center: [
     { id: '수강권 관리', content: '수강권 관리', path: '/center/tickets', hide: false },
-    { id: '만족도 및 후기', content: '만족도 및 후기', path: '/', hide: false },
-    { id: '앨범', content: '앨범', path: '/', hide: false },
+    { id: '직원 관리', content: '직원 관리', path: '/', hide: false },
+    { id: '기록관리', content: '기록관리', path: '/', hide: false },
   ],
   mypage: [],
   me: [

@@ -1,8 +1,7 @@
 import { styled } from 'styled-components';
 
 import { LessonTypeEnum, TermUnitEnum, Ticket_response } from '@apis/ticketsAPIs';
-import ticketIcon from '@assets/icons/ticket/ticketIcon.svg';
-import ticketIcon_w from '@assets/icons/ticket/ticketIcon_w.svg';
+import { TicketIcon } from '@assets/icons/indexIcons';
 
 import { theme } from '@styles/theme';
 
@@ -16,10 +15,10 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
     title,
     lessonType,
     isActive,
-    issuedTicketCount,
-    defaultCount,
-    dailyCountLimit,
-    defaultTerm,
+    issuedTicketCount = 0,
+    defaultCount = 0,
+    dailyCountLimit = 0,
+    defaultTerm = 0,
     defaultTermUnit,
   } = ticket;
   return (
@@ -32,7 +31,7 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
               <p className="tag">{LessonTypeEnum[lessonType]}</p>
             </div>
             <div className="icon">
-              <img alt="ticket-icon" src={isActive ? ticketIcon : ticketIcon_w} />
+              <TicketIcon />
             </div>
           </TS.LeftTitle>
           <TS.LeftInfo>
@@ -131,6 +130,12 @@ export const TS = {
     .tag,
     .icon {
       background-color: ${props => !props.$isActive && `${theme.colors.gray[700]} !important`};
+
+      svg {
+        width: 24px;
+        height: auto;
+        fill: ${props => (props.$isActive ? `${theme.colors.pri[700]}` : `${theme.colors.gray[800]}`)};
+      }
     }
   `,
 

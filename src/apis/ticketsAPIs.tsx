@@ -34,13 +34,27 @@ export const tickets_create: RequestBody<Tickets_request> = {
 export interface Tickets_request {
   lessonType: 'SINGLE' | 'DUET' | 'TRIPLE' | 'GROUP';
   title: string;
-  duration: number;
+  duration?: number;
   defaultCount: number;
-  maxServiceCount: number;
+  maxServiceCount?: number;
   defaultTerm: number;
   defaultTermUnit: 'DAY' | 'WEEK' | 'MONTH' | 'YEAR';
   dailyCountLimit: number;
 }
+
+export const LessonTypeEnum = {
+  SINGLE: '1:1 개인수업',
+  DUET: '2:1 수업',
+  TRIPLE: '3:1 수업',
+  GROUP: '그룹수업',
+};
+
+export const TermUnitEnum = {
+  DAY: '일',
+  WEEK: '주',
+  MONTH: '월',
+  YEAR: '년',
+};
 
 /**
  * [tickets-C] 수강권 생성 - `Response`

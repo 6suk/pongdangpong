@@ -1,7 +1,9 @@
+import { Dispatch, FC, SetStateAction, memo, useCallback } from 'react';
+
+import { keyframes, styled } from 'styled-components';
+
 import x from '@assets/icons/x.svg';
 import theme from '@styles/theme';
-import { Dispatch, FC, SetStateAction, memo, useCallback } from 'react';
-import { keyframes, styled } from 'styled-components';
 
 interface ModalProps {
   children: React.ReactNode;

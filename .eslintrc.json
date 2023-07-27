@@ -1,12 +1,16 @@
 {
   "env": {
-    "module": true,
     "browser": true,
     "es2021": true
   },
   "settings": {
     "import/resolver": {
-      "typescript": {}
+      "typescript": {
+        "node": {},
+        "typescript": {
+          "directory": "./src"
+        }
+      }
     },
     "import/parsers": { "@typescript-eslint/parser": [".ts", ".tsx"] },
     "react": {
@@ -32,13 +36,15 @@
   },
   "rules": {
     "import/default": "off",
+    "import/no-named-as-default": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "no-console": "warn",
     "react/prop-types": "off",
     "react/button-has-type": "warn",
     "react/self-closing-comp": [
-      "warn",
+      "error",
       {
         "component": true,
         "html": false

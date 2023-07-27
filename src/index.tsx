@@ -1,5 +1,4 @@
 /** pages */
-export { GlobalNavigation } from '@components/GlobalNavigation';
 export { GlobalHeader } from '@components/header/GlobalHeader.tsx';
 export { SubHeader } from '@components/header/subHeader';
 export { Layout } from '@components/layout/Layout';

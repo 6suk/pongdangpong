@@ -12,9 +12,11 @@ import theme from '@styles/theme';
 function App() {
   const Login = lazy(() => import('@/pages/Login'));
   const Home = lazy(() => import('@/pages/Home'));
+  const Schedule = lazy(() => import('@/pages/Schedule'));
+  const Center = lazy(() => import('@/pages/Center'));
   const Me = lazy(() => import('@/pages/Me'));
   const Sample = lazy(() => import('@/pages/Sample'));
-  const Center = lazy(() => import('@/pages/Center'));
+  const Members = lazy(() => import('@/pages/Members'));
 
   const isLogin = useSelector((state: RootState) => state.tokens.isLogin);
 
@@ -29,11 +31,13 @@ function App() {
               </Route>
               <Route element={<PrivateRoute isLogin={isLogin} />}>
                 <Route element={<Home />} path="/" />
+                <Route element={<Members/>} path="members/*"/>
+                <Route element={<Schedule/>} path="schedule/*"/>
                 <Route element={<Sample />} path="sample/*" />
                 <Route element={<Me />} path="me" />
               </Route>
               <Route element={<Center />} path="center/*" />
-            </Route>
+              </Route>
           </Routes>
         </Suspense>
       </ThemeProvider>

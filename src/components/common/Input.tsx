@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import theme from '@styles/theme';
-import { Button } from '@components/common/Button';
+
 import styled from 'styled-components';
+
+import { Button } from '@components/common/Button';
+import theme from '@styles/theme';
 
 type FormInputs = {
   message: string;
@@ -81,67 +83,71 @@ const Input: React.FC = () => {
           <Label htmlFor="message">일정 메모</Label>
           <InputField
             id="message"
+            placeholder="내용을 입력해 주세요. (500자 이내)"
             value={formInputs.message}
             onChange={handleInputChange}
-            placeholder="내용을 입력해 주세요. (500자 이내)"
           />
         </div>
         <div>
           <Label htmlFor="date">일자 선택</Label>
-          <InputField type="date" id="date" value={formInputs.date} onChange={handleInputChange} />
+          <InputField id="date" type="date" value={formInputs.date} onChange={handleInputChange} />
         </div>
         <div>
           <Label htmlFor="time">시간 선택</Label>
-          <InputField type="time" id="time" value={formInputs.time} onChange={handleInputChange} />
+          <InputField id="time" type="time" value={formInputs.time} onChange={handleInputChange} />
         </div>
         <div>
           <Label htmlFor="name">이름</Label>
           <InputField
-            type="text"
             id="name"
+            placeholder="이름을 입력해 주세요"
+            type="text"
             value={formInputs.name}
             onChange={handleInputChange}
-            placeholder="이름을 입력해 주세요"
           />
         </div>
         <div>
           <Label htmlFor="birth">생년월일</Label>
           <InputField
-            type="tel"
             id="birth"
+            pattern="[0-9]{4}.[0-9]{2}.[0-9]{2}"
+            placeholder="0000.00.00"
+            type="tel"
             value={formInputs.birth}
             onChange={handleInputChange}
-            placeholder="0000.00.00"
-            pattern="[0-9]{4}.[0-9]{2}.[0-9]{2}"
           />
         </div>
         <div>
           <Label htmlFor="phone">휴대폰 번호</Label>
           <InputField
-            type="tel"
             id="phone"
+            pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}"
+            placeholder="000-0000-0000"
+            type="tel"
             value={formInputs.phone}
             onChange={handleInputChange}
-            placeholder="000-0000-0000"
-            pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}"
           />
         </div>
         <div>
           <Label htmlFor="id">아이디</Label>
-          <InputField type="text" id="id" value={formInputs.id} onChange={handleInputChange} placeholder="아이디" />
+          <InputField id="id" placeholder="아이디" type="text" value={formInputs.id} onChange={handleInputChange} />
         </div>
         <div>
           <Label htmlFor="password">비밀번호</Label>
           <InputField
-            type="password"
             id="password"
+            placeholder="*******"
+            type="password"
             value={formInputs.password}
             onChange={handleInputChange}
-            placeholder="*******"
           />
         </div>
-        <Button type="submit" bgColor="pri" textColor="White" font="sub">
-          로그인
+        <Button size="full">로그인</Button>
+        <Button isPri={false} size="full">
+          취소
+        </Button>
+        <Button disabled size="full">
+          disabled
         </Button>
       </Form>
     </Container>

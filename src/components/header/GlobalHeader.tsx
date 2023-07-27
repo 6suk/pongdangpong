@@ -30,7 +30,7 @@ export const GlobalHeader: React.FC<PropsState> = props => {
     {id:"Home",  content:"홈", path:"/"},
     {id:"Schedule", content:"일정관리", path:"schedule"},
     {id:"Member", content:"회원관리", path:"members"},
-    {id:"Center", content:"센터관리", path:"center"},
+    {id:"Center", content:"센터관리", path:"center", initPath:"center/tickets"},
     {id:"Mypage", content:"마이페이지", path:"me"},
   ]
 
@@ -63,9 +63,9 @@ export const GlobalHeader: React.FC<PropsState> = props => {
       <S.nav theme={theme}>
         <S.menu>
           {
-            isLogin && globalMenu.map(({id, content, path})=>{              
+            isLogin && globalMenu.map(({id, content, path, initPath})=>{              
               return(
-                <li key={id} onClick={activeTarget(path)} className={checkActive(path)}>
+                <li key={id} onClick={activeTarget(initPath ? initPath : path)} className={checkActive(path)}>
                   {content}
                 </li>
               )
@@ -121,6 +121,7 @@ const S = {
   `,
   nav: styled.nav`
     width: 100%;
+    margin-left: 2rem;
     display: flex;
     align-items: center;
     justify-content: space-between;

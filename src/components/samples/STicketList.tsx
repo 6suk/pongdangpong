@@ -1,9 +1,9 @@
 import { Ticket_response, tickets_list } from '@apis/ticketsAPIs';
-import { TicketItem } from '@components/samples/TicketItem';
+import { STicketItem } from '@components/samples/STicketItem';
 
 import { useSwrData } from '@hooks/apis/useSwrData';
 
-export const TicketList = () => {
+export const STicketList = () => {
   const { data, isError, isLoading } = useSwrData(tickets_list.url);
 
   return (
@@ -11,7 +11,7 @@ export const TicketList = () => {
       <ul style={{ listStyle: 'none' }}>
         {!isLoading &&
           data.tickets.map((ticket: Ticket_response) => {
-            return <TicketItem key={ticket.id} ticket={ticket} />;
+            return <STicketItem key={ticket.id} ticket={ticket} />;
           })}
       </ul>
 

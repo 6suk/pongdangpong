@@ -4,14 +4,14 @@ import { Ticket_put_body, tickets_put } from '@apis/ticketsAPIs';
 import { reqDataState } from '@hooks/apis/useRequests';
 import useInput from '@hooks/utils/useInput';
 
-import { TicketProps } from './TicketItem';
+import { TicketProps } from './STicketItem';
 
 interface TicketUpdateProps extends TicketProps {
   setIsEdit: React.Dispatch<React.SetStateAction<boolean>>;
   request: (data: reqDataState) => Promise<void>;
 }
 
-export const TicketUpdate = ({ ticket, setIsEdit, request }: TicketUpdateProps) => {
+export const STicketUpdate = ({ ticket, setIsEdit, request }: TicketUpdateProps) => {
   const navigate = useNavigate();
 
   const initTicket: Ticket_put_body = {

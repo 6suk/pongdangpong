@@ -1,6 +1,6 @@
 import { useSwrData } from '@hooks/apis/useSwrData';
 
-export const TicketQuery = () => {
+export const STicketQuery = () => {
   const { data } = useSwrData(`${location.pathname}${location.search}`);
   console.log(data);
 

@@ -6,7 +6,7 @@ import { tickets_create } from '@apis/ticketsAPIs';
 import { useRequests } from '@hooks/apis/useRequests';
 import useInput from '@hooks/utils/useInput';
 
-export const TicketForm = () => {
+export const STicketForm = () => {
   const { request, isLoading, error } = useRequests();
   const [inputValues, onChange, inputReset] = useInput({ ...tickets_create.body });
   const navigate = useNavigate();

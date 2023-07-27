@@ -40,9 +40,7 @@ export const Login = () => {
           />
 
           {/* ========input 대신 Button 컴포넌트 사용========*/}
-          <Button bgColor="pri" font="sub" textColor="White" type="submit">
-            로그인
-          </Button>
+          <Button type="submit">로그인</Button>
         </form>
       ) : (
         <div>Loading...</div>

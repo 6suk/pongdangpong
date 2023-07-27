@@ -34,7 +34,7 @@ export const STicketUpdate = ({ ticket, setIsEdit, request }: TicketUpdateProps)
         body: inputValues,
         path: `/${id}`,
       });
-      navigate('/tickets/list');
+      navigate('/sample/list');
       inputReset();
     } catch (error) {
       console.log(error);

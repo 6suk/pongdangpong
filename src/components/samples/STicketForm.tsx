@@ -21,7 +21,7 @@ export const STicketForm = () => {
         method,
         body: inputValues,
       });
-      navigate('/tickets/list');
+      navigate('/sample/list');
       inputReset();
     } catch (error) {
       console.log(error);

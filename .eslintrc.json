@@ -94,7 +94,9 @@
     "jsx-a11y/anchor-is-valid": [
       "warn",
       {
-        "components": ["Link"]
+        "components": ["Link"],
+        "specialLink": ["to"],
+        "aspects": ["noHref", "invalidHref", "preferButton"]
       }
     ]
   }

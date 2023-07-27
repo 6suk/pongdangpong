@@ -1,7 +1,7 @@
 import { useSwrData } from '@hooks/apis/useSwrData';
 
 export const STicketQuery = () => {
-  const { data } = useSwrData(`${location.pathname}${location.search}`);
+  const { data } = useSwrData(`${location.pathname.replace('sample', 'tickets')}${location.search}`);
   console.log(data);
 
   return (

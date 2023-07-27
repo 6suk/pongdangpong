@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 import { Ticket_response, tickets_list } from '@apis/ticketsAPIs';
 import { STicketItem } from '@components/samples/STicketItem';
 
@@ -8,6 +10,7 @@ export const STicketList = () => {
 
   return (
     <>
+      <Link to={'/sample/create'}>{'티겟 생성 >'}</Link>
       <ul style={{ listStyle: 'none' }}>
         {!isLoading &&
           data.tickets.map((ticket: Ticket_response) => {

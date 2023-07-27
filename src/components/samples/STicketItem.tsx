@@ -70,7 +70,7 @@ export const STicketItem = ({ ticket }: TicketProps) => {
           </button>
           <Link
             className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded mr-2"
-            to={`/tickets/${id}/issued-tickets`}
+            to={`/sample/${id}/issued-tickets`}
           >
             부여내역보기
           </Link>

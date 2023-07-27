@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 
 import { Ticket_response } from '@apis/ticketsAPIs';
-import Button from '@components/common/Button';
+import theme from '@styles/theme';
 
 import { TicketContainer, TicketItem, TicketWrap } from './TicketItem';
 
@@ -14,9 +14,7 @@ export const TicketList = () => {
             <p>판매중</p>
             <p>판매종료</p>
           </div>
-          <Button primary bgColor="Pri-500" font="sub" size="main" textColor="White" type="button">
-            + 수강권 추가
-          </Button>
+          <Button>+ 수강권 추가</Button>
         </Top>
         <TicketWrap>
           {dummyData.map(ticket => {
@@ -27,6 +25,22 @@ export const TicketList = () => {
     </>
   );
 };
+
+const Button = styled.button`
+  transition: all 0.4s;
+  font-size: ${theme.font.sub};
+  background-color: ${theme.colors.pri[500]};
+  color: ${theme.colors.White};
+  width: 146px;
+  box-sizing: border-box;
+  padding-inline: 2rem;
+  padding-block: 0.8rem;
+  border-radius: 6px;
+
+  &:hover {
+    background-color: ${theme.colors.pri[400]};
+  }
+`;
 
 const Top = styled.div`
   display: flex;

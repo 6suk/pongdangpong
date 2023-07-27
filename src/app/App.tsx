@@ -4,18 +4,17 @@ import { Route, Routes } from 'react-router-dom';
 
 import { ThemeProvider } from 'styled-components';
 
+import { Layout, PrivateRoute, PublicRoute } from '@/index';
 import { RootState } from '@stores/store';
 
 import theme from '@styles/theme';
-
-import { Layout, PrivateRoute, PublicRoute } from '@/index';
-import { Center } from '@/pages/Center';
 
 function App() {
   const Login = lazy(() => import('@/pages/Login'));
   const Home = lazy(() => import('@/pages/Home'));
   const Me = lazy(() => import('@/pages/Me'));
   const Sample = lazy(() => import('@/pages/Sample'));
+  const Center = lazy(() => import('@/pages/Center'));
 
   const isLogin = useSelector((state: RootState) => state.tokens.isLogin);
 
@@ -32,8 +31,8 @@ function App() {
                 <Route element={<Home />} path="/" />
                 <Route element={<Sample />} path="sample/*" />
                 <Route element={<Me />} path="me" />
-                <Route element={<Center />} path="Center/*" />
               </Route>
+              <Route element={<Center />} path="center/*" />
             </Route>
           </Routes>
         </Suspense>

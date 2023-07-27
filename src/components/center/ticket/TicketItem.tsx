@@ -56,9 +56,30 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
         </TS.TicketLeft>
         <TS.TicketRight className="ticket-right">
           {/* 각각 버튼에 맞는 행동 추가 */}
-          <button type="button">수강권 부여내역</button>
-          <button type="button">판매종료</button>
-          <button type="button">수정 / 삭제</button>
+          <button
+            type="button"
+            onClick={() => {
+              console.log(id + ' 수강권 부여내역 클릭');
+            }}
+          >
+            수강권 부여내역
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              console.log(id + ' 판매종료 클릭');
+            }}
+          >
+            판매종료
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              console.log(id + ' 수정/삭제');
+            }}
+          >
+            수정 / 삭제
+          </button>
         </TS.TicketRight>
       </TS.Ticket>
     </>

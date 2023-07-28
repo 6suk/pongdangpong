@@ -63,12 +63,23 @@ export const TicketForm = () => {
     const isError = Object.keys(errors).length !== 0;
 
     if (!isError) {
+      // 소진시까지, 무제한 클릭 시
+      const valuesCopy = { ...inputValues };
+      const { termToggle, countToggle } = toggles;
+
+      if (termToggle) {
+        delete valuesCopy.defaultTerm;
+        delete valuesCopy.defaultTermUnit;
+      } else if (countToggle) {
+        delete valuesCopy.defaultCount;
+      }
+
       const { url, method } = tickets_create;
       try {
         await request({
           url,
           method,
-          body: inputValues,
+          body: valuesCopy,
         });
         navigate('/center/tickets');
         inputReset();
@@ -89,6 +100,7 @@ export const TicketForm = () => {
           <GridContainer>
             <div>
               <SelectField
+                className="required"
                 label="수업 유형"
                 name="lessonType"
                 options={[{ value: 'SINGLE', label: LessonTypeEnum['SINGLE'] }]}
@@ -98,6 +110,7 @@ export const TicketForm = () => {
             </div>
             <div>
               <InputField
+                className="required"
                 error={validationErrors.title}
                 label="수강권명"
                 name="title"
@@ -124,7 +137,7 @@ export const TicketForm = () => {
                 <SelectField
                   disabled={toggles.termToggle}
                   name="defaultTermUnit"
-                  value={inputValues.defaultTermUnit}
+                  value={inputValues.defaultTermUnit || 'DAY'}
                   options={[
                     { value: 'DAY', label: TermUnitEnum['DAY'] },
                     { value: 'WEEK', label: TermUnitEnum['WEEK'] },
@@ -144,6 +157,7 @@ export const TicketForm = () => {
             </div>
             <div>
               <InputField
+                className="required"
                 error={validationErrors.duration}
                 label="시간"
                 name="duration"
@@ -156,6 +170,7 @@ export const TicketForm = () => {
             </div>
             <div>
               <InputField
+                className="required"
                 disabled={toggles.countToggle}
                 error={validationErrors.defaultCount}
                 label="기본횟수"
@@ -319,6 +334,7 @@ const GridContainer = styled.div`
   .row-input {
     display: flex;
     gap: 0.5rem;
+
     :first-child {
       flex: 7;
     }

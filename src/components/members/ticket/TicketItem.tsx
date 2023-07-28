@@ -1,10 +1,6 @@
-import ticketIcon_w from '@assets/icons/ticket/ticketIcon_w.svg';
-
 import { LessonTypeEnum, TermUnitEnum, Ticket_response } from '@apis/ticketsAPIs';
 import { TicketIcon } from '@assets/icons/indexIcons';
-import ticketIcon from '@assets/icons/ticket/ticketIcon.svg';
-
-import { TS } from '@components/center/ticket/TicketItem';
+import { TS } from '@styles/center/ticketsStyle';
 
 interface TicketItemProps {
   ticket: Ticket_response;

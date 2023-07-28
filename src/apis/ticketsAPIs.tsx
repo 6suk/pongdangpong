@@ -35,10 +35,10 @@ export interface Tickets_request {
   lessonType: 'SINGLE' | 'DUET' | 'TRIPLE' | 'GROUP';
   title: string;
   duration: number;
-  defaultCount: number;
+  defaultCount?: number; // null = 무제한
   maxServiceCount?: number;
-  defaultTerm: number;
-  defaultTermUnit: 'DAY' | 'WEEK' | 'MONTH' | 'YEAR';
+  defaultTerm?: number; // null = 소진시까지
+  defaultTermUnit?: 'DAY' | 'WEEK' | 'MONTH' | 'YEAR';
   dailyCountLimit?: number;
 }
 
@@ -114,3 +114,33 @@ export type Ticket_put_body = Pick<
   Ticket_response,
   'defaultCount' | 'defaultTerm' | 'defaultTermUnit' | 'maxServiceCount'
 >;
+
+export interface Ticket_issued_list {
+  meta: {
+    totalCount: number;
+    size: number;
+    count: number;
+    page: number;
+    hasMore: boolean;
+  };
+  datas: [Ticket_issued_list_datas];
+  message: string;
+}
+
+export interface Ticket_issued_list_datas {
+  id: number;
+  owners: [
+    {
+      id: number;
+      name: string;
+      phone: string;
+    },
+  ];
+  privateTutor: {
+    id: number;
+    name: string;
+  };
+  remainingTimes: number;
+  startAt: string; // 0000-00-00
+  endAt: string; // 0000-00-00
+}

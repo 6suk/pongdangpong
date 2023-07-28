@@ -6,6 +6,7 @@ import { SC } from '@styles/styles';
 import theme from '@styles/theme';
 
 type SelectProps = {
+  className?: 'required';
   name: string;
   value: string | number;
   onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
@@ -14,10 +15,22 @@ type SelectProps = {
   label?: string;
 };
 
-export const SelectField: FC<SelectProps> = ({ label, name, value, onChange, disabled = false, options }) => {
+export const SelectField: FC<SelectProps> = ({
+  className,
+  label,
+  name,
+  value,
+  onChange,
+  disabled = false,
+  options,
+}) => {
   return (
     <>
-      {label && <SC.Label htmlFor={name}>{label}</SC.Label>}
+      {label && (
+        <SC.Label className={className || ''} htmlFor={name}>
+          {label}
+        </SC.Label>
+      )}
       <StyledSelect disabled={disabled} id={name} name={name} value={value} onChange={onChange}>
         {options.map(option => (
           <option key={option.value} value={option.value}>

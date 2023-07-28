@@ -1,17 +1,15 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-
-import { styled } from 'styled-components';
 
 import { Ticket_response, tickets_list } from '@apis/ticketsAPIs';
 import { TicketIcon } from '@assets/icons/indexIcons';
 import { Button } from '@components/common/Button';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
-import theme from '@styles/theme';
+import { NoneDisplay, TicketContainer, TicketWrap, Top } from '@styles/center/ticketsStyle';
 
-import { TicketContainer, TicketItem, TicketWrap } from './TicketItem';
+import { TicketItem } from './TicketItem';
 
 export const TicketList = () => {
   const navigate = useNavigate();
@@ -83,58 +81,3 @@ export const TicketList = () => {
     </>
   );
 };
-
-const NoneDisplay = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-  width: 100%;
-  justify-content: center;
-  margin-top: 3rem;
-
-  .none-d-icon {
-    background-color: ${theme.colors.gray[800]};
-    padding: 30px;
-    border-radius: 50%;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    aspect-ratio: 1/1;
-  }
-
-  svg {
-    width: 90px;
-    fill: ${theme.colors.gray[600]};
-  }
-  .text {
-    color: ${theme.colors.gray[500]};
-  }
-`;
-
-const Top = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding-block: 2rem;
-  align-items: center;
-  margin-inline: 1rem;
-  align-items: flex-end;
-
-  .ticket-active {
-    display: flex;
-
-    a {
-      font-size: ${theme.font.sub};
-      color: ${theme.colors.gray[500]};
-      padding: 12px;
-      border-bottom: 2px solid ${theme.colors.gray[600]};
-    }
-
-    .on {
-      font-weight: 600;
-      color: ${theme.colors.pri[500]};
-      border-bottom: 2px solid ${theme.colors.pri[300]};
-    }
-  }
-`;

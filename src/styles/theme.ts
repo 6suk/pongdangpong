@@ -51,6 +51,7 @@ const colors = {
   Dim: '40, 40, 40',
   White: '#ffffff',
   Error: '#df291d',
+  ErrorRGB: '223, 41, 29',
   Positive: '#1fb881',
 };
 

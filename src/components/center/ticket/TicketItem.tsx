@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+
 import { styled } from 'styled-components';
 
 import { LessonTypeEnum, TermUnitEnum, Ticket_response } from '@apis/ticketsAPIs';
@@ -10,6 +12,7 @@ interface TicketItemProps {
 }
 
 export const TicketItem = ({ ticket }: TicketItemProps) => {
+  const navigate = useNavigate();
   const {
     id,
     title,
@@ -17,10 +20,13 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
     isActive,
     issuedTicketCount = 0,
     defaultCount = 0,
-    dailyCountLimit = 0,
     defaultTerm = 0,
     defaultTermUnit,
+    bookableLessons,
   } = ticket;
+
+  const duration = bookableLessons[0].duration;
+
   return (
     <>
       <TS.Ticket $isActive={isActive}>
@@ -45,7 +51,7 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
             </dl>
             <dl>
               <dt>수업 시간</dt>
-              <dd>{`${dailyCountLimit}분`}</dd>
+              <dd>{`${duration}분`}</dd>
             </dl>
             <dl>
               <dt>수강권 기간</dt>
@@ -58,7 +64,7 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
           <button
             type="button"
             onClick={() => {
-              console.log(id + ' 수강권 부여내역 클릭');
+              navigate(`${id}/issued-tickets`);
             }}
           >
             수강권 부여내역

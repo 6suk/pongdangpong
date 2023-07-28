@@ -1,6 +1,8 @@
-import { LessonTypeEnum, TermUnitEnum, Ticket_response } from '@apis/ticketsAPIs';
-import ticketIcon from '@assets/icons/ticket/ticketIcon.svg';
 import ticketIcon_w from '@assets/icons/ticket/ticketIcon_w.svg';
+
+import { LessonTypeEnum, TermUnitEnum, Ticket_response } from '@apis/ticketsAPIs';
+import { TicketIcon } from '@assets/icons/indexIcons';
+import ticketIcon from '@assets/icons/ticket/ticketIcon.svg';
 
 import { TS } from '@components/center/ticket/TicketItem';
 
@@ -30,7 +32,7 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
               <p className="tag">{LessonTypeEnum[lessonType]}</p>
             </div>
             <div className="icon">
-              <img alt="ticket-icon" src={isActive ? ticketIcon : ticketIcon_w} />
+              <TicketIcon />
             </div>
           </TS.LeftTitle>
           <TS.LeftInfo>

@@ -34,13 +34,22 @@ export const tickets_create: RequestBody<Tickets_request> = {
 export interface Tickets_request {
   lessonType: 'SINGLE' | 'DUET' | 'TRIPLE' | 'GROUP';
   title: string;
-  duration?: number;
+  duration: number;
   defaultCount: number;
   maxServiceCount?: number;
   defaultTerm: number;
   defaultTermUnit: 'DAY' | 'WEEK' | 'MONTH' | 'YEAR';
-  dailyCountLimit: number;
+  dailyCountLimit?: number;
 }
+
+export const tickets_title = {
+  lessonType: '수업유형',
+  title: '수강권명',
+  defaultCount: '기본횟수',
+  defaultTerm: '수강권 기간',
+  duration: '시간',
+  maxServiceCount: '서비스 횟수',
+};
 
 export const LessonTypeEnum = {
   SINGLE: '1:1 개인수업',
@@ -52,7 +61,7 @@ export const LessonTypeEnum = {
 export const TermUnitEnum = {
   DAY: '일',
   WEEK: '주',
-  MONTH: '월',
+  MONTH: '개월',
   YEAR: '년',
 };
 
@@ -63,6 +72,15 @@ export interface Ticket_response extends Tickets_request {
   id: number;
   issuedTicketCount: number;
   isActive: boolean;
+  bookableLessons: [
+    {
+      id: number;
+      type: 'SINGLE' | 'DUET' | 'TRIPLE' | 'GROUP';
+      title: string;
+      duration: number;
+      maxGroupMember: number;
+    },
+  ];
 }
 
 /**

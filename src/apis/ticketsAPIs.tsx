@@ -49,6 +49,7 @@ export const tickets_title = {
   defaultTerm: '수강권 기간',
   duration: '시간',
   maxServiceCount: '서비스 횟수',
+  issuedTicketCount: '부여',
 };
 
 export const LessonTypeEnum = {
@@ -143,4 +144,34 @@ export interface Ticket_issued_list_datas {
   remainingTimes: number;
   startAt: string; // 0000-00-00
   endAt: string; // 0000-00-00
+}
+
+/** 회원 수강권 상세
+ * /api/v1/issued-tickets/{issuedTicketId}
+ */
+export interface Ticket_issued_detail_res extends Tickets_request {
+  id: number;
+  privateTutor: {
+    id: number;
+    type: 'ADMIN' | 'STAFF';
+    loginId: string;
+    name: string;
+    phone: string;
+    isActive: boolean;
+    createdAt: string; // dateTime;
+    updatedAt: string; // dateTime;
+    lastLoginedAt: string; // dateTime;
+  };
+  startAt: string; // date;
+  endAt: string; // date;
+  remainingCount: number;
+  availableReservationCount: number;
+  serviceCount: number;
+  isSuspended: boolean;
+  suspendedAt: string; // dateTime;
+  isCanceled: boolean;
+  canceledAt: string; // dateTime;
+  createdAt: string; // dateTime;
+  updatedAt: string; // dateTime;
+  message: string;
 }

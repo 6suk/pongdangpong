@@ -37,7 +37,7 @@ export const SubHeader: React.FC<PropsState> = props => {
 
   return (
     <>
-      <S.subheader className={headerActive} theme={theme}>
+      <S.Subheader className={headerActive} theme={theme}>
         <div className="wrap">
           {menuState[pathTarget]?.map(({ id, content, path }: TicketMenuItem) => {
             return (
@@ -47,13 +47,13 @@ export const SubHeader: React.FC<PropsState> = props => {
             );
           })}
         </div>
-      </S.subheader>
+      </S.Subheader>
     </>
   );
 };
 
 const S = {
-  subheader: styled.ul`
+  Subheader: styled.ul`
     width: 100%;
     height: 64px;
     background-color: #fff;

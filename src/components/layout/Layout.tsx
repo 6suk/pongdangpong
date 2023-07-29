@@ -15,7 +15,7 @@ export const Layout = () => {
       <div className="container max-w-full">
         <GlobalHeader isLogin={isLogin} />
         <SubHeader isLogin={isLogin} />
-        <div className="sm:container sm:mx-auto mt-10 mb-40 2xl:max-w-screen-xl">
+        <div className="sm:container sm:mx-auto mt-[4rem] mb-40 2xl:max-w-screen-xl">
           {/* <section className="mx-auto"> */}
           <Container>
             <Outlet />

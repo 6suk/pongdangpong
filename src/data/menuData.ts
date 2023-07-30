@@ -5,7 +5,8 @@ export const subMenuList = {
     { id: '회원 수정', content: '회원 수정', path: '/schedule/member', hide: true },
   ],
   members: [
-    { id: '회원 등록', content: '회원 등록', path: '/members/edit', hide: false },
+    { id: '회원 등록', content: '회원 등록', path: '/members/register', hide: false },
+    { id: '회원 상세 조회', content: '회원 상세 조회', path: '/members/detail', hide: false },
     { id: '기록지', content: '기록지', path: '/members/record', hide: false },
     { id: '만족도 및 후기', content: '만족도 및 후기', path: '/members/review', hide: false },
     { id: '앨범', content: '앨범', path: '/members/album', hide: false },

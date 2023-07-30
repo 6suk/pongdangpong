@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
@@ -20,7 +20,7 @@ interface FormState {
   toss: [];
 }
 
-export const MembersEdit: React.FC = () => {
+export const MembersResgier: React.FC = () => {
   const [formState, setFormState] = useState<FormState>({
     name: '',
     birthDate: '',
@@ -37,53 +37,59 @@ export const MembersEdit: React.FC = () => {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const inputData = ({ target }: React.ChangeEvent<HTMLInpuphoneement>) => {
-    switch (target.name) {
-      case 'phone':
-        target.value = target.value.replace(/[^0-9]/g, '').replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
-        break;
-      case 'birthDate':
-        target.value = target.value.replace(/(\d{4})(\d{2})(\d{2})/, '$1.$2.$3');
-        break;
-      case 'sex':
-        target.value = target.className.toUpperCase();
-        break;
-    }
+  const inputData = useCallback(
+    ({ target }: React.ChangeEvent<HTMLInpuphoneement>) => {
+      switch (target.name) {
+        case 'phone':
+          target.value = target.value.replace(/[^0-9]/g, '').replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
+          break;
+        case 'birthDate':
+          target.value = target.value.replace(/(\d{4})(\d{2})(\d{2})/, '$1.$2.$3');
+          break;
+        case 'sex':
+          target.value = target.className.toUpperCase();
+          break;
+      }
 
-    setFormState({ ...formState, [target.name]: target.value });
-  };
+      setFormState({ ...formState, [target.name]: target.value });
+    },
+    [formState]
+  );
 
-  const submitData = async (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const submitData = useCallback(
+    async (e: MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
 
-    formState['phone'] = (formState['phone'] + '').replace(/-/g, '');
-    formState['birthDate'] = (formState['birthDate'] + '').replace(/\./g, '-');
+      formState['phone'] = (formState['phone'] + '').replace(/-/g, '');
+      formState['birthDate'] = (formState['birthDate'] + '').replace(/\./g, '-');
 
-    try {
-      await request({
-        url: 'members',
-        method: 'post',
-        body: formState,
-      });
-      console.log('등록 완료');
+      try {
+        await request({
+          url: 'members',
+          method: 'post',
+          body: formState,
+        });
+        console.log('등록 완료');
 
-      setIsOpen(true);
+        setIsOpen(true);
 
-      setFormState({
-        name: '',
-        birthDate: '',
-        phone: '',
-        sex: '',
-        job: '',
-        acqusitionFunnel: '',
-        acquisitionFunnel: '',
-        toss: [],
-      });
-    } catch (error) {
-      console.error(error);
-      // input 빨간색으로 어디부분 잘못되었는지 출력
-    }
-  };
+        setFormState({
+          name: '',
+          birthDate: '',
+          phone: '',
+          sex: '',
+          job: '',
+          acqusitionFunnel: '',
+          acquisitionFunnel: '',
+          toss: [],
+        });
+      } catch (error) {
+        console.error(error);
+        // input 빨간색으로 어디부분 잘못되었는지 출력
+      }
+    },
+    [formState]
+  );
 
   useEffect(() => {
     console.log(formState);

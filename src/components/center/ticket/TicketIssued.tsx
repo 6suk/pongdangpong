@@ -150,6 +150,11 @@ const IssuedListWrap = styled.div`
       align-items: center;
       gap: 0.6rem;
       font-weight: 600;
+
+      svg {
+        width: 26px;
+        height: auto;
+      }
     }
 
     p {

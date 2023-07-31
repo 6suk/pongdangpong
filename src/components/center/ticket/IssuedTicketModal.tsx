@@ -144,5 +144,10 @@ const ModalInfoStyle = styled.div`
   dd {
     display: flex;
     gap: 0.5rem;
+
+    svg {
+      width: 24px;
+      height: auto;
+    }
   }
 `;

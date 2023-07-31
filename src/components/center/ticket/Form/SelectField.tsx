@@ -31,13 +31,13 @@ export const SelectField: FC<SelectProps> = ({
           {label}
         </SC.Label>
       )}
-      <StyledSelect disabled={disabled} id={name} name={name} value={value} onChange={onChange}>
+      <SC.Select disabled={disabled} id={name} name={name} value={value} onChange={onChange}>
         {options.map(option => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>
         ))}
-      </StyledSelect>
+      </SC.Select>
     </>
   );
 };

@@ -1,33 +1,51 @@
-import React, { useCallback, useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState, useCallback } from 'react';
 
-import { styled } from 'styled-components';
-
+import styled from 'styled-components';
 import { mutate } from 'swr';
 
 import { Button } from '@components/common/Button';
-import { useSwrData } from '@hooks/apis/useSwrData';
+import { Modal, ModalButton } from '@components/common/Modal';
+import { useRequests } from '@hooks/apis/useRequests';
 
-import { MembersAlbum } from './MembersAlbum';
-import { MembersDetailComponent } from './MembersDetail';
-import { MembersRecord } from './MembersRecord';
-import { MembersResgier } from './MembersRegister';
+import { useSwrData } from '@hooks/apis/useSwrData';
 
 interface UserListProps {
   [key: string]: string;
 }
-const Members = () => {
-  const [id, setId] = useState(0);
 
-  const navigation = useNavigate();
-
-  const location = useLocation();
+export const MembersRecord = () => {
   const len = 100;
-  const pathSlice = location.pathname.split('/');
-  const currentPathname = pathSlice[pathSlice.length - 1];
+  const [userData, setUserData] = useState({
+    id: '',
+    name: '',
+    birthDate: '',
+    sex: '',
+    phone: '',
+    job: '',
+  });
 
+  const [isOpen, setIsOpen] = useState(false);
   const { data, isLoading } = useSwrData(`members?page=1&size=${len}&sort=createdAt%2CDesc`);
   const { datas } = data ?? ({} as UserListProps);
+
+  const { request } = useRequests();
+
+  const { id, name, phone, birthDate, sex, job } = userData;
+  const userDataArr = [id, name, phone, birthDate, sex];
+
+  const editMember = useCallback(async () => {
+    try {
+      await request({
+        url: `members/${id}`,
+        method: 'put',
+        body: userData,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }, [userData]);
+
+  const userDataKeys = Object.keys(userData);
 
   const dataChange = useCallback((type: string, value: string) => {
     switch (type) {
@@ -48,21 +66,63 @@ const Members = () => {
   }, []);
 
   useEffect(() => {
+    // 서버 렌더링 후 화면에 결과 표시
     (async () => {
       mutate(`members?page=1&size=${len}&sort=createdAt%2CDesc`);
     })();
   });
 
   return (
-    <div style={{ paddingTop: '40px' }}>
-      {currentPathname === 'register' && <MembersResgier />}
-      {currentPathname === 'detail' && <MembersDetailComponent id={id} />}
-      {currentPathname === 'record' && <MembersRecord />}
-      {currentPathname === 'album' && <MembersAlbum />}
+    <>
+      {isOpen && (
+        <Modal setIsOpen={setIsOpen}>
+          {
+            <>
+              <ul>
+                {userDataArr.map((el, i) => {
+                  return (
+                    el !== userData.id && (
+                      <li key={userDataKeys[i]}>
+                        <input
+                          defaultValue={userDataArr[i]}
+                          id={userDataArr[i]}
+                          name={userDataKeys[i]}
+                          type="text"
+                          onChange={({ target }) => {
+                            setUserData({
+                              ...userData,
+                              [userDataKeys[i]]: target.value,
+                            });
+                          }}
+                        />
+                      </li>
+                    )
+                  );
+                })}
+              </ul>
+              <div className="btn-wrap">
+                <ModalButton $isPrimary={false} onClick={() => setIsOpen(false)}>
+                  취소
+                </ModalButton>
+                <ModalButton
+                  $isPrimary={true}
+                  onClick={() => {
+                    setIsOpen(false);
 
-      {location.pathname === '/members' && !isLoading && (
+                    editMember();
+                  }}
+                >
+                  확인
+                </ModalButton>
+              </div>
+            </>
+          }
+        </Modal>
+      )}
+      {!isLoading && (
         <>
-          <h2 style={{ fontSize: '20px', fontWeight: 600, marginBottom: '20px' }}>전체 회원{datas.length}</h2>
+          <h2 style={{ fontSize: '20px', fontWeight: 600, marginBottom: '20px' }}>회원정보</h2>
+
           {datas
             .sort((a, b) => a.id - b.id)
             .reverse()
@@ -101,12 +161,13 @@ const Members = () => {
                       onClick={() => {
                         console.log(datas[idx]);
 
-                        setId(datas[idx].id);
+                        setUserData(datas[idx]);
+                        console.log(userData);
 
-                        navigation('detail');
+                        setIsOpen(true);
                       }}
                     >
-                      상세 보기
+                      수정
                     </Button>
                   </li>
                 </S.list>
@@ -114,7 +175,7 @@ const Members = () => {
             })}
         </>
       )}
-    </div>
+    </>
   );
 };
 
@@ -161,5 +222,3 @@ const S = {
     }
   `,
 };
-
-export default Members;

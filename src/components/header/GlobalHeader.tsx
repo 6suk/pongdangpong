@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
@@ -35,13 +35,19 @@ export const GlobalHeader: React.FC<PropsState> = props => {
     { id: 'Mypage', content: '마이페이지', path: 'me' },
   ];
 
+  const [active, setActive] = useState('');
   const pathName = useLocation().pathname;
 
   const checkActive = (path: string) => {
-    const target = pathName.split('/').filter(el => el);
+    const target = active.split('/').filter(el => el);
+
     if (path === '/' && !target.length) return 'on';
     else if (target.includes(path)) return 'on';
   };
+
+  useEffect(() => {
+    setActive(pathName);
+  }, [active, pathName]);
 
   const activeTarget = (path: string) => () => navigate(path);
 
@@ -59,7 +65,6 @@ export const GlobalHeader: React.FC<PropsState> = props => {
             {isLogin &&
               globalMenu.map(({ id, content, path, initPath }) => {
                 return (
-                  // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
                   <li key={id} className={checkActive(path)} onClick={activeTarget(initPath ? initPath : path)}>
                     {content}
                   </li>

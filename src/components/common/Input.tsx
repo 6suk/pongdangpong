@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { Button } from '@components/common/Button';
-import theme from '@styles/theme';
 
 type FormInputs = {
   message: string;

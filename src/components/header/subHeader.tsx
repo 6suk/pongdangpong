@@ -10,9 +10,11 @@ import { TicketMenuItem } from '@stores/menuSlice';
 
 import theme from '@styles/theme';
 
-export const SubHeader: React.FC<PropsState> = props => {
-  const { isLogin } = props;
+export const SubHeader: React.FC<PropsState> = (props) => {
 
+  const {isLogin} = props;
+
+  const [active, setActive] = useState("");
   const [headerActive, headerActiveSet] = useState('');
 
   const menuState = useSelector((state: any) => state.menu);

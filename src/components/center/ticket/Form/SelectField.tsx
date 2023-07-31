@@ -9,7 +9,7 @@ type SelectProps = {
   className?: 'required';
   name: string;
   value: string | number;
-  onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
+  onChange?: (e: ChangeEvent<HTMLSelectElement>) => void;
   disabled?: boolean;
   options: { value: string | number; label: string }[];
   label?: string;

@@ -14,7 +14,8 @@ type InputFieldProps = {
   placeholder?: string;
   type?: string;
   disabled?: boolean;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  min?: string;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
 export const InputField: FC<InputFieldProps> = ({ className, label, name, value, error = false, unit, ...rest }) => {
@@ -29,7 +30,7 @@ export const InputField: FC<InputFieldProps> = ({ className, label, name, value,
         className={error ? 'error' : ''}
         id={name}
         name={name}
-        value={value === 0 || value === undefined ? '' : value}
+        value={Number(value) === 0 || value === undefined ? '' : value}
         {...rest}
       />
       <span className="unit">{unit}</span>
@@ -45,7 +46,7 @@ export const InputField: FC<InputFieldProps> = ({ className, label, name, value,
         className={error ? 'error' : ''}
         id={name}
         name={name}
-        value={value === 0 ? '' : value}
+        value={Number(value) === 0 ? '' : value}
         {...rest}
       />
     </div>

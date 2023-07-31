@@ -17,18 +17,15 @@ const useInput = <T extends Record<string, unknown>>(initialState: T) => {
     setInputValues(prev => ({ ...prev, [name]: value }));
   }, []);
 
-  const inputReset = useCallback(
-    (isBlank: boolean = false) => {
-      if (!isBlank) setInputValues(initialState);
-      else {
-        const keys = Object.keys(inputValues);
-        keys.forEach(key => {
-          setInputValues(prev => ({ ...prev, [key]: '' }));
-        });
-      }
-    },
-    [initialState]
-  );
+  const inputReset = useCallback((data: T) => {
+    if (data) setInputValues(data);
+    else {
+      const keys = Object.keys(inputValues);
+      keys.forEach(key => {
+        setInputValues(prev => ({ ...prev, [key]: '' }));
+      });
+    }
+  }, []);
 
   return [inputValues, onChange, inputReset] as const;
 };

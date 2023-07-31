@@ -79,7 +79,7 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
           <button
             type="button"
             onClick={() => {
-              console.log(id + ' 수정/삭제');
+              navigate(`${id}/edit`);
             }}
           >
             수정 / 삭제

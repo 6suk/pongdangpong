@@ -1,11 +1,14 @@
-import React,{useState, useEffect} from 'react';
-import { styled } from 'styled-components';
+import React, { useState, useEffect, useCallback } from 'react';
+
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+
+import { styled } from 'styled-components';
+
 import { PropsState } from '@/app/App';
-import { useAuth } from '@hooks/apis/useAuth';
-import { useSwrData } from '@hooks/apis/useSwrData';
 import { me_info, Me_info_response } from '@apis/meApis';
 import { Notifications } from '@assets/icons/indexIcons';
+import { useAuth } from '@hooks/apis/useAuth';
+import { useSwrData } from '@hooks/apis/useSwrData';
 import theme from '@styles/theme';
 
 export const GlobalHeader: React.FC<PropsState> = props => {
@@ -22,77 +25,67 @@ export const GlobalHeader: React.FC<PropsState> = props => {
     logout();
   };
 
-  const {
-    name = '',
-  } = data ?? ({} as Me_info_response);
+  const { name = '' } = data ?? ({} as Me_info_response);
 
-  const globalMenu =[
-    {id:"Home",  content:"홈", path:"/"},
-    {id:"Schedule", content:"일정관리", path:"schedule"},
-    {id:"Member", content:"회원관리", path:"members"},
-    {id:"Center", content:"센터관리", path:"center", initPath:"center/tickets"},
-    {id:"Mypage", content:"마이페이지", path:"me"},
-  ]
+  const globalMenu = [
+    { id: 'Home', content: '홈', path: '/' },
+    { id: 'Schedule', content: '일정관리', path: 'schedule' },
+    { id: 'Member', content: '회원관리', path: 'members' },
+    { id: 'Center', content: '센터관리', path: 'center', initPath: 'center/tickets' },
+    { id: 'Mypage', content: '마이페이지', path: 'me' },
+  ];
 
-  const [active, setActive] = useState('');
+  const pathName = useLocation().pathname;
 
-  const pathName =  useLocation().pathname;
+  const checkActive = (path: string) => {
+    const target = pathName.split('/').filter(el => el);
+    if (path === '/' && !target.length) return 'on';
+    else if (target.includes(path)) return 'on';
+  };
 
-  const checkActive = (path: string) =>{
-    const target = active.split('/').filter(el=> el);
-    
-    if (path === "/" && !target.length) return "on";
-    else if (target.includes(path)) return "on";
-  }
-
-  useEffect(()=>{
-      setActive(pathName);      
-  },[active, pathName])
-
-  const activeTarget = (path : string) => () => navigate(path);
+  const activeTarget = (path: string) => () => navigate(path);
 
   return (
     <S.header>
       <div className="container">
         <h1 className="logo">
           <Link to={'/'}>
-            <img src="/imgs/logo.png" alt="로고" />
+            <img alt="로고" src="/imgs/logo.png" />
           </Link>
         </h1>
 
-      <S.nav theme={theme}>
-        <S.menu>
-          {
-            isLogin && globalMenu.map(({id, content, path, initPath})=>{              
-              return(
-                <li key={id} onClick={activeTarget(initPath ? initPath : path)} className={checkActive(path)}>
-                  {content}
-                </li>
-              )
-            })
-          }
-        </S.menu>
+        <S.nav theme={theme}>
+          <S.menu>
+            {isLogin &&
+              globalMenu.map(({ id, content, path, initPath }) => {
+                return (
+                  // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
+                  <li key={id} className={checkActive(path)} onClick={activeTarget(initPath ? initPath : path)}>
+                    {content}
+                  </li>
+                );
+              })}
+          </S.menu>
 
-        <ul>
-          <li className="user">
-            {isLogin ? 
-              <> 
-              <div className="pic">
-                <img src="/imgs/profile.png" alt="프로필 사진" />
-              </div>
-              <span className='userName'>
-                {name} 님 
-              </span>
-              <button type="button" onClick={handleLogOutClick} style={{cursor:"pointer"}} >          
-                로그아웃      
-              </button>
-              <Notifications style={{cursor:"pointer"}}/>
-              </> 
-              : 
-              <div>비로그인 상태</div>}
-          </li>
-        </ul>
-      </S.nav>
+          <ul>
+            <li className="user">
+              {isLogin ? (
+                <>
+                  <div className="pic">
+                    <img alt="프로필 사진" src="/imgs/profile.png" />
+                  </div>
+                  <span className="userName">{name} 님</span>
+                  <button style={{ cursor: 'pointer' }} type="button" onClick={handleLogOutClick}>
+                    로그아웃
+                  </button>
+                  <Notifications style={{ cursor: 'pointer' }} />
+                </>
+              ) : (
+                <div>비로그인 상태</div>
+              )}
+            </li>
+          </ul>
+        </S.nav>
       </div>
     </S.header>
   );
@@ -125,8 +118,8 @@ const S = {
     display: flex;
     align-items: center;
     justify-content: space-between;
-  
-    .user{
+
+    .user {
       height: 100%;
       display: flex;
       align-items: center;
@@ -169,20 +162,19 @@ const S = {
         }
       }
     }
-      
   `,
   menu: styled.ul`
     display: flex;
 
-    & > li{
+    & > li {
       margin: 0 14px;
-      cursor:pointer;
+      cursor: pointer;
       position: relative;
-          
-          &.on{
-            color: ${({theme})=> theme.colors["Pri-400"]};
-            font-weight: 600;
-          }
+
+      &.on {
+        color: ${({ theme }) => theme.colors['Pri-400']};
+        font-weight: 600;
+      }
     }
-  `
-}
+  `,
+};

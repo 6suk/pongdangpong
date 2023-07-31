@@ -8,6 +8,7 @@ import theme from '@styles/theme';
 interface ModalProps {
   children: React.ReactNode;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
+  maxWidth?: string;
 }
 
 export interface ModalValueState {
@@ -16,7 +17,7 @@ export interface ModalValueState {
   button: { id: number; title: string; color: boolean }[];
 }
 
-const ModalComponent: FC<ModalProps> = ({ children, setIsOpen }) => {
+const ModalComponent: FC<ModalProps> = ({ children, setIsOpen, maxWidth }) => {
   const handleClose = useCallback(
     (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       if (event.target === event.currentTarget) setIsOpen(false);
@@ -27,12 +28,12 @@ const ModalComponent: FC<ModalProps> = ({ children, setIsOpen }) => {
   return (
     <>
       <S.ModalBackground onClick={handleClose}>
-        <S.ModalContent onClick={e => e.stopPropagation()}>
+        <ModalContent $maxWidth={maxWidth} onClick={e => e.stopPropagation()}>
           <S.CloseButton onClick={() => setIsOpen(false)}>
             <img alt="close" src={x} />
           </S.CloseButton>
           <S.ModalInnerContent>{children}</S.ModalInnerContent>
-        </S.ModalContent>
+        </ModalContent>
       </S.ModalBackground>
     </>
   );
@@ -56,6 +57,19 @@ const fadeOut = keyframes`
   }
 `;
 
+const ModalContent = styled.div<{ $maxWidth?: string }>`
+  position: relative;
+  background: white;
+  border: 1px solid ${theme.colors.gray[600]};
+  max-height: 100%;
+  width: 100%;
+  max-width: ${props => (!props.$maxWidth ? `28rem` : props.$maxWidth)};
+  overflow-y: auto;
+  border-radius: 0.5rem;
+  padding: 3rem 2.5rem 2.5rem 2.5rem;
+  text-align: center;
+`;
+
 const S = {
   ModalBackground: styled.div`
     display: flex;
@@ -72,19 +86,6 @@ const S = {
     z-index: 999;
   `,
 
-  ModalContent: styled.div`
-    position: relative;
-    background: white;
-    border: 1px solid ${theme.colors.gray[600]};
-    max-height: 100%;
-    width: 100%;
-    max-width: 28rem;
-    overflow-y: auto;
-    border-radius: 0.5rem;
-    padding: 3rem 2.5rem 2.5rem 2.5rem;
-    text-align: center;
-  `,
-
   ModalInnerContent: styled.div`
     h3 {
       margin-bottom: 1rem;
@@ -92,6 +93,7 @@ const S = {
       font-weight: 800;
       color: ${theme.colors.gray[50]};
     }
+
     p {
       color: ${theme.colors.gray[50]};
       white-space: pre-wrap;

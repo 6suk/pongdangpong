@@ -105,7 +105,7 @@ const BackButton = styled.button`
   color: ${theme.colors.gray[500]};
 `;
 
-const DetailButton = styled.button`
+export const DetailButton = styled.button`
   font-size: 14px;
   padding-inline: 0.2rem;
   padding-block: 0.3rem;
@@ -121,7 +121,7 @@ const DetailButton = styled.button`
 `;
 
 const IssuedListWrap = styled.div`
-  font-size: 16px;
+  font-size: 14px;
 
   .table {
     display: grid;

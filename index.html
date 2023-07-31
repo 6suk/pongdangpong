@@ -5,10 +5,33 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
+      body {
+        overflow: scroll;
+      }
+
       ::-webkit-scrollbar {
-        display: none;
+        width: 14px;
+        height: 14px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        outline: none;
+        border-radius: 10px;
+        border: 4px solid transparent;
+        box-shadow: inset 6px 6px 0 rgba(34, 34, 34, 0.15);
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        border: 4px solid transparent;
+        box-shadow: inset 6px 6px 0 rgba(34, 34, 34, 0.3);
+      }
+
+      ::-webkit-scrollbar-track {
+        box-shadow: none;
+        background-color: transparent;
       }
     </style>
+
     <title>1-13-pongdangpong</title>
   </head>
   <body>

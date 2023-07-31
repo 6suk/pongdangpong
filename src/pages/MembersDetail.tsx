@@ -1,19 +1,46 @@
-import React, { useCallback } from 'react';
+import React, { useState, useCallback, memo, useEffect } from 'react';
 
-// import { useRequests } from '@hooks/apis/useRequests';
 import styled from 'styled-components';
 
+import { Button } from '@components/common/Button';
+import { Modal, ModalButton } from '@components/common/Modal';
+
+import { useRequests } from '@hooks/apis/useRequests';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
 interface UserListProps {
   [key: string]: string;
 }
 
-export const MembersDetail = ({ id }) => {
+const MembersDetail = ({ id }) => {
   const url = `members/${id}`;
+
   const { data, isLoading, isError } = useSwrData(url);
 
-  console.log(data);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const { name, birthDate, phone, sex }: UserListProps = data ?? {};
+
+  const dataArr = [name, birthDate, phone, sex];
+  const dataStr = ['name', 'birthDate', 'phone', 'sex'];
+  const dataStrKor = ['이름', '생일', '전화번호', '성별'];
+
+  const [userData, setUserData] = useState({
+    ...data,
+  });
+  const { request } = useRequests();
+
+  const editMember = useCallback(async () => {
+    try {
+      await request({
+        url: `members/${id}`,
+        method: 'put',
+        body: userData,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }, [id, userData]);
 
   const dataChange = useCallback((type: string, value: string) => {
     switch (type) {
@@ -33,28 +60,58 @@ export const MembersDetail = ({ id }) => {
     return value;
   }, []);
 
-  // const editMember = useCallback(async () => {
-  //   try {
-  //     await request({
-  //       url: `members/${memberId}`,
-  //       method: 'put',
-  //       body: {
-  //         name: '형진짱짱맨',
-  //         birthDate: '2023-07-29',
-  //         phone: 'string',
-  //         sex: 'MALE',
-  //         job: 'string',
-  //         acquisitionFunnel: 'string',
-  //       },
-  //     });
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }, []);
+  useEffect(() => {
+    console.log(userData);
+  }, [userData]);
 
   return (
-    (!isLoading && id ) && (
+    !isLoading &&
+    id && (
       <div>
+        {isOpen && (
+          <Modal setIsOpen={setIsOpen}>
+            {
+              <>
+                <ul>
+                  {dataArr.map((el, i) => {
+                    return (
+                      <li key={dataStr[i]}>
+                        <span style={{ color: 'gray ' }}>{dataStrKor[i]}</span>
+                        <input
+                          defaultValue={dataArr[i]}
+                          id={dataArr[i]}
+                          name={dataStr[i]}
+                          type="text"
+                          onChange={({ target }) => {
+                            setUserData({
+                              ...data,
+                              [dataStr[i]]: target.value,
+                            });
+                          }}
+                        />
+                      </li>
+                    );
+                  })}
+                </ul>
+                <div className="btn-wrap">
+                  <ModalButton $isPrimary={false} onClick={() => setIsOpen(false)}>
+                    취소
+                  </ModalButton>
+                  <ModalButton
+                    $isPrimary={true}
+                    onClick={() => {
+                      setIsOpen(false);
+
+                      editMember();
+                    }}
+                  >
+                    확인
+                  </ModalButton>
+                </div>
+              </>
+            }
+          </Modal>
+        )}
         <S.list key={data.id}>
           <li>
             <div className="pic">
@@ -81,6 +138,16 @@ export const MembersDetail = ({ id }) => {
               {dataChange('phone', data.phone)}
             </p>
           </li>
+          <li className="btn-wrap">
+            <Button
+              type="button"
+              onClick={() => {
+                setIsOpen(true);
+              }}
+            >
+              수정
+            </Button>
+          </li>
         </S.list>
       </div>
     )
@@ -94,7 +161,7 @@ const S = {
     justify-content: space-between;
     margin-bottom: 20px;
     padding: 6px 10px;
-    border: 1px solid gray;
+    border: 1px solid #e5e7eb;
     border-radius: 10px;
 
     & > li {
@@ -130,3 +197,5 @@ const S = {
     }
   `,
 };
+
+export const MembersDetailComponent = memo(MembersDetail);

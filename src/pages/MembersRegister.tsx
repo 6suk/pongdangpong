@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
@@ -34,6 +34,7 @@ export const MembersResgier: React.FC = () => {
 
   const navigate = useNavigate();
   const { request } = useRequests();
+  const inputRef = useRef(null);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -101,10 +102,24 @@ export const MembersResgier: React.FC = () => {
         {isOpen && (
           <Modal setIsOpen={setIsOpen}>
             <h2>등록완료</h2>
-            <p>{''}님의 회원 정보가 생성되었습니다. 문진을 바로 시작하시겠어요? </p>
+            <p>님의 회원 정보가 생성되었습니다. 문진을 바로 시작하시겠어요? </p>
             <img alt="" src="/imgs/Graphic_Member_registered.png" />
-            <ModalButton $isPrimary={false}>닫기</ModalButton>
-            <ModalButton $isPrimary={true}>문진 시작</ModalButton>
+            <ModalButton
+              $isPrimary={false}
+              onClick={() => {
+                setIsOpen(false);
+              }}
+            >
+              닫기
+            </ModalButton>
+            <ModalButton
+              $isPrimary={true}
+              onClick={() => {
+                navigate('/members');
+              }}
+            >
+              문진 시작
+            </ModalButton>
           </Modal>
         )}
       </S.modalContainer>
@@ -119,6 +134,7 @@ export const MembersResgier: React.FC = () => {
               이름 <span>*</span>
             </SC.Label>
             <SC.InputField
+              ref={inputRef}
               maxLength={10}
               name="name"
               placeholder="이름을 입력하세요"
@@ -156,6 +172,7 @@ export const MembersResgier: React.FC = () => {
               생년월일 <span>*</span>
             </SC.Label>
             <SC.InputField
+              ref={inputRef}
               maxLength={10}
               name="birthDate"
               placeholder="0000.00.00"
@@ -170,6 +187,7 @@ export const MembersResgier: React.FC = () => {
             </SC.Label>
 
             <SC.InputField
+              ref={inputRef}
               maxLength={13}
               name="phone"
               placeholder="000-0000-0000"
@@ -208,11 +226,40 @@ export const MembersResgier: React.FC = () => {
             size={'full'}
             onClick={e => {
               submitData(e);
+
+              setFormState({
+                name: '',
+                birthDate: '',
+                phone: '',
+                sex: '',
+                job: '',
+                acqusitionFunnel: '',
+                acquisitionFunnel: '',
+                toss: [],
+              });
             }}
           >
             확인
           </Button>
-          <Button isPri={false} size={'full'}>
+          <Button
+            isPri={false}
+            size={'full'}
+            onClick={() => {
+              // input select초기화 함수로 만들어로 빼기
+              inputRef.current.value = '';
+
+              setFormState({
+                name: '',
+                birthDate: '',
+                phone: '',
+                sex: '',
+                job: '',
+                acqusitionFunnel: '',
+                acquisitionFunnel: '',
+                toss: [],
+              });
+            }}
+          >
             취소
           </Button>
         </S.BtnWrap>

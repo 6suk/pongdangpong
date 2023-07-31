@@ -10,8 +10,9 @@ interface ButtonProps {
 }
 
 const buttonsize = {
-  main: `width: 146px;`,
-  full: `width: 100%;`,
+  main: `width: 146px; padding-inline: 2rem; padding-block: 0.8rem;`,
+  full: `width: 100%; padding-inline: 2rem; padding-block: 0.8rem;`,
+  md: `padding-inline: 2rem; padding-block: 0.6rem;`,
 };
 
 export const Button: React.FC<ButtonProps> = ({ isPri, children, type = 'button', size = 'main', ...rest }) => {
@@ -34,8 +35,6 @@ const ButtonStyle = styled.button<ButtonStyleProps>`
     const { colors, font } = theme;
     return `
       ${$size}
-      padding-inline: 2rem;
-      padding-block: 0.8rem;
       background-color: ${$isPri ? colors.pri[500] : colors.gray[800]};
       &:hover {
         background-color: ${$isPri ? colors.pri[400] : colors.gray[700]};

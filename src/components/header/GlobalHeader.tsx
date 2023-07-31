@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
+
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 import { styled } from 'styled-components';
@@ -26,33 +27,23 @@ export const GlobalHeader: React.FC<PropsState> = props => {
 
   const { name = '' } = data ?? ({} as Me_info_response);
 
-  const globalMenu = useMemo(() => {
-    return [
-      { id: 'Home', content: '홈', path: '/' },
-      { id: 'Schedule', content: '일정관리', path: 'schedule' },
-      { id: 'Member', content: '회원관리', path: 'members' },
-      { id: 'Center', content: '센터관리', path: 'center', initPath: 'center/tickets' },
-      { id: 'Mypage', content: '마이페이지', path: 'me' },
-    ];
-  }, []);
+  const globalMenu = [
+    { id: 'Home', content: '홈', path: '/' },
+    { id: 'Schedule', content: '일정관리', path: 'schedule' },
+    { id: 'Member', content: '회원관리', path: 'members' },
+    { id: 'Center', content: '센터관리', path: 'center', initPath: 'center/tickets' },
+    { id: 'Mypage', content: '마이페이지', path: 'me' },
+  ];
 
   const [active, setActive] = useState('');
-
   const pathName = useLocation().pathname;
 
-  const checkActive = useCallback(
-    (path: string) => {
-      const target = active.split('/').filter(el => el);
+  const checkActive = (path: string) => {
+    const target = active.split('/').filter(el => el);
 
-      if (path === '/' && !target.length) return 'on';
-      else if (target.includes(path)) return 'on';
-    },
-    [active]
-  );
-
-  useEffect(() => {
-    setActive(pathName);
-  }, [active, pathName]);
+    if (path === '/' && !target.length) return 'on';
+    else if (target.includes(path)) return 'on';
+  };
 
   useEffect(() => {
     setActive(pathName);

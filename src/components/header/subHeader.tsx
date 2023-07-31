@@ -10,10 +10,11 @@ import { TicketMenuItem } from '@stores/menuSlice';
 
 import theme from '@styles/theme';
 
-export const SubHeader: React.FC<PropsState> = props => {
-  const { isLogin } = props;
+export const SubHeader: React.FC<PropsState> = (props) => {
 
-  const [active, setActive] = useState('');
+  const {isLogin} = props;
+
+  const [active, setActive] = useState("");
   const [headerActive, headerActiveSet] = useState('');
 
   const menuState = useSelector((state: any) => state.menu);
@@ -31,29 +32,25 @@ export const SubHeader: React.FC<PropsState> = props => {
     menuState[pathTarget]?.find((el: any) => el.path === pathName)?.hide && headerActiveSet('');
   }, [isLogin, pathName]);
 
-  useEffect(() => {
-    setActive(pathName);
-  }, [pathName]);
-
   return (
     <>
-      <S.Subheader className={headerActive} theme={theme}>
+      <S.subheader className={headerActive} theme={theme}>
         <div className="wrap">
           {menuState[pathTarget]?.map(({ id, content, path }: TicketMenuItem) => {
             return (
-              <li key={id} className={active === path ? 'on' : ''}>
+              <li key={id} className={pathName === path || path.split('/')[2] === pathName.split('/')[2] ? 'on' : ''}>
                 <Link to={path}>{content}</Link>
               </li>
             );
           })}
         </div>
-      </S.Subheader>
+      </S.subheader>
     </>
   );
 };
 
 const S = {
-  Subheader: styled.ul`
+  subheader: styled.ul`
     width: 100%;
     height: 64px;
     background-color: #fff;

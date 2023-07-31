@@ -1,12 +1,15 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { styled } from 'styled-components';
+
+import { mutate } from 'swr';
 
 import { Button } from '@components/common/Button';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
-import { MembersDetail } from './MembersDetail';
+import { MembersAlbum } from './MembersAlbum';
+import { MembersDetailComponent } from './MembersDetail';
 import { MembersRecord } from './MembersRecord';
 import { MembersResgier } from './MembersRegister';
 
@@ -14,14 +17,15 @@ interface UserListProps {
   [key: string]: string;
 }
 const Members = () => {
-  const location = useLocation();
-  const navigation = useNavigate();
-
   const [id, setId] = useState(0);
 
+  const navigation = useNavigate();
+
+  const location = useLocation();
+  const len = 100;
   const pathSlice = location.pathname.split('/');
   const currentPathname = pathSlice[pathSlice.length - 1];
-  const len = 100;
+
   const { data, isLoading } = useSwrData(`members?page=1&size=${len}&sort=createdAt%2CDesc`);
   const { datas } = data ?? ({} as UserListProps);
 
@@ -43,11 +47,19 @@ const Members = () => {
     return value;
   }, []);
 
+  useEffect(() => {
+    (async () => {
+      mutate(`members?page=1&size=${len}&sort=createdAt%2CDesc`);
+    })();
+  });
+
   return (
     <div style={{ paddingTop: '40px' }}>
       {currentPathname === 'register' && <MembersResgier />}
-      {currentPathname === 'detail' && <MembersDetail id={id} />}
+      {currentPathname === 'detail' && <MembersDetailComponent id={id} />}
       {currentPathname === 'record' && <MembersRecord />}
+      {currentPathname === 'album' && <MembersAlbum />}
+
       {location.pathname === '/members' && !isLoading && (
         <>
           <h2 style={{ fontSize: '20px', fontWeight: 600, marginBottom: '20px' }}>전체 회원{datas.length}</h2>
@@ -87,9 +99,10 @@ const Members = () => {
                     <Button
                       type="button"
                       onClick={() => {
-                        // 맴버 컴포넌트로 id 전달
                         console.log(datas[idx]);
+
                         setId(datas[idx].id);
+
                         navigation('detail');
                       }}
                     >
@@ -112,7 +125,7 @@ const S = {
     justify-content: space-between;
     margin-bottom: 20px;
     padding: 6px 10px;
-    border: 1px solid gray;
+    border: 1px solid #e5e7eb;
     border-radius: 10px;
 
     & > li {

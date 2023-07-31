@@ -109,10 +109,6 @@ export const MembersRecord = () => {
                   onClick={() => {
                     setIsOpen(false);
 
-                    // const c = { ...userData };
-                    // c.birthDate = c.birthDate.replace(/./gi, '-');
-                    // setUserData(c);
-
                     editMember();
                   }}
                 >
@@ -190,7 +186,7 @@ const S = {
     justify-content: space-between;
     margin-bottom: 20px;
     padding: 6px 10px;
-    border: 1px solid gray;
+    border: 1px solid #e5e7eb;
     border-radius: 10px;
 
     & > li {

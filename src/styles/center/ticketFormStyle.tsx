@@ -89,7 +89,7 @@ export const InputCountStyle = styled.div`
 export const FormGridContainer = styled.div`
   margin-top: 2rem;
   display: grid;
-  grid-template-rows: repeat(4, 1fr);
+  grid-template-rows: repeat(4, minmax(100px, 1fr));
   grid-template-columns: repeat(2, minmax(200px, 1fr));
   grid-auto-flow: column;
   row-gap: 0.5rem;

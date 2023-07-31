@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { styled } from 'styled-components';
@@ -11,6 +11,7 @@ import { CenterContainer } from '@styles/center/ticketsStyle';
 
 import theme from '@styles/theme';
 
+import { StaffsEditModal } from './StaffsEditModal';
 import { DetailButton } from '../ticket/TicketIssued';
 
 export const StaffsList = () => {
@@ -19,6 +20,8 @@ export const StaffsList = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { meta, datas: staffsDatas } = data ?? { meta: {}, datas: [] };
   const isActivePath = searchParams.get('sort') === 'createdAt,Desc';
+  const [isOpen, setIsOpen] = useState(false);
+  const [editId, setEditId] = useState(0);
 
   useEffect(() => {
     if (searchParams.size === 0) {
@@ -67,7 +70,13 @@ export const StaffsList = () => {
                 const { id, name, phone, memberCount, rating, memo } = v;
                 return (
                   // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-                  <div key={id} className="table-row" onClick={() => {}}>
+                  <div
+                    key={id}
+                    className="table-row"
+                    onClick={() => {
+                      navigate(`${id}`);
+                    }}
+                  >
                     <p className="icon-box">
                       <MemberIcon /> {name}
                     </p>
@@ -78,6 +87,8 @@ export const StaffsList = () => {
                     <DetailButton
                       onClick={e => {
                         e.stopPropagation();
+                        setEditId(id);
+                        setIsOpen(true);
                       }}
                       onMouseOver={e => {
                         e.stopPropagation();
@@ -91,6 +102,7 @@ export const StaffsList = () => {
           </div>
         </StaffsLIstWrap>
       </CenterContainer>
+      {isOpen && <StaffsEditModal id={editId} setIsOpen={setIsOpen} />}
     </>
   );
 };
@@ -173,6 +185,11 @@ const StaffsLIstWrap = styled.div`
       align-items: center;
       gap: 0.6rem;
       font-weight: 600;
+
+      svg {
+        width: 26px;
+        height: auto;
+      }
     }
 
     p {

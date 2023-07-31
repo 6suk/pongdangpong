@@ -61,14 +61,28 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
           >
             수강권 부여내역
           </button>
-          <button
-            type="button"
-            onClick={() => {
-              console.log(id + ' 판매종료 클릭');
-            }}
-          >
-            판매종료
-          </button>
+          {isActive ? (
+            <button
+              type="button"
+              onClick={() => {
+                console.log(id + ' 판매종료 클릭');
+              }}
+            >
+              판매종료
+            </button>
+          ) : (
+            <>
+              {' '}
+              <button
+                type="button"
+                onClick={() => {
+                  console.log(id + ' 판매가능 클릭');
+                }}
+              >
+                판매가능
+              </button>
+            </>
+          )}
           <button
             type="button"
             onClick={() => {

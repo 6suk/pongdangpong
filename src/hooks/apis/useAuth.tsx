@@ -45,11 +45,11 @@ export const useAuth = () => {
     setIsLoading(true);
     try {
       await axiosInstance[method](url);
-      dispatch(clearTokens());
-      clearCache();
     } catch (error) {
       setAuthError(error);
     } finally {
+      dispatch(clearTokens());
+      clearCache();
       setIsLoading(false);
     }
   }, [dispatch]);

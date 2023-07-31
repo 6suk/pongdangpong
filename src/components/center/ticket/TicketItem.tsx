@@ -63,7 +63,7 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
           <button
             type="button"
             onClick={() => {
-              navigate(`${id}/issued-tickets`);
+              navigate(`/center/tickets/${id}/issued-tickets`);
             }}
           >
             수강권 부여내역

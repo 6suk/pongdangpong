@@ -1,21 +1,28 @@
 import React, { useState, useCallback, memo, useEffect } from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
 import styled from 'styled-components';
 
+import { TicketItem } from '@components/center/ticket/TicketItem';
 import { Button } from '@components/common/Button';
 import { Modal, ModalButton } from '@components/common/Modal';
 
 import { useRequests } from '@hooks/apis/useRequests';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
+import { NoneDisplay, TicketContainer, TicketWrap } from '@styles/center/ticketsStyle';
+
 interface UserListProps {
   [key: string]: string;
 }
 
-const MembersDetail = ({ id }) => {
+const MembersDetail = ({ id, tickets }) => {
   const url = `members/${id}`;
 
   const { data, isLoading, isError } = useSwrData(url);
+
+  const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -59,10 +66,6 @@ const MembersDetail = ({ id }) => {
     }
     return value;
   }, []);
-
-  useEffect(() => {
-    console.log(userData);
-  }, [userData]);
 
   return (
     !isLoading &&
@@ -149,6 +152,27 @@ const MembersDetail = ({ id }) => {
             </Button>
           </li>
         </S.list>
+
+        <Button
+          onClick={() => {
+            navigate('addTicket');
+          }}
+        >
+          수강권 부여
+        </Button>
+
+        <TicketContainer>
+          <TicketWrap>
+            <NoneDisplay>
+              {tickets
+                .sort((a, b) => a.id + b.id)
+                .reverse()
+                .map(el => {
+                  return <TicketItem key={el.id} ticket={el} />;
+                })}
+            </NoneDisplay>
+          </TicketWrap>
+        </TicketContainer>
       </div>
     )
   );

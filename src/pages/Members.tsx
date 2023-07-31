@@ -8,6 +8,7 @@ import { mutate } from 'swr';
 import { Button } from '@components/common/Button';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
+import { MembersAddTicekt } from './MembersAddTicekt';
 import { MembersAlbum } from './MembersAlbum';
 import { MembersDetailComponent } from './MembersDetail';
 import { MembersRecord } from './MembersRecord';
@@ -47,6 +48,8 @@ const Members = () => {
     return value;
   }, []);
 
+  const { data: ticketData } = useSwrData('tickets') ?? {};
+
   useEffect(() => {
     (async () => {
       mutate(`members?page=1&size=${len}&sort=createdAt%2CDesc`);
@@ -56,12 +59,27 @@ const Members = () => {
   return (
     <div style={{ paddingTop: '40px' }}>
       {currentPathname === 'register' && <MembersResgier />}
-      {currentPathname === 'detail' && <MembersDetailComponent id={id} />}
+      {currentPathname === 'detail' && <MembersDetailComponent id={id} tickets={ticketData?.tickets} />}
       {currentPathname === 'record' && <MembersRecord />}
       {currentPathname === 'album' && <MembersAlbum />}
+      {currentPathname === 'addTicket' && <MembersAddTicekt id={id} members={datas} tickets={ticketData?.tickets} />}
 
       {location.pathname === '/members' && !isLoading && (
         <>
+          <form action="">
+            <select id="" name="">
+              <option value="등록일">등록일</option>
+            </select>
+            <label htmlFor="search"></label>
+            <input id="search" name="search" placeholder="회원/멤버 이름, 연락처로 검색하세요" type="search" />
+          </form>
+          <Button
+            onClick={() => {
+              navigation('register');
+            }}
+          >
+            회원 등록
+          </Button>
           <h2 style={{ fontSize: '20px', fontWeight: 600, marginBottom: '20px' }}>전체 회원{datas.length}</h2>
           {datas
             .sort((a, b) => a.id - b.id)

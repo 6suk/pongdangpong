@@ -1,3 +1,5 @@
+import path from 'path';
+
 import { useEffect, useState } from 'react';
 
 import { useSelector } from 'react-redux';
@@ -10,26 +12,27 @@ import { TicketMenuItem } from '@stores/menuSlice';
 
 import theme from '@styles/theme';
 
-export const SubHeader: React.FC<PropsState> = (props) => {
+export const SubHeader: React.FC<PropsState> = props => {
+  const { isLogin } = props;
 
-  const {isLogin} = props;
-
-  const [active, setActive] = useState("");
+  const [active, setActive] = useState('');
   const [headerActive, headerActiveSet] = useState('');
 
   const menuState = useSelector((state: any) => state.menu);
 
   const pathName = useLocation().pathname;
+  const pathSlice = pathName.split('/');
 
   const pathTarget = (() => {
-    if (pathName === '/') return 'home';
-    else return pathName.split('/')[1];
+    return pathName === '/' ? 'home' : pathSlice[1];
   })();
 
   useEffect(() => {
     isLogin && menuState[pathTarget] && headerActiveSet('on');
-    (!isLogin || !menuState[pathTarget]?.length) && headerActiveSet('');
-    menuState[pathTarget]?.find((el: any) => el.path === pathName)?.hide && headerActiveSet('');
+    if (!isLogin || !menuState[pathTarget]?.length || (pathSlice[1] === 'members' && pathSlice.length < 3))
+      headerActiveSet('');
+
+    menuState[pathTarget]?.find(el => el.path === pathName)?.hide && headerActiveSet('');
   }, [isLogin, pathName]);
 
   return (

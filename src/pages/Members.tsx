@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { styled } from 'styled-components';
@@ -21,8 +21,9 @@ const Members = () => {
   const [id, setId] = useState(0);
 
   const navigation = useNavigate();
-
   const location = useLocation();
+  const userIdRef = useRef(null);
+
   const len = 100;
   const pathSlice = location.pathname.split('/');
   const currentPathname = pathSlice[pathSlice.length - 1];
@@ -59,27 +60,31 @@ const Members = () => {
   return (
     <div style={{ paddingTop: '40px' }}>
       {currentPathname === 'register' && <MembersResgier />}
-      {currentPathname === 'detail' && <MembersDetailComponent id={id} tickets={ticketData?.tickets} />}
+      {currentPathname === 'detail' && <MembersDetailComponent id={userIdRef.current} tickets={ticketData?.tickets} />}
       {currentPathname === 'record' && <MembersRecord />}
       {currentPathname === 'album' && <MembersAlbum />}
-      {currentPathname === 'addTicket' && <MembersAddTicekt id={id} members={datas} tickets={ticketData?.tickets} />}
+      {currentPathname === 'addTicket' && (
+        <MembersAddTicekt id={userIdRef.current} members={datas} tickets={ticketData?.tickets} />
+      )}
 
       {location.pathname === '/members' && !isLoading && (
         <>
-          <form action="">
-            <select id="" name="">
-              <option value="등록일">등록일</option>
-            </select>
-            <label htmlFor="search"></label>
-            <input id="search" name="search" placeholder="회원/멤버 이름, 연락처로 검색하세요" type="search" />
-          </form>
-          <Button
-            onClick={() => {
-              navigation('register');
-            }}
-          >
-            회원 등록
-          </Button>
+          <S.wrap>
+            <form action="">
+              <select id="" name="">
+                <option value="등록일">등록일</option>
+              </select>
+              <label htmlFor="search"></label>
+              <input id="search" name="search" placeholder="회원/멤버 이름, 연락처로 검색하세요" type="search" />
+            </form>
+            <Button
+              onClick={() => {
+                navigation('register');
+              }}
+            >
+              회원 등록
+            </Button>
+          </S.wrap>
           <h2 style={{ fontSize: '20px', fontWeight: 600, marginBottom: '20px' }}>전체 회원{datas.length}</h2>
           {datas
             .sort((a, b) => a.id - b.id)
@@ -119,7 +124,8 @@ const Members = () => {
                       onClick={() => {
                         console.log(datas[idx]);
 
-                        setId(datas[idx].id);
+                        userIdRef.current = datas[idx].id;
+                        // setId(datas[idx].id);
 
                         navigation('detail');
                       }}
@@ -177,6 +183,11 @@ const S = {
         width: 200px;
       }
     }
+  `,
+  wrap: styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   `,
 };
 

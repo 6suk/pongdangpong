@@ -18,6 +18,8 @@ interface UserListProps {
 }
 
 const MembersDetail = ({ id, tickets }) => {
+  console.log(id);
+
   const url = `members/${id}`;
 
   const { data, isLoading, isError } = useSwrData(url);
@@ -25,6 +27,7 @@ const MembersDetail = ({ id, tickets }) => {
   const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [editTicketModalState, setEditTicketModalState] = useState(false);
 
   const { name, birthDate, phone, sex }: UserListProps = data ?? {};
 
@@ -67,114 +70,117 @@ const MembersDetail = ({ id, tickets }) => {
     return value;
   }, []);
 
-  return (
-    !isLoading &&
-    id && (
-      <div>
-        {isOpen && (
-          <Modal setIsOpen={setIsOpen}>
-            {
-              <>
-                <ul>
-                  {dataArr.map((el, i) => {
-                    return (
-                      <li key={dataStr[i]}>
-                        <span style={{ color: 'gray ' }}>{dataStrKor[i]}</span>
-                        <input
-                          defaultValue={dataArr[i]}
-                          id={dataArr[i]}
-                          name={dataStr[i]}
-                          type="text"
-                          onChange={({ target }) => {
-                            setUserData({
-                              ...data,
-                              [dataStr[i]]: target.value,
-                            });
-                          }}
-                        />
-                      </li>
-                    );
-                  })}
-                </ul>
-                <div className="btn-wrap">
-                  <ModalButton $isPrimary={false} onClick={() => setIsOpen(false)}>
-                    취소
-                  </ModalButton>
-                  <ModalButton
-                    $isPrimary={true}
-                    onClick={() => {
-                      setIsOpen(false);
-
-                      editMember();
-                    }}
-                  >
-                    확인
-                  </ModalButton>
-                </div>
-              </>
-            }
-          </Modal>
-        )}
-        <S.list key={data.id}>
-          <li>
-            <div className="pic">
-              <img alt="profile" src="/imgs/profile.png" />
-            </div>
-            <p>
-              <span>이름</span>
-              {data.name}
-            </p>
-            <p>
-              <span>생년월일</span>
-              {dataChange('birthDate', data.birthDate)}
-            </p>
-            <p>
-              <span>등록일</span>
-              {dataChange('createdAt', data.createdAt)}
-            </p>
-            <p>
-              <span>성별</span>
-              {dataChange('sex', data.sex)}
-            </p>
-            <p>
-              <span>전화번호</span>
-              {dataChange('phone', data.phone)}
-            </p>
-          </li>
-          <li className="btn-wrap">
-            <Button
-              type="button"
-              onClick={() => {
-                setIsOpen(true);
-              }}
-            >
-              수정
-            </Button>
-          </li>
-        </S.list>
-
-        <Button
-          onClick={() => {
-            navigate('addTicket');
-          }}
-        >
-          수강권 부여
-        </Button>
-
-        <TicketContainer>
-          <TicketWrap>
-            <NoneDisplay>
-              {tickets
-                .sort((a, b) => a.id + b.id)
-                .reverse()
-                .map(el => {
-                  return <TicketItem key={el.id} ticket={el} />;
+  return !isLoading && id ? (
+    <div>
+      {isOpen && (
+        <Modal setIsOpen={setIsOpen}>
+          {
+            <>
+              <ul>
+                {dataArr.map((el, i) => {
+                  return (
+                    <li key={dataStr[i]}>
+                      <span style={{ color: 'gray ' }}>{dataStrKor[i]}</span>
+                      <input
+                        defaultValue={dataArr[i]}
+                        id={dataArr[i]}
+                        name={dataStr[i]}
+                        type="text"
+                        onChange={({ target }) => {
+                          setUserData({
+                            ...data,
+                            [dataStr[i]]: target.value,
+                          });
+                        }}
+                      />
+                    </li>
+                  );
                 })}
-            </NoneDisplay>
-          </TicketWrap>
-        </TicketContainer>
-      </div>
-    )
+              </ul>
+              <div className="btn-wrap">
+                <ModalButton $isPrimary={false} onClick={() => setIsOpen(false)}>
+                  취소
+                </ModalButton>
+                <ModalButton
+                  $isPrimary={true}
+                  onClick={() => {
+                    setIsOpen(false);
+
+                    editMember();
+                  }}
+                >
+                  확인
+                </ModalButton>
+              </div>
+            </>
+          }
+        </Modal>
+      )}
+      <S.list key={data.id}>
+        <li>
+          <div className="pic">
+            <img alt="profile" src="/imgs/profile.png" />
+          </div>
+          <p>
+            <span>이름</span>
+            {data.name}
+          </p>
+          <p>
+            <span>생년월일</span>
+            {dataChange('birthDate', data.birthDate)}
+          </p>
+          <p>
+            <span>등록일</span>
+            {dataChange('createdAt', data.createdAt)}
+          </p>
+          <p>
+            <span>성별</span>
+            {dataChange('sex', data.sex)}
+          </p>
+          <p>
+            <span>전화번호</span>
+            {dataChange('phone', data.phone)}
+          </p>
+        </li>
+        <li className="btn-wrap">
+          <Button
+            type="button"
+            onClick={() => {
+              setIsOpen(true);
+            }}
+          >
+            수정
+          </Button>
+        </li>
+      </S.list>
+
+      <Button
+        onClick={() => {
+          navigate('addTicket');
+        }}
+      >
+        수강권 부여
+      </Button>
+
+      {/* 수강권 수정 */}
+      {editTicketModalState && <Modal setIsOpen={setEditTicketModalState}>{}</Modal>}
+
+      <TicketContainer>
+        <TicketWrap>
+          <NoneDisplay>
+            {tickets
+              .sort((a, b) => a.id - b.id)
+              .map(el => {
+                return <TicketItem key={el.id} setIsOpen={setEditTicketModalState} ticket={el} />;
+              })}
+          </NoneDisplay>
+        </TicketWrap>
+      </TicketContainer>
+    </div>
+  ) : (
+    <h2 style={{ textAlign: 'center' }}>
+      선택된 회원이 없습니다 <br></br> <strong>회원관리 페이지</strong>에서 회원을 선택해주세요!
+    </h2>
   );
 };
 

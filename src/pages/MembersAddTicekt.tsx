@@ -1,17 +1,21 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { Modal } from '@components/common/Modal';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
+
+import { styled } from 'styled-components';
+
+import { Button } from '@components/common/Button';
+import { Modal, ModalButton } from '@components/common/Modal';
 import { useRequests } from '@hooks/apis/useRequests';
 
 import { useSwrData } from '@hooks/apis/useSwrData';
-import { Button } from '@components/common/Button';
+import { SC } from '@styles/styles';
 
-export const MembersAddTicekt = ({ id, members,tickets }) => {
-
+export const MembersAddTicekt = ({ id, members, tickets }) => {
   const { data, isLoading } = useSwrData('staffs');
 
-  const {datas : staffData} = data ?? {}
+  console.log(id);
 
-  const [memberModalIsOpen, setMemberModalIsOpen] = useState(false);
+  const { datas: staffData } = data ?? {};
+
   const [staffModalIsOpen, setStaffModalIsOpen] = useState(false);
 
   const [submitTicketData, setSubmitTicketData] = useState({
@@ -22,139 +26,140 @@ export const MembersAddTicekt = ({ id, members,tickets }) => {
     endAt: '',
   });
 
-  // console.log(id);
-  
-
   const [ticketId, setTicketId] = useState(0);
- 
-  const {request} = useRequests();
 
-  const addTicket = useCallback(async ()=>{
-    try {
-      await request({
-        url:`tickets/${ticketId}/issue`,
-        method: 'post',
-        body:submitTicketData,
-      });
-
-      alert('부여완료')
-      
-    } catch (error) {
-      console.error(error)
-    }
-  },[ticketId,submitTicketData])
+  const { request } = useRequests();
 
   useEffect(() => {
-    console.log(submitTicketData);
-    console.log(ticketId,"ticketId");
-    
-  }, [submitTicketData,ticketId]);
+    console.log(ticketId);
+  }, [ticketId]);
+
+  const addTicket = useCallback(async () => {
+    try {
+      await request({
+        url: `tickets/${ticketId}/issue`,
+        method: 'post',
+        body: submitTicketData,
+      });
+
+      alert('부여완료');
+    } catch (error) {
+      console.error(error);
+    }
+  }, [ticketId, submitTicketData]);
 
   return (
-    <>
-      <h2># 수강권 부여</h2>
-
-      <h2>## 티켓 생성</h2>
-      <select name="ticketId" id="ticketId" onChange={(e)=>{setTicketId(+e.target.value)}}>
-        {
-          tickets?.map(({id, title})=>{
-            return <option key={id} value={id}>{`${title}`}</option>
-          })
-        }
-      </select>
-
-      {/* <button
-        type="button"
-        onClick={() => {
-          setMemberModalIsOpen(true);
+    <S.addTicketContainer>
+      <h2 className="main-title">수강권 부여</h2>
+      <p className="add-ticket-username">
+        부여할 회원 <span> {members?.filter(el => el.id === id)[0]?.name}</span>
+      </p>
+      <h3>수강권 선택</h3>
+      <SC.Select
+        id="ticketId"
+        name="ticketId"
+        onChange={e => {
+          setTicketId(+e.target.value);
         }}
       >
-        회원 선택하기
-      </button>
-      {memberModalIsOpen && (
-        <Modal setIsOpen={setMemberModalIsOpen}>
-          {
-            <>
-              {members?.map((el, i) => {
-                const { id, name, phone, sex, birthDate } = el;
-                return (
-                  <div key={id}>
-                    <input
-                      checked={submitTicketData['memberIds']?.includes(members[i].id) ? true : false}
-                      id={id}
-                      name="memberIds"
-                      type="checkbox"
-                      onChange={e => {
-                        e.stopPropagation();
+        {tickets?.map(({ id, title }) => {
+          return <option key={id} value={id}>{`${title}`}</option>;
+        })}
+      </SC.Select>
+      {staffModalIsOpen && (
+        <Modal setIsOpen={setStaffModalIsOpen}>
+          {staffData?.map(({ id, memberCount, memo, name, phone, rating }) => {
+            return (
+              <div key={id}>
+                <input
+                  id={id}
+                  name="privateTutorId"
+                  type="radio"
+                  onChange={e => {
+                    e.stopPropagation();
 
-                        setSubmitTicketData({
-                          ...submitTicketData,
-                          [e.target.name]: [...new Set([...submitTicketData[e.target.name], +e.target.id])],
-                        });
-                      }}
-                    />
-                    <label
-                      htmlFor={id}
-                    >{`id :${id} 이름: ${name} 전화번호:${phone} 성별: ${sex} 생년월일${birthDate}`}</label>
-                  </div>
-                );
-              })}
-            </>
-          }
+                    setSubmitTicketData({
+                      ...submitTicketData,
+                      [e.target.name]: +e.target.id,
+                    });
+                  }}
+                />
+                <label
+                  htmlFor={id}
+                >{`id :${id} 이름: ${name} 전화번호:${phone} 회원 수:${memberCount} 메모:${memo} 평가: ${rating}`}</label>
+              </div>
+            );
+          })}
+          <ModalButton>취소</ModalButton>
+          <ModalButton
+            $isPrimary={true}
+            onClick={() => {
+              setStaffModalIsOpen(false);
+            }}
+          >
+            확인
+          </ModalButton>
         </Modal>
-      )} */}
-      <br />
-
-      <p>선택한 회원 : </p>
-      
-
-      {/* 담당강사 선택 */}
-      {staffModalIsOpen && <Modal setIsOpen={setStaffModalIsOpen}>
-                {staffData?.map(({id, memberCount, memo, name, phone, rating}, i) => {
-                    return (
-                      <div key={id}>
-                        <input                        
-                          id={id}
-                          name="privateTutorId"
-                          type="radio"
-                          onChange={e => {
-                            e.stopPropagation();
-    
-                            setSubmitTicketData({
-                              ...submitTicketData,
-                              [e.target.name]: +e.target.id,
-                            });
-                          }}
-                        />
-                        <label
-                          htmlFor={id}
-                        >{`id :${id} 이름: ${name} 전화번호:${phone} 회원 수:${memberCount} 메모:${memo} 평가: ${rating}`}</label>
-                      </div>
-                    );
-                })}
-      }</Modal>}
-      <button
+      )}
+      <Button
         type="button"
         onClick={() => {
           setStaffModalIsOpen(true);
         }}
       >
         담당강사 선택
-      </button>
-
-      <label htmlFor="startAt">시작일</label>
-      <input type="date" id="startAt"name='startAt' onChange={({target})=>{
-        setSubmitTicketData({...submitTicketData, [target.name]: target.value})
-        
-      }}/>
-      <label htmlFor="endAt">종료일</label>
-      <input type="date" id="endAt" name='endAt' onChange={({target})=>{
-                setSubmitTicketData({...submitTicketData, [target.name]: target.value})
-      }}/>
-
-      <Button onClick={()=>{
-        addTicket()
-      }}>전송</Button>
-    </>
+      </Button>
+      담당 강사명 : {staffData?.filter(el => el.id === submitTicketData['privateTutorId'])[0]?.name}
+      <br></br>
+      <label htmlFor="startAt">
+        <strong>시작일</strong>
+      </label>
+      <input
+        id="startAt"
+        name="startAt"
+        type="date"
+        onChange={({ target }) => {
+          setSubmitTicketData({ ...submitTicketData, [target.name]: target.value });
+        }}
+      />
+      <label htmlFor="endAt">
+        {' '}
+        <strong>종료일</strong>
+      </label>
+      <input
+        id="endAt"
+        name="endAt"
+        type="date"
+        onChange={({ target }) => {
+          setSubmitTicketData({ ...submitTicketData, [target.name]: target.value });
+        }}
+      />
+      {/* 수강권 부여완료 : 선택하신 수강권의 부여가 완료되었습니다. */}
+      <Button
+        onClick={() => {
+          addTicket();
+        }}
+      >
+        저장
+      </Button>
+    </S.addTicketContainer>
   );
+};
+
+const S = {
+  addTicketContainer: styled.div`
+    .main-title {
+      font-size: 32px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 14px;
+    }
+    .add-ticket-username {
+      text-align: center;
+
+      & > span {
+        font-weight: 700;
+      }
+    }
+  `,
 };

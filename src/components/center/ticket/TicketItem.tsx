@@ -8,7 +8,7 @@ interface TicketItemProps {
   ticket: Ticket_response;
 }
 
-export const TicketItem = ({ ticket }: TicketItemProps) => {
+export const TicketItem = ({ ticket, setIsOpen }: TicketItemProps) => {
   const navigate = useNavigate();
   const {
     id,
@@ -94,7 +94,7 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
           <button
             type="button"
             onClick={() => {
-              navigate(`${id}/edit`);
+              setIsOpen(true);
             }}
           >
             수정 / 삭제

@@ -1,17 +1,16 @@
 import React, { useState, useCallback } from 'react';
-
 import { Routes, Route, useNavigate, useLocation, Outlet } from 'react-router-dom';
 
 import styled from 'styled-components';
 
 import { Button } from '@components/common/Button';
 import { Modal } from '@components/common/Modal';
+
+import CreateCounseling from '@components/schedule/CreateCounseling';
+import CreateSchedule from '@components/schedule/CreateSchedule';
 import ScheduleModal from '@components/schedule/ScheduleModal';
 
 import theme from '@styles/theme';
-
-import { CreateCounseling } from './CreateCounseling';
-import { CreateSchedule } from './CreateSchedule';
 
 export const Schedule = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

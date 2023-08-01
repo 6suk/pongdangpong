@@ -7,3 +7,5 @@ export { ReactComponent as Notifications } from '@assets/icons/Notifications.svg
 export { ReactComponent as TicketIcon } from '@assets/icons/ticket/ticketIcon.svg';
 export { ReactComponent as MemberIcon } from '@assets/icons/memberIcon.svg';
 export { ReactComponent as BackIcon } from '@assets/icons/backIcon.svg';
+export { ReactComponent as RegisteredStaff } from '@assets/icons/staffs/registered_staff.svg';
+export { ReactComponent as UserIcon } from '@assets/icons/staffs/userIcon.svg';

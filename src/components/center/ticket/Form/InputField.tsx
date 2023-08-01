@@ -15,10 +15,33 @@ type InputFieldProps = {
   type?: string;
   disabled?: boolean;
   min?: string;
+  maxLength?: number;
+  isStartZero?: boolean;
+  pattern?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
-export const InputField: FC<InputFieldProps> = ({ className, label, name, value, error = false, unit, ...rest }) => {
+export const InputField: FC<InputFieldProps> = ({
+  className,
+  label,
+  name,
+  value,
+  type,
+  error = false,
+  unit,
+  isStartZero = true,
+  pattern,
+  ...rest
+}) => {
+  if (isStartZero && (Number(value) === 0 || value === undefined)) {
+    value = '';
+  }
+
+  if (pattern && value) {
+    const re = new RegExp(pattern);
+    value = value.toString().replace(re, '');
+  }
+
   return unit ? (
     <Unit>
       {label && (
@@ -26,13 +49,7 @@ export const InputField: FC<InputFieldProps> = ({ className, label, name, value,
           {label}
         </SC.Label>
       )}
-      <SC.InputField
-        className={error ? 'error' : ''}
-        id={name}
-        name={name}
-        value={Number(value) === 0 || value === undefined ? '' : value}
-        {...rest}
-      />
+      <SC.InputField className={error ? 'error' : ''} id={name} name={name} value={value} {...rest} type={type} />
       <span className="unit">{unit}</span>
     </Unit>
   ) : (
@@ -42,13 +59,7 @@ export const InputField: FC<InputFieldProps> = ({ className, label, name, value,
           {label}
         </SC.Label>
       )}
-      <SC.InputField
-        className={error ? 'error' : ''}
-        id={name}
-        name={name}
-        value={Number(value) === 0 ? '' : value}
-        {...rest}
-      />
+      <SC.InputField className={error ? 'error' : ''} id={name} name={name} value={value} {...rest} type={type} />
     </div>
   );
 };

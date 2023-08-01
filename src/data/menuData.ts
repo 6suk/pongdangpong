@@ -13,7 +13,7 @@ export const subMenuList = {
   ],
   center: [
     { id: '수강권 관리', content: '수강권 관리', path: '/center/tickets', hide: false },
-    { id: '직원 관리', content: '직원 관리', path: '/', hide: false },
+    { id: '직원 관리', content: '직원 관리', path: '/center/staffs', hide: false },
     { id: '기록관리', content: '기록관리', path: '/', hide: false },
   ],
   mypage: [],

@@ -35,6 +35,7 @@ export const MembersResgier: React.FC = () => {
   const navigate = useNavigate();
   const { request } = useRequests();
   const inputRef = useRef(null);
+  const BtnWrapRef = useRef(null);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -164,7 +165,7 @@ export const MembersResgier: React.FC = () => {
             <SC.Label>
               성별<span>*</span>
             </SC.Label>
-            <div className="button-wrap">
+            <div ref={BtnWrapRef} className="button-wrap">
               {Array(2)
                 .fill(null)
                 .map((_, idx) => {
@@ -176,7 +177,9 @@ export const MembersResgier: React.FC = () => {
                       type="button"
                       onClick={e => {
                         inputData(e);
-                        for (const el of document?.querySelector('.button-wrap').children) el.classList.remove('on');
+                        for (const el of BtnWrapRef.current.children) {
+                          el.classList.remove('on');
+                        }
                         e.target.classList.add('on');
                       }}
                     >
@@ -254,8 +257,7 @@ export const MembersResgier: React.FC = () => {
             isPri={false}
             size={'full'}
             onClick={() => {
-              inputRef.current.value = '';
-              restInputData();
+              navigate('/members');
             }}
           >
             취소

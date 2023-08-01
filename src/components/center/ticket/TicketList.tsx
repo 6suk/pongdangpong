@@ -65,6 +65,7 @@ export const TicketList = () => {
             )}
           </TicketWrap>
         )}
+
         {isError && <p>{isError.response?.data.message}</p>}
       </TicketContainer>
 

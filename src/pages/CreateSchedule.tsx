@@ -152,7 +152,7 @@ export const CreateSchedule = () => {
             <SC.Label>
               담당 강사 선택 <span>*</span>
             </SC.Label>
-            <SelectButton onClick={handleSearchClick('USER')} disabled={!!selectedUserName}>
+            <SelectButton disabled={!!selectedUserName} onClick={handleSearchClick('USER')}>
               선택하기 +
             </SelectButton>
             {selectedUserName && (
@@ -160,10 +160,10 @@ export const CreateSchedule = () => {
                 <span className="user-name">{selectedUserName}</span>
                 <span
                   className="close-button"
+                  role="button"
+                  tabIndex={0}
                   onClick={clearSelection}
                   onKeyDown={e => e.key === 'Enter' && setSelectedUserName(null)}
-                  tabIndex={0}
-                  role="button"
                 >
                   x
                 </span>
@@ -173,7 +173,7 @@ export const CreateSchedule = () => {
             <SC.Label>
               회원 선택 <span>*</span>
             </SC.Label>
-            <SelectButton onClick={handleSearchClick('MEMBER')} disabled={!!selectedMemberName}>
+            <SelectButton disabled={!!selectedMemberName} onClick={handleSearchClick('MEMBER')}>
               선택하기 +
             </SelectButton>
             {selectedMemberName && (
@@ -181,10 +181,10 @@ export const CreateSchedule = () => {
                 <span className="user-name">{selectedMemberName}</span>
                 <span
                   className="close-button"
+                  role="button"
+                  tabIndex={0}
                   onClick={() => setSelectedMemberName(null)}
                   onKeyDown={e => e.key === 'Enter' && setSelectedMemberName(null)}
-                  tabIndex={0}
-                  role="button"
                 >
                   x
                 </span>
@@ -287,11 +287,11 @@ export const CreateSchedule = () => {
         </S.wrap>
         <S.BtnWrap>
           <Button
+            disabled={!isValid()}
             size={'full'}
             onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
               handleSubmit(e);
             }}
-            disabled={!isValid()}
           >
             완료
           </Button>

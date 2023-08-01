@@ -58,8 +58,41 @@ const Select = styled.select`
 
   &:focus {
     outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 1px #3b82f6;
+    border-color: ${theme.colors.pri[800]};
+    box-shadow: 0 0 0 1px ${theme.colors.pri[900]};
+    background-image: url(/imgs/selectArrow.png);
+  }
+`;
+
+const Select__ = styled.select`
+  border: 1px solid #e5e7eb;
+  color: #1f2937;
+  font-size: 0.875rem;
+  border-radius: 0.375rem;
+  width: 100%;
+  padding: 0.625rem;
+  position: relative;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url(/imgs/selectArrow.png);
+  background-repeat: no-repeat;
+  background-position: calc(100% - 10px) center;
+  background-size: 12px;
+  padding: 0.625rem 40px 0.625rem 0.625rem;
+
+  & .opion-title {
+    color: blue;
+  }
+
+  & > option[value=''][disabled] {
+    display: none;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: ${theme.colors.pri[800]};
+    box-shadow: 0 0 0 1px ${theme.colors.pri[900]};
     background-image: url(/imgs/selectArrow.png);
   }
 `;
@@ -71,10 +104,11 @@ const InputField = styled.input`
   border-radius: 0.375rem;
   width: 100%;
   padding: 0.625rem;
+
   &:focus {
     outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 1px #3b82f6;
+    border-color: ${theme.colors.pri[800]};
+    box-shadow: 0 0 0 1px ${theme.colors.pri[900]};
   }
 
   &:disabled {
@@ -102,6 +136,7 @@ export const SC = {
   Label,
   InputField,
   Select,
+  Select__,
 };
 
 export const TopTitleWrap = styled.div`

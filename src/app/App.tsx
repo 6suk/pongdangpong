@@ -5,6 +5,7 @@ import { Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
 import { Layout, PrivateRoute, PublicRoute } from '@/index';
+import { Schedules } from '@/pages/Schedules';
 import { RootState } from '@stores/store';
 
 import theme from '@styles/theme';
@@ -36,6 +37,7 @@ function App() {
                 <Route element={<Sample />} path="sample/*" />
                 <Route element={<Me />} path="me" />
                 <Route element={<Center />} path="center/*" />
+                <Route element={<Schedules />} path="schedules/*" />
               </Route>
             </Route>
           </Routes>

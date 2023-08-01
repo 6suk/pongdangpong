@@ -14,9 +14,8 @@ import theme from '@styles/theme';
 
 type FormInputs = {
   userId: number;
+  issuedTicketId: number;
   memberId: number;
-  clientName: string;
-  clientPhone: string;
   memo: string;
   date: string;
   startTime: string;
@@ -27,9 +26,8 @@ type FormInputs = {
 
 const initialInputs: FormInputs = {
   userId: 0,
+  issuedTicketId: 0,
   memberId: 0,
-  clientName: '',
-  clientPhone: '',
   memo: '',
   date: '',
   startTime: '',
@@ -61,16 +59,45 @@ interface MemberData {
   visitedAt: string;
 }
 
+type AvailableTicket = {
+  id: number;
+  title: string;
+  lessonType: string;
+  privateTutorId: number;
+  remainingCount: number;
+  availableReservationCount: number;
+  lessonDuration: number;
+  owners: Array<{
+    id: number;
+    name: string;
+    phone: string;
+  }>;
+};
+
 export const CreateSchedule = () => {
   const [formInputs, setFormInputs] = useState<FormInputs>(initialInputs);
+
   const { data: userData, isLoading: userLoading, isError: userError } = useSwrData('search?resource=USER');
   const { data: memberData, isLoading: memberLoading, isError: memberError } = useSwrData('search?resource=MEMBER');
+
+  const [selectedMemberId, setSelectedMemberId] = useState<number | null>(null);
+
+  const {
+    data: ticketsData,
+    isLoading: ticketsLoading,
+    isError: ticketsError,
+  } = useSwrData(`members/${selectedMemberId}/bookable-tickets`);
+
   const navigate = useNavigate();
   const { request } = useRequests();
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedUserName, setSelectedUserName] = useState<string | null>(null); // 선택된 사용자의 이름
+  const [selectedUserName, setSelectedUserName] = useState<string | null>(null);
   const [selectedMemberName, setSelectedMemberName] = useState<string | null>(null);
   const [modalType, setModalType] = useState<'USER' | 'MEMBER' | null>(null);
+  const [availableTickets, setAvailableTickets] = useState<AvailableTicket[] | null>(null);
+  const [selectedOwnerId, setSelectedOwnerId] = useState<number | null>(null);
+  const [selectedOwnerName, setSelectedOwnerName] = useState<string | null>(null);
+  const [selectedTicket, setSelectedTicket] = useState<AvailableTicket | null>(null);
 
   const handleInputChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     switch (target.name) {
@@ -100,13 +127,19 @@ export const CreateSchedule = () => {
   const handleMemberSelect = (memberId: number, memberName: string) => {
     setFormInputs({ ...formInputs, memberId });
     setSelectedMemberName(memberName);
+    setSelectedMemberId(memberId);
     setIsOpen(false);
+  };
+
+  const handleOwnerSelect = (id: number, name: string) => {
+    // 여기에 원하는 동작 구현
+    setSelectedOwnerId(id);
+    setSelectedOwnerName(name);
   };
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    const clientPhone = formInputs['clientPhone'].replace(/-/g, '');
     const date = formInputs['date'].replace(/\./g, '-');
     const startTime = formInputs['startTime'];
     const endTime = formInputs['endTime'];
@@ -114,11 +147,18 @@ export const CreateSchedule = () => {
     const startAt = new Date(`${date}T${startTime}:00`).toISOString();
     const endAt = new Date(`${date}T${endTime}:00`).toISOString();
 
+    const payload = {
+      userId: formInputs.userId,
+      issuedTicketId: formInputs.issuedTicketId,
+      startAt,
+      endAt,
+    };
+
     try {
       await request({
         url: 'schedules/private-lesson',
         method: 'post',
-        body: formInputs,
+        body: payload,
       });
       console.log('등록 완료');
       navigate('/schedule');
@@ -129,17 +169,34 @@ export const CreateSchedule = () => {
   };
 
   const isValid = () => {
-    const { clientName, clientPhone, date, startTime, endTime } = formInputs;
-    return clientName && clientPhone && date && startTime && endTime;
+    const { userId, memberId, issuedTicketId, date, startTime, endTime } = formInputs;
+    return userId && memberId && issuedTicketId && date && startTime && endTime;
   };
 
   useEffect(() => {
     console.log(formInputs);
   }, [formInputs]);
 
+  useEffect(() => {
+    if (ticketsData) {
+      setAvailableTickets(ticketsData.availableTickets);
+    }
+  }, [ticketsData]);
+  useEffect(() => {
+    if (!selectedMemberName) {
+      clearMemberSelection();
+    }
+  }, [selectedMemberName]);
   const clearSelection = () => {
     setSelectedUserName(null);
     setSelectedMemberName(null);
+    setSelectedTicket(null);
+  };
+
+  const clearMemberSelection = () => {
+    setSelectedMemberName(null);
+    setSelectedTicket(null);
+    // 참여회원 등 다른 관련 상태값도 초기화
   };
 
   return (
@@ -160,8 +217,11 @@ export const CreateSchedule = () => {
                 <span className="user-name">{selectedUserName}</span>
                 <span
                   className="close-button"
-                  onClick={clearSelection}
-                  onKeyDown={e => e.key === 'Enter' && setSelectedUserName(null)}
+                  onClick={e => {
+                    clearSelection();
+                    e.stopPropagation();
+                  }}
+                  onKeyDown={e => e.key === 'Enter' && clearSelection()}
                   tabIndex={0}
                   role="button"
                 >
@@ -181,7 +241,7 @@ export const CreateSchedule = () => {
                 <span className="user-name">{selectedMemberName}</span>
                 <span
                   className="close-button"
-                  onClick={() => setSelectedMemberName(null)}
+                  onClick={() => clearMemberSelection()}
                   onKeyDown={e => e.key === 'Enter' && setSelectedMemberName(null)}
                   tabIndex={0}
                   role="button"
@@ -231,12 +291,47 @@ export const CreateSchedule = () => {
             <SC.Label>
               수강권 선택 <span>*</span>
             </SC.Label>
+            <SC.Select
+              name="lessonTicket"
+              disabled={!selectedMemberName}
+              value={selectedTicket ? selectedTicket.id : ''}
+              onChange={e => {
+                const selectedTicketId = Number(e.target.value);
+                const foundTicket = availableTickets?.find(ticket => ticket.id === selectedTicketId);
+                setSelectedTicket(foundTicket || null);
+                setFormInputs({ ...formInputs, issuedTicketId: selectedTicketId });
+              }}
+            >
+              <option className="option-title" defaultValue="">
+                수강권을 선택해주세요.
+              </option>
+              {ticketsLoading ? (
+                <option>데이터 불러오는 중...</option>
+              ) : ticketsError ? (
+                <option>데이터를 불러올 수 없습니다.</option>
+              ) : (
+                availableTickets
+                  ?.filter(ticket => ticket.privateTutorId === formInputs.userId)
+                  .map(ticket => (
+                    <option value={ticket.id} key={ticket.id}>
+                      {ticket.title} ({ticket.lessonDuration}분)
+                    </option>
+                  ))
+              )}
+            </SC.Select>
 
-            <SC.Label>
-              참여회원
-              <p>회원과 수강권 선택시 자동으로 입력됩니다. </p>
-            </SC.Label>
+            <SC.Label>참여회원</SC.Label>
+            {selectedTicket ? (
+              selectedTicket.owners.map((owner, ownerIndex) => (
+                <NameButton key={ownerIndex} onClick={() => handleOwnerSelect(owner.id, owner.name)}>
+                  <span className="user-name">{owner.name}</span>
+                </NameButton>
+              ))
+            ) : (
+              <p>회원과 수강권 선택 시 자동으로 입력됩니다.</p>
+            )}
           </div>
+
           <div className="second-column">
             <SC.Label>
               일자 선택 <span>*</span>

@@ -35,6 +35,7 @@ export const MembersResgier: React.FC = () => {
   const navigate = useNavigate();
   const { request } = useRequests();
   const inputRef = useRef(null);
+  const BtnWrapRef = useRef(null);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -92,6 +93,23 @@ export const MembersResgier: React.FC = () => {
     [formState]
   );
 
+  // useEffect(() => {
+  //   console.log(formState);
+  // }, [formState]);
+
+  const restInputData = () => {
+    setFormState({
+      name: '',
+      birthDate: '',
+      phone: '',
+      sex: '',
+      job: '',
+      acqusitionFunnel: '',
+      acquisitionFunnel: '',
+      toss: [],
+    });
+  };
+
   useEffect(() => {
     console.log(formState);
   }, [formState]);
@@ -147,7 +165,7 @@ export const MembersResgier: React.FC = () => {
             <SC.Label>
               성별<span>*</span>
             </SC.Label>
-            <div className="button-wrap">
+            <div ref={BtnWrapRef} className="button-wrap">
               {Array(2)
                 .fill(null)
                 .map((_, idx) => {
@@ -159,6 +177,10 @@ export const MembersResgier: React.FC = () => {
                       type="button"
                       onClick={e => {
                         inputData(e);
+                        for (const el of BtnWrapRef.current.children) {
+                          el.classList.remove('on');
+                        }
+                        e.target.classList.add('on');
                       }}
                     >
                       {!idx ? '여' : '남'}
@@ -226,17 +248,7 @@ export const MembersResgier: React.FC = () => {
             size={'full'}
             onClick={e => {
               submitData(e);
-
-              setFormState({
-                name: '',
-                birthDate: '',
-                phone: '',
-                sex: '',
-                job: '',
-                acqusitionFunnel: '',
-                acquisitionFunnel: '',
-                toss: [],
-              });
+              restInputData();
             }}
           >
             확인
@@ -245,19 +257,7 @@ export const MembersResgier: React.FC = () => {
             isPri={false}
             size={'full'}
             onClick={() => {
-              // input select초기화 함수로 만들어로 빼기
-              inputRef.current.value = '';
-
-              setFormState({
-                name: '',
-                birthDate: '',
-                phone: '',
-                sex: '',
-                job: '',
-                acqusitionFunnel: '',
-                acquisitionFunnel: '',
-                toss: [],
-              });
+              navigate('/members');
             }}
           >
             취소
@@ -316,7 +316,9 @@ const S = {
           margin-right: 6px;
 
           &.on {
-            background-color: blue;
+            border: none;
+            background-color: ${({ theme: { colors } }) => colors['Pri-400']};
+            color: #fff;
           }
         }
       }

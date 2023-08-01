@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { styled } from 'styled-components';
@@ -6,22 +6,23 @@ import { styled } from 'styled-components';
 import { mutate } from 'swr';
 
 import { Button } from '@components/common/Button';
+import { MembersDetailComponent } from '@components/members//MembersDetail';
+import { MembersAddTicekt } from '@components/members/MembersAddTicekt';
+import { MembersAlbum } from '@components/members/MembersAlbum';
+import { MembersRecord } from '@components/members/MembersRecord';
+import { MembersResgier } from '@components/members/MembersRegister';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
-import { MembersAlbum } from './MembersAlbum';
-import { MembersDetailComponent } from './MembersDetail';
-import { MembersRecord } from './MembersRecord';
-import { MembersResgier } from './MembersRegister';
+import { SC } from '@styles/styles';
 
 interface UserListProps {
   [key: string]: string;
 }
 const Members = () => {
-  const [id, setId] = useState(0);
-
   const navigation = useNavigate();
-
   const location = useLocation();
+  const userIdRef = useRef(null);
+
   const len = 100;
   const pathSlice = location.pathname.split('/');
   const currentPathname = pathSlice[pathSlice.length - 1];
@@ -47,6 +48,10 @@ const Members = () => {
     return value;
   }, []);
 
+  const { data: ticketData } = useSwrData('tickets') ?? {};
+  const { data: staffsData } = useSwrData('staffs');
+  const { datas: staffsDatas } = staffsData ?? {};
+
   useEffect(() => {
     (async () => {
       mutate(`members?page=1&size=${len}&sort=createdAt%2CDesc`);
@@ -56,13 +61,57 @@ const Members = () => {
   return (
     <div style={{ paddingTop: '40px' }}>
       {currentPathname === 'register' && <MembersResgier />}
-      {currentPathname === 'detail' && <MembersDetailComponent id={id} />}
+      {currentPathname === 'detail' && (
+        <MembersDetailComponent id={userIdRef.current} staffsDatas={staffsDatas} tickets={ticketData?.tickets} />
+      )}
       {currentPathname === 'record' && <MembersRecord />}
       {currentPathname === 'album' && <MembersAlbum />}
+      {currentPathname === 'addTicket' && (
+        <MembersAddTicekt
+          id={userIdRef.current}
+          members={datas}
+          staffsDatas={staffsDatas}
+          tickets={ticketData?.tickets}
+        />
+      )}
 
       {location.pathname === '/members' && !isLoading && (
         <>
-          <h2 style={{ fontSize: '20px', fontWeight: 600, marginBottom: '20px' }}>전체 회원{datas.length}</h2>
+          <S.wrap>
+            <SC.Select width={'14%'}>
+              <option value="등록일">등록일</option>
+              <option value="등록일">이름순</option>
+              <option value="등록일">최근작성일</option>
+            </SC.Select>
+
+            <label htmlFor="search"></label>
+            <SC.InputField
+              id="search"
+              name="search"
+              placeholder="회원/멤버 이름, 연락처로 검색하세요"
+              type="search"
+              width={'40%'}
+            />
+
+            <Button
+              onClick={() => {
+                navigation('register');
+              }}
+            >
+              + 회원 등록
+            </Button>
+          </S.wrap>
+          <h2 style={{ fontSize: '20px', fontWeight: 600, marginBottom: '20px' }}>
+            전체 회원 <span style={{ color: 'royalblue' }}>{datas?.length}</span>
+          </h2>
+
+          {/* 회원 리스트 전체, 동록일, 이름순, 최근 작성일 순 */}
+          {/* 
+              1. select에 선택된 데이터 종류를 state에 저장한다. 등록일 || 이름 || 최근 작성일
+              2. input:search 입력된 값을 state에 저장한다. 
+              3. enter key 또는 검색 버튼을 클릭한다.
+              4. 저장된 select, input:search state기준으로 데이터를 걸러내서 재렌더링
+          */}
           {datas
             .sort((a, b) => a.id - b.id)
             .reverse()
@@ -97,16 +146,14 @@ const Members = () => {
 
                   <li className="btn-wrap">
                     <Button
+                      size="md"
                       type="button"
                       onClick={() => {
-                        console.log(datas[idx]);
-
-                        setId(datas[idx].id);
-
+                        userIdRef.current = datas[idx].id;
                         navigation('detail');
                       }}
                     >
-                      상세 보기
+                      수강권 관리
                     </Button>
                   </li>
                 </S.list>
@@ -158,6 +205,19 @@ const S = {
       & > p:nth-of-type(5) {
         width: 200px;
       }
+    }
+  `,
+  wrap: styled.div`
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+
+    input {
+      margin-left: 10px;
+    }
+
+    button {
+      margin-left: auto;
     }
   `,
 };

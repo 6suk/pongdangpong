@@ -38,7 +38,7 @@ const Select = styled.select`
   color: #1f2937;
   font-size: 0.875rem;
   border-radius: 0.375rem;
-  width: 100%;
+  width: ${props => props.width || '100%'};
   padding: 0.625rem;
   position: relative;
   appearance: none;
@@ -69,7 +69,7 @@ const InputField = styled.input`
   color: #1f2937;
   font-size: 0.875rem;
   border-radius: 0.375rem;
-  width: 100%;
+  width: ${props => props.width || '100%'};
   padding: 0.625rem;
   &:focus {
     outline: none;

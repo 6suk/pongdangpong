@@ -4,7 +4,19 @@ const useInput = <T extends Record<string, unknown>>(initialState: T) => {
   const [inputValues, setInputValues] = useState<T>(initialState);
 
   const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    let { name, value } = e.target;
+    const { name, type } = e.target;
+    let value = e.target.value;
+
+    switch (name) {
+      case 'phone': {
+        value = value.replace(/[^0-9]/g, '').replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
+        break;
+      }
+      case 'birthDate': {
+        value = value.replace(/(\d{4})(\d{2})(\d{2})/, '$1.$2.$3');
+        break;
+      }
+    }
 
     // Number 유효성 검사
     if (typeof initialState[name] === 'number') {
@@ -13,7 +25,6 @@ const useInput = <T extends Record<string, unknown>>(initialState: T) => {
         else value = '';
       }
     }
-
     setInputValues(prev => ({ ...prev, [name]: value }));
   }, []);
 

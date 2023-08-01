@@ -36,7 +36,6 @@ axiosInstance.interceptors.request.use(
   },
   error => Promise.reject(error)
 );
-
 axiosInstance.interceptors.response.use(
   response => response,
 
@@ -45,7 +44,7 @@ axiosInstance.interceptors.response.use(
     const originalRequest = error.config;
     const storeRefreshToken = store.getState().tokens.refreshToken;
 
-    if (error.response.status === 401 && storeRefreshToken && !originalRequest._retry) {
+    if (error.response && error.response.status === 401 && storeRefreshToken && !originalRequest._retry) {
       console.log('Token Expiration');
       try {
         const response = await axios[method](

@@ -133,4 +133,5 @@ export const FormContentWrap = styled.div`
   width: 100%;
   margin-top: 3rem;
   padding-inline: 2rem;
+  gap: 0.5rem;
 `;

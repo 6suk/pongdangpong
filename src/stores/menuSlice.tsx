@@ -1,9 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
-import { subMenuList } from "@/data/menuData.ts";
 
-export interface MenuState  {
-  tickets: {id: number, content: string, path: string }[]
+import { subMenuList } from '@/data/menuData.ts';
+
+import type { PayloadAction } from '@reduxjs/toolkit';
+
+// export interface MenuState  {
+//   tickets: {id: number, content: string, path: string }[]
+// }
+export interface MenuState {
+  [key: string]: { id: string; content: string; path: string }[];
 }
 
 export interface TicketMenuItem {
@@ -14,16 +19,16 @@ export interface TicketMenuItem {
 }
 
 const initialState: MenuState = {
-  ...subMenuList
-} 
+  ...subMenuList,
+};
 
 const menu = createSlice({
   name: 'menu',
   initialState,
-  reducers:{
-    setMenu: (state, action : PayloadAction<string>)=>{} 
-  } 
-})
+  reducers: {
+    setMenu: (state, action: PayloadAction<string>) => {},
+  },
+});
 
-export const {setMenu} = menu.actions;
-export const menuReducer =  menu.reducer;
+export const { setMenu } = menu.actions;
+export const menuReducer = menu.reducer;

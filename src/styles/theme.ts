@@ -53,6 +53,7 @@ const colors = {
   Error: '#df291d',
   ErrorRGB: '223, 41, 29',
   Positive: '#1fb881',
+  inputBorder: '#e5e7eb;',
 };
 
 const fontSize = {

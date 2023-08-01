@@ -1,4 +1,6 @@
-export const subMenuList = {
+import { MenuState } from '@stores/menuSlice';
+
+export const subMenuList: MenuState = {
   home: [],
   schedule: [
     // { id: '수강권 관리', content: '수강권 관리', path: '/schedule/ticketManagement', hide: true },

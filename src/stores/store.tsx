@@ -4,8 +4,9 @@ import { persistReducer } from 'redux-persist';
 import sessionStorage from 'redux-persist/lib/storage/session';
 
 import { counterReducer } from '@stores/counterSlice';
-import { tokenReducer } from '@stores/tokenSilce';
 import { menuReducer } from '@stores/menuSlice';
+import { calendarReducer } from '@stores/selectedDateSlice';
+import { tokenReducer } from '@stores/tokenSilce';
 
 const middlewares: Middleware<AnyAction>[] = [];
 
@@ -17,6 +18,7 @@ const reducers = combineReducers({
   counter: counterReducer,
   tokens: tokenReducer,
   menu: menuReducer,
+  calendar: calendarReducer,
 });
 
 const persistConfig = {

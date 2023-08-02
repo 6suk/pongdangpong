@@ -25,8 +25,6 @@ export const TicketItem = ({ ticket, setTicketData }: TicketItemProps) => {
   } = ticket;
   const [isOpen, setIsOpen] = useState(false);
 
-  console.log(ticket);
-
   return (
     <>
       <TS.Ticket $isActive={isActive}>

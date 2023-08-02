@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-import { Editicon } from '@assets/icons/indexIcons';
+import { Editicon, TicketIcon, UserIcon } from '@assets/icons/indexIcons';
 import { StaffDetailWrap } from '@components/center/staff/StaffsDetail';
 import { StaffsLIstWrap } from '@components/center/staff/StaffsList';
 import { Button } from '@components/common/Button';
@@ -210,7 +210,7 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
             </Button>
           </Top>
           <TicketContainer>
-            <TicketWrap style={{ gridTemplateColumns: 'repeat(2, minmax(430px, 1fr))' }}>
+            <TicketWrap>
               {!memberTicketDataIsLoading &&
                 memberTicketData.issuedTickets
                   .sort((a, b) => a.id - b.id)
@@ -219,6 +219,13 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
                     return <TicketItem key={el.id} setTicketData={setTicketData(i)} ticket={el} />;
                   })}
             </TicketWrap>
+
+            {memberTicketData.issuedTickets.length <= 0 && (
+              <div className="empty">
+                <TicketIcon fill={theme.colors.gray[700]} style={{ width: '100px' }} />
+                <p>부여된 티켓이 없습니다.</p>
+              </div>
+            )}
           </TicketContainer>
         </div>
       </StaffDetailWrap>

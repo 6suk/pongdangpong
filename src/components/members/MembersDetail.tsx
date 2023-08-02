@@ -4,7 +4,8 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-import { Editicon } from '@assets/icons/indexIcons';
+import { ArrowIcon, MemberIcon, SearchIcon, Editicon } from '@assets/icons/indexIcons';
+import { StaffsLIstWrap } from '@components/center/staff/StaffsList';
 import { Button } from '@components/common/Button';
 import { Modal, ModalButton } from '@components/common/Modal';
 import { TicketItem } from '@components/members/ticket/TicketItem';
@@ -14,7 +15,7 @@ import { useSwrData } from '@hooks/apis/useSwrData';
 
 import { TicketContainer, TicketWrap, Top } from '@styles/center/ticketsStyle';
 import { SC } from '@styles/styles';
-import theme from '@styles/theme';
+import theme, { type } from '@styles/theme';
 
 interface UserListProps {
   [key: string]: string;
@@ -39,24 +40,6 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
     };
   }, [data]);
 
-  const [searchParams, setSearchParams] = useSearchParams();
-  const isActivePath = searchParams.get('isActive') === 'true';
-
-  useEffect(() => {
-    if (!searchParams.get('isActive')) {
-      setSearchParams({
-        isActive: 'true',
-      });
-    }
-  }, [searchParams, setSearchParams]);
-
-  useEffect(() => {
-    // 이용중단 수강권
-    console.log(memberTicketData?.issuedTickets?.filter(el => el.isSuspended || el.isisCanceled));
-    // 이용가능 수강권
-    console.log(memberTicketData?.issuedTickets?.filter(el => !(el.isSuspended || el.isisCanceled)));
-  }, []);
-
   // props로 전달받은 회원 데이터
   const [userData, setUserData] = useState({ ...data });
   // Modal
@@ -71,6 +54,14 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
     endAt: '',
     tutorId: 0,
   });
+
+  const [ticketActive, setTicketActive] = useState(0);
+  const ticketList = useMemo(() => {
+    return {
+      active: memberTicketData?.issuedTickets?.filter(el => !el.isSuspended && !el.isCanceled),
+      inactive: memberTicketData?.issuedTickets?.filter(el => el.isSuspended || el.isCanceled),
+    };
+  }, [memberTicketData, ticketActive]);
 
   // request요청
   const submitRequest = useCallback(
@@ -153,12 +144,8 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
     alert(`${targetTicket}티켓이 환불 되었습니다.`);
   };
 
-  useEffect(() => {
-    console.log(issuedTicketId);
-  }, [issuedTicketId]);
-
   return !isLoading && id ? (
-    <div>
+    <div style={{ padding: '40px' }}>
       {isOpen && (
         <Modal setIsOpen={setIsOpen}>
           {
@@ -210,41 +197,36 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
           }
         </Modal>
       )}
-      <S.list key={data.id}>
-        <li>
-          <div className="pic">
-            <img alt="profile" src="/imgs/profile.png" />
+
+      <StaffsLIstWrap key={data.id}>
+        <div className="table">
+          <div className="table-row title">
+            <p>이름</p>
+            <p>전화번호</p>
+            <p>생년월일</p>
+            <p>성별</p>
+            <p>등록일</p>
+            <p>수정</p>
           </div>
-          <p>
-            <span>이름</span>
-            {data.name}
-          </p>
-          <p>
-            <span>생년월일</span>
-            {dataChange('birthDate', data.birthDate)}
-          </p>
-          <p>
-            <span>등록일</span>
-            {dataChange('createdAt', data.createdAt)}
-          </p>
-          <p>
-            <span>성별</span>
-            {dataChange('sex', data.sex)}
-          </p>
-          <p>
-            <span>전화번호</span>
-            {dataChange('phone', data.phone)}
-          </p>
-        </li>
-        <li className="btn-wrap">
-          <Editicon
-            style={{ cursor: 'pointer' }}
-            onClick={() => {
-              setIsOpen(true);
-            }}
-          />
-        </li>
-      </S.list>
+          <div className="table-row">
+            <p className="icon-box">
+              <MemberIcon /> <span>{name}</span>
+            </p>
+            <p>{dataChange('phone', data.phone)}</p>
+            <p>{dataChange('birthDate', data.birthDate)}</p>
+            <p>{dataChange('sex', data.sex)}</p>
+            <p>{dataChange('createdAt', data.createdAt)}</p>
+            <button type="button">
+              <Editicon
+                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                  setIsOpen(true);
+                }}
+              />
+            </button>
+          </div>
+        </div>
+      </StaffsLIstWrap>
 
       {editTicketModalState && (
         <Modal maxWidth="36rem" setIsOpen={setEditTicketModalState}>
@@ -332,10 +314,24 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
         </Modal>
       )}
       <Top>
-        {/* 미완 */}
         <div className="ticket-active">
-          <Link className={isActivePath ? 'on' : ''} to="?isActive=true">{`이용중(${''})`}</Link>
-          <Link className={!isActivePath ? 'on' : ''} to="?isActive=false">{`이용중단(${''})`}</Link>
+          {Array(2)
+            .fill(0)
+            .map((el, i) => {
+              return (
+                <button
+                  key={i}
+                  className={ticketActive === i ? 'on' : ''}
+                  onClick={() => {
+                    setTicketActive(i);
+                  }}
+                >
+                  {!i % 2 && !memberTicketDataIsLoading
+                    ? `이용중(${ticketList?.active?.length})`
+                    : `이용 중단(${ticketList?.inactive?.length})`}
+                </button>
+              );
+            })}
         </div>
         <Button
           size="md"

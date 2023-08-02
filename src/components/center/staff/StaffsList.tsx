@@ -78,7 +78,7 @@ export const StaffsList = () => {
                     }}
                   >
                     <p className="icon-box">
-                      <MemberIcon /> {name}
+                      <MemberIcon /> <span>{name}</span>
                     </p>
                     <p>{phone}</p>
                     <p>{memberCount}</p>
@@ -149,7 +149,7 @@ const StaffsTop = styled.div`
   }
 `;
 
-const StaffsLIstWrap = styled.div`
+export const StaffsLIstWrap = styled.div`
   font-size: 16px;
   margin-inline: 1rem;
 
@@ -161,7 +161,7 @@ const StaffsLIstWrap = styled.div`
 
   .table-row {
     display: grid;
-    grid-template-columns: 1fr 1.5fr 1fr 1fr 2fr 0.5fr;
+    grid-template-columns: 1fr 1.5fr 1fr 1fr 2fr 0.6fr;
     align-items: center;
     padding: 1rem;
     border: 1px solid ${theme.colors.gray[800]};
@@ -189,6 +189,13 @@ const StaffsLIstWrap = styled.div`
       svg {
         width: 26px;
         height: auto;
+      }
+
+      span {
+        width: 80px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
 

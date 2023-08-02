@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
@@ -8,6 +8,7 @@ import { styled } from 'styled-components';
 import calendarIcon from '@assets/icons/schedules/calendar.svg';
 
 import { Button } from '@components/common/Button';
+import { Modal } from '@components/common/Modal';
 import { getLastDateOfMonth } from '@components/schedules/utils/getDate';
 
 import { useSwrData } from '@hooks/apis/useSwrData';
@@ -19,6 +20,7 @@ import { SC } from '@styles/styles';
 import theme from '@styles/theme';
 
 import { Calendar } from './Calendar';
+import { SchedulesModal } from './SchedulesModal';
 import { filterAndSortSchedulesByDate } from './utils/filterAndSortSchedulesByDate';
 import { getEventCountbyDate } from './utils/getEventCountbyDate';
 
@@ -33,6 +35,7 @@ export const SchedulesList = () => {
     checkDate: selectedDate,
     lastNextDates: { last, next },
   } = useSelector((state: RootState) => state.calendar);
+  const [isOpen, setIsOpen] = useState(false);
 
   // 일정 데이터 (카운트)
   useEffect(() => {
@@ -89,7 +92,7 @@ export const SchedulesList = () => {
           </div>
           <Button
             onClick={() => {
-              navigate('new');
+              setIsOpen(true);
             }}
           >
             + 일정 추가
@@ -97,6 +100,7 @@ export const SchedulesList = () => {
         </Top>
         <Calendar />
       </SchedulesContainer>
+      {isOpen && <SchedulesModal setIsOpen={setIsOpen} />}
     </>
   );
 };

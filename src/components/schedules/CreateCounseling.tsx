@@ -4,12 +4,16 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Profile from '@/assets/icons/Profile.svg';
+import { MemberIcon } from '@assets/icons/indexIcons';
 import { Button } from '@components/common/Button';
 import { Modal } from '@components/common/Modal';
 import { useRequests } from '@hooks/apis/useRequests';
 import { useSwrData } from '@hooks/apis/useSwrData';
+import { FormButtonGroup, FormGridContainer } from '@styles/center/ticketFormStyle';
 import { FormContentWrap, SC, TopTitleWrap } from '@styles/styles';
 import theme from '@styles/theme';
+
+import { ModalList, NameButton } from './CreateSchedule';
 
 type FormInputs = {
   userId: number;
@@ -123,190 +127,169 @@ export const CreateCounseling = () => {
 
   return (
     <FormContentWrap>
-      <S.Container theme={theme}>
-        <TopTitleWrap>
-          <h2>일정 생성</h2>
-          <p>상담 일정을 생성합니다.</p>
-        </TopTitleWrap>
-        <S.wrap theme={theme}>
-          <div className="first-column">
-            <div>
-              <SC.Label>
-                담당 강사 선택 <span>*</span>
-              </SC.Label>
-              <div className="button-container">
-                <SelectButton onClick={handleSearchClick} disabled={!!selectedUserName}>
-                  선택하기 +
-                </SelectButton>
+      <TopTitleWrap>
+        <h3>상담 일정 생성</h3>
+        <p>상담 일정을 생성합니다.</p>
+      </TopTitleWrap>
+      <FormGridContainer>
+        <div>
+          <SC.Label>
+            담당 강사 선택 <span></span>
+          </SC.Label>
+          <div className="button-container">
+            <SelectButton disabled={!!selectedUserName} onClick={handleSearchClick}>
+              선택하기 +
+            </SelectButton>
 
-                {selectedUserName && (
-                  <NameButton onClick={() => setSelectedUserName('')}>
-                    <span className="user-name">{selectedUserName}</span>
-                    <span
-                      className="close-button"
-                      onClick={() => setSelectedUserName(null)}
-                      onKeyDown={e => e.key === 'Enter' && setSelectedUserName(null)}
-                      tabIndex={0}
-                      role="button"
-                    >
-                      x
-                    </span>
-                  </NameButton>
-                )}
-              </div>
-              {isOpen && (
-                <Modal setIsOpen={setIsOpen}>
-                  {isLoading ? (
-                    <div>데이터를 불러오는 중...</div>
-                  ) : isError ? (
-                    <div>오류가 발생했습니다.</div>
-                  ) : (
-                    <ul>
-                      {data?.users.map((user: UserData, index: number) => (
-                        <li key={index}>
-                          <button onClick={() => handleUserSelect(user.id, user.name)}>
-                            아이디: {user.id}, 타입: {user.type}, 이름: {user.name}, 로그인 ID: {user.loginId},
-                            전화번호: {user.phone}
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </Modal>
+            {selectedUserName && (
+              <NameButton onClick={() => setSelectedUserName('')}>
+                <span className="user-name">{selectedUserName}</span>
+                <span
+                  className="close-button"
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => setSelectedUserName(null)}
+                  onKeyDown={e => e.key === 'Enter' && setSelectedUserName(null)}
+                >
+                  x
+                </span>
+              </NameButton>
+            )}
+          </div>
+          {isOpen && (
+            <Modal maxWidth="43rem" setIsOpen={setIsOpen}>
+              {isLoading ? (
+                <div>데이터를 불러오는 중...</div>
+              ) : isError ? (
+                <div>오류가 발생했습니다.</div>
+              ) : (
+                <ul>
+                  <ModalList>
+                    <button className="table-title" type="button">
+                      <p className="left">
+                        <p>목록</p>
+                        <p></p>
+                        <p>이름/아이디</p>
+                      </p>
+                      <p>핸드폰 번호</p>
+                    </button>
+                  </ModalList>
+                  {data?.users.map((user: UserData, index: number) => (
+                    <ModalList key={index}>
+                      <button type="button" onClick={() => handleUserSelect(user.id, user.name)}>
+                        <p className="left">
+                          <MemberIcon />
+                          <p className="tag">{user.type === 'ADMIN' ? '관리자' : '직원'}</p>
+                          <p className="info">
+                            {user.name} <span>{user.loginId}</span>
+                          </p>
+                        </p>
+                        <p>{user.phone}</p>
+                      </button>
+                    </ModalList>
+                  ))}
+                </ul>
               )}
-            </div>
-            <div>
-              <SC.Label>
-                일자 선택 <span>*</span>
-              </SC.Label>
-              <SC.InputField
-                maxLength={10}
-                name="date"
-                type="date"
-                onChange={e => {
-                  handleInputChange(e);
-                }}
-              />
-            </div>
-            <div>
-              <SC.Label>
-                시간 선택 <span>*</span>
-              </SC.Label>
-              <div className="time-inputs">
-                <SC.InputField
-                  maxLength={5}
-                  name="startTime"
-                  type="time"
-                  onChange={e => {
-                    handleInputChange(e);
-                  }}
-                />
-                <SC.InputField
-                  maxLength={5}
-                  name="endTime"
-                  type="time"
-                  onChange={e => {
-                    handleInputChange(e);
-                  }}
-                />
-              </div>
-            </div>
+            </Modal>
+          )}
+        </div>
+        <div>
+          <SC.Label>
+            일자 선택 <span></span>
+          </SC.Label>
+          <SC.InputField
+            maxLength={10}
+            name="date"
+            type="date"
+            onChange={e => {
+              handleInputChange(e);
+            }}
+          />
+        </div>
+        <div>
+          <SC.Label>
+            시간 선택 <span></span>
+          </SC.Label>
+          <div className="time-inputs">
+            <SC.InputField
+              maxLength={5}
+              name="startTime"
+              type="time"
+              onChange={e => {
+                handleInputChange(e);
+              }}
+            />
+            ~
+            <SC.InputField
+              maxLength={5}
+              name="endTime"
+              type="time"
+              onChange={e => {
+                handleInputChange(e);
+              }}
+            />
           </div>
-          <div className="second-column">
-            <div>
-              <SC.Label>
-                이름 <span>*</span>
-              </SC.Label>
-              <SC.InputField
-                maxLength={10}
-                name="clientName"
-                placeholder="이름을 입력하세요."
-                type="text"
-                onChange={e => {
-                  handleInputChange(e);
-                }}
-              />
-            </div>
-            <div>
-              <SC.Label>
-                연락처 <span>*</span>
-              </SC.Label>
-              <SC.InputField
-                maxLength={13}
-                name="clientPhone"
-                placeholder="000-0000-0000"
-                type="tel"
-                onChange={e => {
-                  handleInputChange(e);
-                }}
-              />
-            </div>
-            <div>
-              <SC.Label>일정 메모</SC.Label>
-              <SC.InputField
-                maxLength={500}
-                name="memo"
-                placeholder="내용을 입력해주세요. (500자 이내)"
-                type="text"
-                onChange={e => {
-                  handleInputChange(e);
-                }}
-              />
-            </div>
-          </div>
-        </S.wrap>
-      </S.Container>
+        </div>
+        <div>
+          <SC.Label>
+            이름 <span></span>
+          </SC.Label>
+          <SC.InputField
+            maxLength={10}
+            name="clientName"
+            placeholder="이름을 입력하세요."
+            type="text"
+            onChange={e => {
+              handleInputChange(e);
+            }}
+          />
+        </div>
+        <div>
+          <SC.Label>
+            연락처 <span></span>
+          </SC.Label>
+          <SC.InputField
+            maxLength={13}
+            name="clientPhone"
+            placeholder="000-0000-0000"
+            type="tel"
+            onChange={e => {
+              handleInputChange(e);
+            }}
+          />
+        </div>
+        <div>
+          <SC.Label>일정 메모</SC.Label>
+          <SC.InputField
+            maxLength={500}
+            name="memo"
+            placeholder="내용을 입력해주세요. (500자 이내)"
+            type="text"
+            onChange={e => {
+              handleInputChange(e);
+            }}
+          />
+        </div>
+      </FormGridContainer>
 
-      <S.BtnWrap>
+      <FormButtonGroup>
+        <Button isPri={false} size="full" onClick={() => navigate(-1)}>
+          돌아가기
+        </Button>
         <Button
+          disabled={!isValid()}
           size="full"
           onClick={e => {
             handleSubmit(e);
           }}
-          disabled={!isValid()}
         >
           완료
         </Button>
-        <Button isPri={false} size="full" onClick={() => navigate(-1)}>
-          취소
-        </Button>
-      </S.BtnWrap>
+      </FormButtonGroup>
     </FormContentWrap>
   );
 };
 
-const NameButton = styled.button`
-  font-size: 14px;
-  background-color: ${({ theme }) => theme.colors.White};
-  border: 1px solid ${({ theme }) => theme.colors.gray[500]};
-  border-radius: 8px;
-  padding: 1px 2px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-
-  .user-name {
-    color: ${({ theme }) => theme.colors.gray[300]};
-    display: flex;
-    align-items: center;
-  }
-
-  .user-name::before {
-    content: url(${Profile});
-    margin-right: 8px;
-    margin-top: 5px;
-    margin-left: 8px;
-  }
-
-  .close-button {
-    color: ${({ theme }) => theme.colors.gray[300]};
-    margin-left: 8px;
-    margin-right: 8px;
-    cursor: pointer;
-    flex-shrink: 0;
-    font-size: 16px;
-  }
-`;
 const SelectButton = styled.button`
   font-size: 14px;
   padding: 8px 16px;

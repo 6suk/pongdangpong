@@ -1,7 +1,8 @@
-import { memo } from 'react';
+import { useState, memo } from 'react';
 
 import { LessonTypeEnum, TermUnitEnum, Ticket_response } from '@apis/ticketsAPIs';
 import { TicketIcon } from '@assets/icons/indexIcons';
+import { IssuedTicketModal } from '@components/center/ticket/IssuedTicketModal';
 import { TS } from '@styles/center/ticketsStyle';
 
 interface TicketItemProps {
@@ -28,6 +29,7 @@ const TicketItemMemo = ({
     startAt,
     endAt,
   } = ticket;
+  const [isOpen, setIsOpen] = useState(false);
 
   console.log(ticket);
 
@@ -48,11 +50,11 @@ const TicketItemMemo = ({
             {/* 본인 데이터에 맞는 목록 추가 */}
             <dl>
               <dt>수강권 횟수</dt>
-              <dd>{`${defaultCount ? defaultCount + '회' : '무제한'}`}</dd>
+              <dd>{defaultCount ? `${defaultCount}회` : '무제한'}</dd>
             </dl>
             <dl>
               <dt>서비스 횟수</dt>
-              <dd>{`${serviceCount ? serviceCount + '회' : '무제한'}`}</dd>
+              <dd>{serviceCount ? `${serviceCount}회` : '무제한'}</dd>
             </dl>
             {/* "새로운" <- 데이터 보고 고치기 */}
             {/* <dl>
@@ -68,35 +70,38 @@ const TicketItemMemo = ({
         <TS.TicketRight className="ticket-right">
           {/* 각각 버튼에 맞는 행동 추가 */}
           <button
+            disabled={isCanceled ? true : false}
             type="button"
             onClick={() => {
-              setTicketData();
+              setIsOpen(true);
             }}
           >
-            상세보기
+            {isCanceled ? '-' : '상세보기'}
           </button>
+
           {!isSuspended ? (
             <button
+              disabled={isCanceled ? true : false}
               type="button"
               onClick={() => {
                 suspendTicketFunc();
               }}
             >
-              수강권 일시중단
+              {isCanceled ? '-' : '수강권 일시중단'}
             </button>
           ) : (
-            <>
-              <button
-                type="button"
-                onClick={() => {
-                  unsuspendTicketFunc();
-                }}
-              >
-                수강권 재진행
-              </button>
-            </>
+            <button
+              disabled={isCanceled ? true : false}
+              type="button"
+              onClick={() => {
+                unsuspendTicketFunc();
+              }}
+            >
+              {isCanceled ? '-' : '수강권 재진행'}
+            </button>
           )}
           <button
+            disabled={isCanceled ? true : false}
             type="button"
             onClick={() => {
               refundTicketFunc();
@@ -106,6 +111,7 @@ const TicketItemMemo = ({
           </button>
         </TS.TicketRight>
       </TS.Ticket>
+      {isOpen && <IssuedTicketModal issuedId={id} setIsOpen={setIsOpen} />}
     </>
   );
 };

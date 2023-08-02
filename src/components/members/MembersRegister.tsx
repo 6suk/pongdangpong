@@ -1,14 +1,13 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-import { SC } from '@/styles/styles';
-import { InputField } from '@components/center/ticket/Form/InputField';
 import { Button } from '@components/common/Button';
 import { Modal, ModalButton } from '@components/common/Modal';
 import { useRequests } from '@hooks/apis/useRequests';
-import { theme } from '@styles/theme';
+import { FormButtonGroup, FormGridContainer } from '@styles/center/ticketFormStyle';
+import { Chips, FormContentWrap, SC, TopTitleWrap } from '@styles/styles';
 
 interface FormState {
   name: string;
@@ -39,6 +38,8 @@ export const MembersResgier: React.FC = () => {
   const BtnWrapRef = useRef(null);
 
   const [isOpen, setIsOpen] = useState(false);
+  const [chips, setChips] = useState('FEMAIL');
+  console.log(chips);
 
   const inputData = useCallback(
     ({ target }: React.ChangeEvent<HTMLInpuphoneement>) => {
@@ -50,7 +51,7 @@ export const MembersResgier: React.FC = () => {
           target.value = target.value.replace(/(\d{4})(\d{2})(\d{2})/, '$1.$2.$3');
           break;
         case 'sex':
-          target.value = target.className.toUpperCase();
+          target.value = target.value.toUpperCase();
           break;
       }
 
@@ -58,6 +59,8 @@ export const MembersResgier: React.FC = () => {
     },
     [formState]
   );
+
+  console.log(formState);
 
   const submitData = useCallback(
     async (e: MouseEvent<HTMLButtonElement>) => {
@@ -139,14 +142,16 @@ export const MembersResgier: React.FC = () => {
         )}
       </S.modalContainer>
 
-      <S.MembersEditContainer theme={theme}>
-        <h2>회원 등록</h2>
-        <p>회원 정보를 등록합니다.</p>
+      <FormContentWrap>
+        <TopTitleWrap>
+          <h3>회원 등록</h3>
+          <p>회원 정보를 등록합니다.</p>
+        </TopTitleWrap>
 
-        <S.wrap theme={theme}>
-          <div className="first-column">
+        <FormGridContainer>
+          <div>
             <SC.Label>
-              이름 <span>*</span>
+              이름 <span></span>
             </SC.Label>
             <SC.InputField
               ref={inputRef}
@@ -158,37 +163,48 @@ export const MembersResgier: React.FC = () => {
                 inputData(e);
               }}
             />
+          </div>
 
+          <div>
             <SC.Label>
-              성별<span>*</span>
+              성별<span></span>
             </SC.Label>
             <div ref={BtnWrapRef} className="button-wrap">
-              {Array(2)
-                .fill(null)
-                .map((_, idx) => {
-                  return (
-                    <button
-                      key={idx}
-                      className={!idx ? 'female' : 'male'}
-                      name="sex"
-                      type="button"
-                      onClick={e => {
-                        inputData(e);
-                        for (const el of BtnWrapRef.current.children) {
-                          el.classList.remove('on');
-                        }
-                        e.target.classList.add('on');
-                      }}
-                    >
-                      {!idx ? '여' : '남'}
-                    </button>
-                  );
-                })}
+              <Chips>
+                <label className={chips === 'FEMALE' ? 'on' : ''} htmlFor="female">
+                  여
+                </label>
+                <input
+                  id="female"
+                  name="sex"
+                  type="radio"
+                  value={'FEMALE'}
+                  onClick={e => {
+                    setChips('FEMALE');
+                    inputData(e);
+                  }}
+                />
+                <label className={chips === 'MALE' ? 'on' : ''} htmlFor="male">
+                  남
+                </label>
+                <input
+                  id="male"
+                  name="sex"
+                  type="radio"
+                  value={'MALE'}
+                  onClick={e => {
+                    setChips('MALE');
+                    inputData(e);
+                  }}
+                />
+              </Chips>
             </div>
+          </div>
 
-            {/*  화면상 . 으로 구분, 데이터 보낼때 - 추가  */}
+          {/*  화면상 . 으로 구분, 데이터 보낼때 - 추가  */}
+          <div>
             <SC.Label>
-              생년월일 <span>*</span>
+              생년월일 <span></span>
             </SC.Label>
             <SC.InputField
               ref={inputRef}
@@ -200,9 +216,11 @@ export const MembersResgier: React.FC = () => {
                 inputData(e);
               }}
             />
+          </div>
 
+          <div>
             <SC.Label>
-              휴대폰 번호 <span>*</span>
+              휴대폰 번호 <span></span>
             </SC.Label>
 
             <SC.InputField
@@ -217,7 +235,7 @@ export const MembersResgier: React.FC = () => {
             />
           </div>
 
-          <div className="second-column">
+          <div>
             <SC.Label>직업</SC.Label>
             <SC.Select name="job" onChange={e => inputData(e)}>
               <option className="opion-title" defaultValue="">
@@ -227,7 +245,9 @@ export const MembersResgier: React.FC = () => {
               <option value="b">b</option>
               <option value="c">c</option>
             </SC.Select>
+          </div>
 
+          <div>
             <SC.Label>방문경로</SC.Label>
             <SC.Select name="visitRoute" onChange={e => inputData(e)}>
               <option className="opion-title" defaultValue="">
@@ -238,29 +258,22 @@ export const MembersResgier: React.FC = () => {
               <option value="c">c</option>
             </SC.Select>
           </div>
-        </S.wrap>
-
-        <S.BtnWrap>
+        </FormGridContainer>
+        <FormButtonGroup>
+          <Button isPri={false} size="full" onClick={() => navigate(-1)}>
+            돌아가기
+          </Button>
           <Button
-            size={'full'}
+            size="full"
             onClick={e => {
               submitData(e);
               restInputData();
             }}
           >
-            확인
+            완료
           </Button>
-          <Button
-            isPri={false}
-            size={'full'}
-            onClick={() => {
-              navigate('/members');
-            }}
-          >
-            취소
-          </Button>
-        </S.BtnWrap>
-      </S.MembersEditContainer>
+        </FormButtonGroup>
+      </FormContentWrap>
     </>
   );
 };

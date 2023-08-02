@@ -91,7 +91,7 @@ const Members = () => {
   // const [urlQuery, setUrlQuery] = useState('');
 
   return (
-    <Container>
+    <>
       {currentPathname === 'register' && <MembersResgier />}
       {currentPathname === 'detail' && (
         <MembersDetailComponent id={userIdRef.current} staffsDatas={staffsDatas} tickets={ticketData?.tickets} />
@@ -107,148 +107,150 @@ const Members = () => {
         />
       )}
 
-      {location.pathname === '/members' && !isLoading && (
-        <>
-          <S.wrap>
-            <TopTitle>
-              <h3>
-                전체 회원 <span className="highlight">{totalUser}</span>
-              </h3>
-            </TopTitle>
-            <div className="top-left">
-              <div className="search-bar">
-                <SC.InputField
-                  id="search"
-                  name="search"
-                  placeholder="회원/멤버 이름, 연락처로 검색하세요"
-                  type="search"
-                  width={'300px'}
-                />
-                <button className="search-submit" type="submit">
-                  <SearchIcon />
-                </button>
+      <Container>
+        {location.pathname === '/members' && !isLoading && (
+          <>
+            <S.wrap>
+              <TopTitle>
+                <h3>
+                  전체 회원 <span className="highlight">{totalUser}</span>
+                </h3>
+              </TopTitle>
+              <div className="top-left">
+                <div className="search-bar">
+                  <SC.InputField
+                    id="search"
+                    name="search"
+                    placeholder="회원/멤버 이름, 연락처로 검색하세요"
+                    type="search"
+                    width={'300px'}
+                  />
+                  <button className="search-submit" type="submit">
+                    <SearchIcon />
+                  </button>
+                </div>
+                <SC.Select>
+                  <option value="등록일">등록일</option>
+                  <option value="등록일">이름순</option>
+                  <option value="등록일">최근작성일</option>
+                </SC.Select>
+                <Button
+                  onClick={() => {
+                    navigation('register');
+                  }}
+                >
+                  + 회원 등록
+                </Button>
               </div>
-              <SC.Select>
-                <option value="등록일">등록일</option>
-                <option value="등록일">이름순</option>
-                <option value="등록일">최근작성일</option>
-              </SC.Select>
-              <Button
-                onClick={() => {
-                  navigation('register');
-                }}
-              >
-                + 회원 등록
-              </Button>
-            </div>
-          </S.wrap>
+            </S.wrap>
 
-          <StaffsLIstWrap>
-            <div className="table">
-              <div className="table-row title">
-                <p>이름</p>
-                <p>전화번호</p>
-                <p>생년월일</p>
-                <p>성별</p>
-                <p>등록일</p>
-                <p></p>
-              </div>
-              {!isLoading &&
-                datas
-                  .sort((a, b) => a.id - b.id)
-                  .reverse()
-                  .map(({ name, phone, sex, birthDate, createdAt }: UserListProps, idx: number) => {
-                    return (
-                      // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-                      <div
-                        key={idx}
-                        className="table-row"
-                        onClick={() => {
-                          userIdRef.current = datas[idx].id;
-                          navigation('detail');
-                        }}
-                      >
-                        <p className="icon-box">
-                          <MemberIcon /> <span>{name}</span>
-                        </p>
-                        <p>{dataChange('phone', phone)}</p>
-                        <p>{dataChange('birthDate', birthDate)}</p>
-                        <p>{dataChange('sex', sex)}</p>
-                        <p>{dataChange('createdAt', createdAt)}</p>
-                        <DetailButton
-                          onClick={e => {
-                            e.stopPropagation();
+            <StaffsLIstWrap>
+              <div className="table">
+                <div className="table-row title">
+                  <p>이름</p>
+                  <p>전화번호</p>
+                  <p>생년월일</p>
+                  <p>성별</p>
+                  <p>등록일</p>
+                  <p></p>
+                </div>
+                {!isLoading &&
+                  datas
+                    .sort((a, b) => a.id - b.id)
+                    .reverse()
+                    .map(({ name, phone, sex, birthDate, createdAt }: UserListProps, idx: number) => {
+                      return (
+                        // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+                        <div
+                          key={idx}
+                          className="table-row"
+                          onClick={() => {
                             userIdRef.current = datas[idx].id;
                             navigation('detail');
                           }}
-                          onMouseOver={e => {
-                            e.stopPropagation();
-                          }}
                         >
-                          수강권 관리
-                        </DetailButton>
-                      </div>
-                    );
-                  })}
-            </div>
-          </StaffsLIstWrap>
-        </>
-      )}
-
-      <S.pageNation ref={pageNationRef}>
-        {pageState.pageNavNum >= 11 && currentPathname === 'members' && (
-          <button
-            type="button"
-            onClick={() => {
-              setPageState({
-                ...pageState,
-                ['pageNavNum']: pageState['pageNavNum'] - 10,
-              });
-            }}
-          >
-            {'<'}
-          </button>
+                          <p className="icon-box">
+                            <MemberIcon /> <span>{name}</span>
+                          </p>
+                          <p>{dataChange('phone', phone)}</p>
+                          <p>{dataChange('birthDate', birthDate)}</p>
+                          <p>{dataChange('sex', sex)}</p>
+                          <p>{dataChange('createdAt', createdAt)}</p>
+                          <DetailButton
+                            onClick={e => {
+                              e.stopPropagation();
+                              userIdRef.current = datas[idx].id;
+                              navigation('detail');
+                            }}
+                            onMouseOver={e => {
+                              e.stopPropagation();
+                            }}
+                          >
+                            수강권 관리
+                          </DetailButton>
+                        </div>
+                      );
+                    })}
+              </div>
+            </StaffsLIstWrap>
+          </>
         )}
 
-        {subDatas &&
-          currentPathname === 'members' &&
-          Array(10)
-            .fill(0)
-            .map((_, i) => {
-              let pageV = 0;
-              if (currentPageLen >= i + pageState.pageNavNum) pageV = i + pageState.pageNavNum;
-              else return;
-              return (
-                <button
-                  key={i + 1}
-                  className={`pageBtn ${btnActive === i + pageState.pageNavNum ? 'on ' : ''}`}
-                  data-index={i + 1}
-                  type="button"
-                  onClick={e => {
-                    setPageState({ ...pageState, ['pageQuery']: +e.target.textContent });
-                    setBtnActive(+e.target.textContent);
-                  }}
-                >
-                  {pageV}
-                </button>
-              );
-            })}
-        {pageState.pageNavNum <= 10 && currentPathname === 'members' && (
-          <button
-            className="pageBtn"
-            type="button"
-            onClick={() => {
-              setPageState({
-                ...pageState,
-                ['pageNavNum']: pageState['pageNavNum'] + 10,
-              });
-            }}
-          >
-            <ArrowIcon />
-          </button>
-        )}
-      </S.pageNation>
-    </Container>
+        <S.pageNation ref={pageNationRef}>
+          {pageState.pageNavNum >= 11 && currentPathname === 'members' && (
+            <button
+              type="button"
+              onClick={() => {
+                setPageState({
+                  ...pageState,
+                  ['pageNavNum']: pageState['pageNavNum'] - 10,
+                });
+              }}
+            >
+              {'<'}
+            </button>
+          )}
+
+          {subDatas &&
+            currentPathname === 'members' &&
+            Array(10)
+              .fill(0)
+              .map((_, i) => {
+                let pageV = 0;
+                if (currentPageLen >= i + pageState.pageNavNum) pageV = i + pageState.pageNavNum;
+                else return;
+                return (
+                  <button
+                    key={i + 1}
+                    className={`pageBtn ${btnActive === i + pageState.pageNavNum ? 'on ' : ''}`}
+                    data-index={i + 1}
+                    type="button"
+                    onClick={e => {
+                      setPageState({ ...pageState, ['pageQuery']: +e.target.textContent });
+                      setBtnActive(+e.target.textContent);
+                    }}
+                  >
+                    {pageV}
+                  </button>
+                );
+              })}
+          {pageState.pageNavNum <= 10 && currentPathname === 'members' && (
+            <button
+              className="pageBtn"
+              type="button"
+              onClick={() => {
+                setPageState({
+                  ...pageState,
+                  ['pageNavNum']: pageState['pageNavNum'] + 10,
+                });
+              }}
+            >
+              <ArrowIcon />
+            </button>
+          )}
+        </S.pageNation>
+      </Container>
+    </>
   );
 };
 

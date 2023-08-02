@@ -1,6 +1,6 @@
 import React, { useState, useCallback, memo, useEffect, useMemo } from 'react';
 
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 import styled from 'styled-components';
 
@@ -38,6 +38,24 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
       dataStrKor: ['이름', '생일', '전화번호', '성별'],
     };
   }, [data]);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const isActivePath = searchParams.get('isActive') === 'true';
+
+  useEffect(() => {
+    if (!searchParams.get('isActive')) {
+      setSearchParams({
+        isActive: 'true',
+      });
+    }
+  }, [searchParams, setSearchParams]);
+
+  useEffect(() => {
+    // 이용중단 수강권
+    console.log(memberTicketData?.issuedTickets?.filter(el => el.isSuspended || el.isisCanceled));
+    // 이용가능 수강권
+    console.log(memberTicketData?.issuedTickets?.filter(el => !(el.isSuspended || el.isisCanceled)));
+  }, []);
 
   // props로 전달받은 회원 데이터
   const [userData, setUserData] = useState({ ...data });
@@ -316,9 +334,8 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
       <Top>
         {/* 미완 */}
         <div className="ticket-active">
-          <Link className={'on'} to="?isActive=true">{`이용중`}</Link>
-          <Link className={''} to="?isActive=false">{`이용 중단`}</Link>
-          <Link className={''} to="?isActive=false">{`환불`}</Link>
+          <Link className={isActivePath ? 'on' : ''} to="?isActive=true">{`이용중(${''})`}</Link>
+          <Link className={!isActivePath ? 'on' : ''} to="?isActive=false">{`이용중단(${''})`}</Link>
         </div>
         <Button
           size="md"

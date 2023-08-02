@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import { Button } from '@components/common/Button';
 import { Modal } from '@components/common/Modal';
 
-import CreateCounseling from '@components/schedule/CreateCounseling';
-import CreateSchedule from '@components/schedule/CreateSchedule';
+import CreateCounseling from '@components/schedules/CreateCounseling';
+import CreateSchedule from '@components/schedules/CreateSchedule';
 import ScheduleModal from '@components/schedule/ScheduleModal';
 
 import theme from '@styles/theme';

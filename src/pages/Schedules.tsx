@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 
-import CreateCounseling from '@components/schedule/CreateCounseling';
-import CreateSchedule from '@components/schedule/CreateSchedule';
+import CreateCounseling from '@components/schedules/CreateCounseling';
+import CreateSchedule from '@components/schedules/CreateSchedule';
 import { SchedulesList } from '@components/schedules/SchedulesList';
 
 export const Schedules = () => {

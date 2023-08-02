@@ -33,7 +33,6 @@ function App() {
               <Route element={<PrivateRoute isLogin={isLogin} />}>
                 <Route element={<Home />} path="/" />
                 <Route element={<Members />} path="members/*" />
-                <Route element={<Schedule />} path="schedule/*" />
                 <Route element={<Sample />} path="sample/*" />
                 <Route element={<Me />} path="me" />
                 <Route element={<Center />} path="center/*" />

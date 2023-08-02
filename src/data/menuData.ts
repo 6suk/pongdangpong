@@ -2,10 +2,7 @@ import { MenuState } from '@stores/menuSlice';
 
 export const subMenuList: MenuState = {
   home: [],
-  schedule: [
-    // { id: '수강권 관리', content: '수강권 관리', path: '/schedule/ticketManagement', hide: true },
-    // { id: '회원 수정', content: '회원 수정', path: '/schedule/member', hide: true },
-  ],
+  schedule: [],
   members: [
     { id: '회원 등록', content: '회원 등록', path: '/members/register', hide: false },
     { id: '회원 상세 조회', content: '회원 상세 조회', path: '/members/detail', hide: false },

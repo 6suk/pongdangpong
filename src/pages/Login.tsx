@@ -1,10 +1,13 @@
 import { useState } from 'react';
 
+import styled from 'styled-components';
+
+import { Container, LoginSelect, LoginType, LoginForm, Links } from '@/styles/loginStyle';
 import { Button } from '@components/common/Button';
-import Input from '@components/common/Input';
-import { Modal, ModalButton } from '@components/common/Modal';
 import { useAuth } from '@hooks/apis/useAuth';
 import useInput from '@hooks/utils/useInput';
+import { SC } from '@styles/styles';
+import theme from '@styles/theme';
 
 const initForm = {
   loginId: '',
@@ -14,8 +17,7 @@ const initForm = {
 export const Login = () => {
   const { login, isLoading, authError } = useAuth();
   const [inputValues, handleInputChange, inputReset] = useInput(initForm);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
+  const [selectedLogin, setSelectedLogin] = useState('admin');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,12 +27,29 @@ export const Login = () => {
   };
 
   return (
-    <>
-      <h1>로그인</h1>
+    <Container>
+      <LoginSelect>
+        <LoginType isSelected={selectedLogin === 'admin'} onClick={() => setSelectedLogin('admin')}>
+          관리자 로그인
+        </LoginType>
+        <LoginType isSelected={selectedLogin === 'staff'} onClick={() => setSelectedLogin('staff')}>
+          직원 로그인
+        </LoginType>
+      </LoginSelect>
+
       {!isLoading ? (
-        <form onSubmit={handleSubmit}>
-          <input name="loginId" placeholder="id" type="text" value={inputValues.loginId} onChange={handleInputChange} />
-          <input
+        <LoginForm onSubmit={handleSubmit}>
+          <p>아이디</p>
+          <SC.InputField
+            name="loginId"
+            placeholder="id"
+            type="text"
+            value={inputValues.loginId}
+            onChange={handleInputChange}
+          />
+
+          <p>비밀번호</p>
+          <SC.InputField
             autoComplete="off"
             name="password"
             placeholder="password"
@@ -39,44 +58,25 @@ export const Login = () => {
             onChange={handleInputChange}
           />
 
-          {/* ========input 대신 Button 컴포넌트 사용========*/}
-          <Button type="submit">로그인</Button>
-        </form>
+          <Links>
+            <a href="searchID">아이디 찾기</a>/<a href="searchPW"> 비밀번호 찾기</a>
+          </Links>
+
+          <div style={{ margin: '1rem 0', textAlign: 'center', fontSize: '14px', color: theme.colors.gray[200] }}>
+            포인티 계정이 없으세요? |<a href="/signup"> 회원가입</a>
+          </div>
+
+          <div style={{ width: '70%', margin: '0 auto', fontSize: '16px' }}>
+            <Button type="submit" size="full">
+              로그인
+            </Button>
+          </div>
+        </LoginForm>
       ) : (
         <div>Loading...</div>
       )}
       {authError && <p>{String(authError)}</p>}
-      {/* ========================== 모달 테스트 ========================== */}
-      <button className="mt-3 mr-3" type="button" onClick={() => setIsModalOpen(true)}>
-        첫번째 모달 열기
-      </button>
-      {isModalOpen && (
-        <Modal setIsOpen={setIsModalOpen}>
-          <h3>일정 확인 필요</h3>
-          <p>{`취소를 진행하시겠습니까?\n취소는 차감된 횟수가 복구됩니다.\n주의 : 일정 내용 복구 불가`}</p>
-          <div className="buttonWrapper">
-            <ModalButton onClick={() => setIsModalOpen(false)}>아니요</ModalButton>
-            <ModalButton $isPrimary={true} onClick={() => setIsModalOpen(false)}>
-              확인
-            </ModalButton>
-          </div>
-        </Modal>
-      )}
-      <button className="mt-3 mr-3" type="button" onClick={() => setIsSecondModalOpen(true)}>
-        두번째 모달 열기
-      </button>
-      {isSecondModalOpen && (
-        <Modal setIsOpen={setIsSecondModalOpen}>
-          <h3>권한 없음</h3>
-          <p>{`삭제 권한이 없습니다.\n센터관리 > 직원관리에서 권한 설정을 변경해 주세요.`}</p>
-          <div className="buttonWrapper">
-            <ModalButton onClick={() => setIsSecondModalOpen(false)}>확인</ModalButton>
-          </div>
-        </Modal>
-      )}
-      {/* ========================== 모달 테스트 ========================== */}
-      <Input />
-    </>
+    </Container>
   );
 };
 

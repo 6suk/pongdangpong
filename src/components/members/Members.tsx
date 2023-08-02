@@ -1,11 +1,12 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { styled } from 'styled-components';
 
 import { mutate } from 'swr';
 
-import { SearchIcon } from '@assets/icons/indexIcons';
+import { MemberIcon, SearchIcon } from '@assets/icons/indexIcons';
+import { StaffsLIstWrap } from '@components/center/staff/StaffsList';
 import { Button } from '@components/common/Button';
 import { MembersDetailComponent } from '@components/members//MembersDetail';
 import { MembersAddTicekt } from '@components/members/MembersAddTicekt';
@@ -17,8 +18,6 @@ import { useSwrData } from '@hooks/apis/useSwrData';
 import { SC } from '@styles/styles';
 
 import theme from '@styles/theme';
-
-import { type } from './../../apis/ticketsAPIs';
 
 interface UserListProps {
   [key: string]: string;
@@ -92,7 +91,7 @@ const Members = () => {
   // const [urlQuery, setUrlQuery] = useState('');
 
   return (
-    <div>
+    <Container>
       {currentPathname === 'register' && <MembersResgier />}
       {currentPathname === 'detail' && (
         <MembersDetailComponent id={userIdRef.current} staffsDatas={staffsDatas} tickets={ticketData?.tickets} />
@@ -111,13 +110,12 @@ const Members = () => {
       {location.pathname === '/members' && !isLoading && (
         <>
           <S.wrap>
+            <TopTitle>
+              <h3>
+                전체 회원 <span className="highlight">{totalUser}</span>
+              </h3>
+            </TopTitle>
             <div className="top-left">
-              <SC.Select>
-                <option value="등록일">등록일</option>
-                <option value="등록일">이름순</option>
-                <option value="등록일">최근작성일</option>
-              </SC.Select>
-
               <div className="search-bar">
                 <SC.InputField
                   id="search"
@@ -130,68 +128,70 @@ const Members = () => {
                   <SearchIcon />
                 </button>
               </div>
+              <SC.Select>
+                <option value="등록일">등록일</option>
+                <option value="등록일">이름순</option>
+                <option value="등록일">최근작성일</option>
+              </SC.Select>
+              <Button
+                onClick={() => {
+                  navigation('register');
+                }}
+              >
+                + 회원 등록
+              </Button>
             </div>
-
-            <Button
-              onClick={() => {
-                navigation('register');
-              }}
-            >
-              + 회원 등록
-            </Button>
           </S.wrap>
-          <h2 style={{ fontSize: '20px', fontWeight: 600, marginBottom: '20px' }}>
-            전체 회원 <span style={{ color: 'royalblue' }}>{totalUser}</span>
-          </h2>
 
-          {!isLoading &&
-            datas
-              .sort((a, b) => a.id - b.id)
-              .reverse()
-              .map(({ name, phone, sex, birthDate, createdAt }: UserListProps, idx: number) => {
-                return (
-                  <S.list key={idx}>
-                    <li>
-                      <div className="pic">
-                        <img alt="profile" src="/imgs/profile.png" />
-                      </div>
-                      <p>
-                        <span>이름</span>
-                        {name}
-                      </p>
-                      <p>
-                        <span>생년월일</span>
-                        {dataChange('birthDate', birthDate)}
-                      </p>
-                      <p>
-                        <span>등록일</span>
-                        {dataChange('createdAt', createdAt)}
-                      </p>
-                      <p>
-                        <span>성별</span>
-                        {dataChange('sex', sex)}
-                      </p>
-                      <p>
-                        <span>전화번호</span>
-                        {dataChange('phone', phone)}
-                      </p>
-                    </li>
-
-                    <li className="btn-wrap">
-                      <Button
-                        size="md"
-                        type="button"
+          <StaffsLIstWrap>
+            <div className="table">
+              <div className="table-row title">
+                <p>이름</p>
+                <p>전화번호</p>
+                <p>생년월일</p>
+                <p>성별</p>
+                <p>등록일</p>
+                <p></p>
+              </div>
+              {!isLoading &&
+                datas
+                  .sort((a, b) => a.id - b.id)
+                  .reverse()
+                  .map(({ name, phone, sex, birthDate, createdAt }: UserListProps, idx: number) => {
+                    return (
+                      // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+                      <div
+                        key={idx}
+                        className="table-row"
                         onClick={() => {
                           userIdRef.current = datas[idx].id;
                           navigation('detail');
                         }}
                       >
-                        수강권 관리
-                      </Button>
-                    </li>
-                  </S.list>
-                );
-              })}
+                        <p className="icon-box">
+                          <MemberIcon /> <span>{name}</span>
+                        </p>
+                        <p>{dataChange('phone', phone)}</p>
+                        <p>{dataChange('birthDate', birthDate)}</p>
+                        <p>{dataChange('sex', sex)}</p>
+                        <p>{dataChange('createdAt', createdAt)}</p>
+                        <DetailButton
+                          onClick={e => {
+                            e.stopPropagation();
+                            userIdRef.current = datas[idx].id;
+                            navigation('detail');
+                          }}
+                          onMouseOver={e => {
+                            e.stopPropagation();
+                          }}
+                        >
+                          수강권 관리
+                        </DetailButton>
+                      </div>
+                    );
+                  })}
+            </div>
+          </StaffsLIstWrap>
         </>
       )}
 
@@ -247,9 +247,48 @@ const Members = () => {
           </button>
         )}
       </S.pageNation>
-    </div>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  max-width: 1024px;
+  width: 100%;
+`;
+
+const DetailButton = styled.button`
+  font-size: 14px;
+  padding-inline: 0.4rem;
+  padding-block: 0.3rem;
+  background-color: ${theme.colors.pri[900]};
+  color: ${theme.colors.pri[600]};
+  border-radius: 6px;
+  transition: all 0.4s;
+
+  &:hover {
+    font-weight: 600;
+    background-color: ${theme.colors.pri[800]};
+  }
+`;
+
+const TopTitle = styled.div`
+  display: flex;
+  flex-direction: row;
+  padding-block: 1rem;
+  align-items: center;
+  margin-inline: 1rem;
+
+  h3 {
+    font-weight: bold;
+    size: ${theme.font.title};
+
+    .highlight {
+      color: ${theme.colors.pri[500]};
+    }
+  }
+`;
 
 const S = {
   list: styled.ul`
@@ -260,6 +299,7 @@ const S = {
     padding: 6px 10px;
     border: 1px solid #e5e7eb;
     border-radius: 10px;
+    font-size: ${theme.font.sub};
 
     & > li {
       display: flex;
@@ -297,10 +337,8 @@ const S = {
     display: flex;
     align-items: center;
     margin-bottom: 24px;
-
-    input {
-      margin-left: 10px;
-    }
+    margin-inline: 1rem;
+    justify-content: space-between;
 
     button {
       margin-left: auto;
@@ -308,7 +346,7 @@ const S = {
 
     .top-left {
       display: flex;
-
+      gap: 1rem;
       select {
         width: auto;
       }
@@ -340,6 +378,7 @@ const S = {
       }
     }
   `,
+
   pageNation: styled.div`
     width: 380px;
     display: flex;

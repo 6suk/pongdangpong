@@ -12,3 +12,4 @@ export { ReactComponent as UserIcon } from '@assets/icons/staffs/userIcon.svg';
 export { ReactComponent as Editicon } from '@assets/icons/editicon.svg';
 export { ReactComponent as DumbbellIcon } from '@assets/icons/schedules/dumbbell.svg';
 export { ReactComponent as UserColorIcon } from '@assets/icons/schedules/userIcon.svg';
+export { ReactComponent as SearchIcon } from '@assets/icons/search.svg';

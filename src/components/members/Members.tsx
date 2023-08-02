@@ -5,6 +5,7 @@ import { styled } from 'styled-components';
 
 import { mutate } from 'swr';
 
+import { SearchIcon } from '@assets/icons/indexIcons';
 import { Button } from '@components/common/Button';
 import { MembersDetailComponent } from '@components/members//MembersDetail';
 import { MembersAddTicekt } from '@components/members/MembersAddTicekt';
@@ -14,6 +15,10 @@ import { MembersResgier } from '@components/members/MembersRegister';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
 import { SC } from '@styles/styles';
+
+import theme from '@styles/theme';
+
+import { type } from './../../apis/ticketsAPIs';
 
 interface UserListProps {
   [key: string]: string;
@@ -87,7 +92,7 @@ const Members = () => {
   // const [urlQuery, setUrlQuery] = useState('');
 
   return (
-    <div style={{ paddingTop: '40px' }}>
+    <div>
       {currentPathname === 'register' && <MembersResgier />}
       {currentPathname === 'detail' && (
         <MembersDetailComponent id={userIdRef.current} staffsDatas={staffsDatas} tickets={ticketData?.tickets} />
@@ -106,20 +111,26 @@ const Members = () => {
       {location.pathname === '/members' && !isLoading && (
         <>
           <S.wrap>
-            <SC.Select width={'14%'}>
-              <option value="등록일">등록일</option>
-              <option value="등록일">이름순</option>
-              <option value="등록일">최근작성일</option>
-            </SC.Select>
+            <div className="top-left">
+              <SC.Select>
+                <option value="등록일">등록일</option>
+                <option value="등록일">이름순</option>
+                <option value="등록일">최근작성일</option>
+              </SC.Select>
 
-            <label htmlFor="search"></label>
-            <SC.InputField
-              id="search"
-              name="search"
-              placeholder="회원/멤버 이름, 연락처로 검색하세요"
-              type="search"
-              width={'40%'}
-            />
+              <div className="search-bar">
+                <SC.InputField
+                  id="search"
+                  name="search"
+                  placeholder="회원/멤버 이름, 연락처로 검색하세요"
+                  type="search"
+                  width={'300px'}
+                />
+                <button className="search-submit" type="submit">
+                  <SearchIcon />
+                </button>
+              </div>
+            </div>
 
             <Button
               onClick={() => {
@@ -293,6 +304,40 @@ const S = {
 
     button {
       margin-left: auto;
+    }
+
+    .top-left {
+      display: flex;
+
+      select {
+        width: auto;
+      }
+
+      input[type='text'] {
+        width: 100%;
+      }
+    }
+
+    .search-bar {
+      position: relative;
+      display: flex;
+      align-items: center;
+
+      .search-submit {
+        position: absolute;
+        right: 0;
+        margin-right: 1rem;
+        transition: all 0.4s;
+
+        &:hover {
+          opacity: 0.5;
+        }
+
+        svg {
+          width: 17px;
+          fill: ${theme.colors.gray[400]};
+        }
+      }
     }
   `,
   pageNation: styled.div`

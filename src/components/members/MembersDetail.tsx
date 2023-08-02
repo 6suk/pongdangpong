@@ -4,10 +4,10 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-import { InputField } from '@components/center/ticket/Form/InputField';
-import { TicketItem } from '@components/center/ticket/TicketItem';
+import { Editicon } from '@assets/icons/indexIcons';
 import { Button } from '@components/common/Button';
 import { Modal, ModalButton } from '@components/common/Modal';
+import { TicketItem } from '@components/members/ticket/TicketItem';
 
 import { useRequests } from '@hooks/apis/useRequests';
 import { useSwrData } from '@hooks/apis/useSwrData';
@@ -176,19 +176,15 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
           </p>
         </li>
         <li className="btn-wrap">
-          <Button
-            size="md"
-            type="button"
+          <Editicon
+            style={{ cursor: 'pointer' }}
             onClick={() => {
               setIsOpen(true);
             }}
-          >
-            수정
-          </Button>
+          />
         </li>
       </S.list>
 
-      {/* 수강권 수정 */}
       {editTicketModalState && (
         <Modal maxWidth="36rem" setIsOpen={setEditTicketModalState}>
           <S.ModalInfoTop>
@@ -243,7 +239,6 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
                     setSubmitTicketData({ ...submitTicketData, [target.name]: parseInt(target.value) });
                   }}
                 >
-                  {/* <option value="" selected ></option> */}
                   {staffsDatas.map(el => {
                     return (
                       <option key={el.id} value={el.id}>
@@ -277,7 +272,6 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
           </ModalButton>
         </Modal>
       )}
-
       <Top>
         <div className="ticket-active">
           {/* 미완 */}
@@ -300,14 +294,7 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
               .sort((a, b) => a.id - b.id)
               .reverse()
               .map((el, i) => {
-                return (
-                  <TicketItem
-                    key={el.id}
-                    btnTexts={{ btnDetail: '상세보기', btnSuspens: '수강권 일시중단', btnEdit: '수정' }}
-                    setTicketData={setTicketData(i)}
-                    ticket={el}
-                  />
-                );
+                return <TicketItem key={el.id} setTicketData={setTicketData(i)} ticket={el} />;
               })}
         </TicketWrap>
       </TicketContainer>

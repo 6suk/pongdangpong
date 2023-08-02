@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { styled } from 'styled-components';
@@ -21,14 +21,34 @@ interface UserListProps {
 const Members = () => {
   const navigation = useNavigate();
   const location = useLocation();
-  const userIdRef = useRef(null);
 
-  const len = 100;
   const pathSlice = location.pathname.split('/');
   const currentPathname = pathSlice[pathSlice.length - 1];
 
-  const { data, isLoading } = useSwrData(`members?page=1&size=${len}&sort=createdAt%2CDesc`);
+  const [pageState, setPageState] = useState({
+    pageQuery: 1,
+    pageNavNum: 1,
+  });
+
+  const userIdRef = useRef(null);
+  const pageNationRef = useRef(null);
+
+  const len = 10;
+  const { data, isLoading } = useSwrData(`members?page=${pageState['pageQuery']}&size=${len}&sort=createdAt%2CDesc`);
+  const { data: subDatas, isLoading: subDatasIsLoading } = useSwrData(`members?page=0&size=200&sort=createdAt%2CDesc`);
+  const { data: ticketData } = useSwrData('tickets') ?? {};
+  const { data: staffsData } = useSwrData('staffs');
+
   const { datas } = data ?? ({} as UserListProps);
+  const { datas: staffsDatas } = staffsData ?? {};
+
+  const [totalUser, setTotalUser] = useState(0);
+  const [btnActive, setBtnActive] = useState(1);
+
+  const currentPageLen = useMemo(() => {
+    const pageLen = subDatas?.datas.length / 10;
+    return Math.ceil(pageLen);
+  }, [subDatas]);
 
   const dataChange = useCallback((type: string, value: string) => {
     switch (type) {
@@ -48,15 +68,23 @@ const Members = () => {
     return value;
   }, []);
 
-  const { data: ticketData } = useSwrData('tickets') ?? {};
-  const { data: staffsData } = useSwrData('staffs');
-  const { datas: staffsDatas } = staffsData ?? {};
+  useEffect(() => {
+    mutate(`members?page=${pageState.pageQuery}&size=${len}&sort=createdAt%2CDesc`);
+  });
 
   useEffect(() => {
-    (async () => {
-      mutate(`members?page=1&size=${len}&sort=createdAt%2CDesc`);
-    })();
-  });
+    setTotalUser(subDatas?.datas.length);
+  }, [subDatasIsLoading, subDatas?.datas]);
+
+  // 전체 회원조회
+  // search?resource=MEMBER
+
+  // query 특정 회원조회
+  // search?query=%EC%B9%98%ED%82%A8&resource=MEMBER
+  // const url = `search?query=${query}&resource=MEMBER`;
+
+  // const query = encodeURIComponent('치킨');
+  // const [urlQuery, setUrlQuery] = useState('');
 
   return (
     <div style={{ paddingTop: '40px' }}>
@@ -102,65 +130,112 @@ const Members = () => {
             </Button>
           </S.wrap>
           <h2 style={{ fontSize: '20px', fontWeight: 600, marginBottom: '20px' }}>
-            전체 회원 <span style={{ color: 'royalblue' }}>{datas?.length}</span>
+            전체 회원 <span style={{ color: 'royalblue' }}>{totalUser}</span>
           </h2>
 
-          {/* 회원 리스트 전체, 동록일, 이름순, 최근 작성일 순 */}
-          {/* 
-              1. select에 선택된 데이터 종류를 state에 저장한다. 등록일 || 이름 || 최근 작성일
-              2. input:search 입력된 값을 state에 저장한다. 
-              3. enter key 또는 검색 버튼을 클릭한다.
-              4. 저장된 select, input:search state기준으로 데이터를 걸러내서 재렌더링
-          */}
-          {datas
-            .sort((a, b) => a.id - b.id)
-            .reverse()
-            .map(({ name, phone, sex, birthDate, createdAt }: UserListProps, idx: number) => {
-              return (
-                <S.list key={idx}>
-                  <li>
-                    <div className="pic">
-                      <img alt="profile" src="/imgs/profile.png" />
-                    </div>
-                    <p>
-                      <span>이름</span>
-                      {name}
-                    </p>
-                    <p>
-                      <span>생년월일</span>
-                      {dataChange('birthDate', birthDate)}
-                    </p>
-                    <p>
-                      <span>등록일</span>
-                      {dataChange('createdAt', createdAt)}
-                    </p>
-                    <p>
-                      <span>성별</span>
-                      {dataChange('sex', sex)}
-                    </p>
-                    <p>
-                      <span>전화번호</span>
-                      {dataChange('phone', phone)}
-                    </p>
-                  </li>
+          {!isLoading &&
+            datas
+              .sort((a, b) => a.id - b.id)
+              .reverse()
+              .map(({ name, phone, sex, birthDate, createdAt }: UserListProps, idx: number) => {
+                return (
+                  <S.list key={idx}>
+                    <li>
+                      <div className="pic">
+                        <img alt="profile" src="/imgs/profile.png" />
+                      </div>
+                      <p>
+                        <span>이름</span>
+                        {name}
+                      </p>
+                      <p>
+                        <span>생년월일</span>
+                        {dataChange('birthDate', birthDate)}
+                      </p>
+                      <p>
+                        <span>등록일</span>
+                        {dataChange('createdAt', createdAt)}
+                      </p>
+                      <p>
+                        <span>성별</span>
+                        {dataChange('sex', sex)}
+                      </p>
+                      <p>
+                        <span>전화번호</span>
+                        {dataChange('phone', phone)}
+                      </p>
+                    </li>
 
-                  <li className="btn-wrap">
-                    <Button
-                      size="md"
-                      type="button"
-                      onClick={() => {
-                        userIdRef.current = datas[idx].id;
-                        navigation('detail');
-                      }}
-                    >
-                      수강권 관리
-                    </Button>
-                  </li>
-                </S.list>
-              );
-            })}
+                    <li className="btn-wrap">
+                      <Button
+                        size="md"
+                        type="button"
+                        onClick={() => {
+                          userIdRef.current = datas[idx].id;
+                          navigation('detail');
+                        }}
+                      >
+                        수강권 관리
+                      </Button>
+                    </li>
+                  </S.list>
+                );
+              })}
         </>
       )}
+
+      <S.pageNation ref={pageNationRef}>
+        {pageState.pageNavNum >= 11 && currentPathname === 'members' && (
+          <button
+            type="button"
+            onClick={() => {
+              setPageState({
+                ...pageState,
+                ['pageNavNum']: pageState['pageNavNum'] - 10,
+              });
+            }}
+          >
+            {'<'}
+          </button>
+        )}
+
+        {subDatas &&
+          currentPathname === 'members' &&
+          Array(10)
+            .fill(0)
+            .map((_, i) => {
+              let pageV = 0;
+              if (currentPageLen >= i + pageState.pageNavNum) pageV = i + pageState.pageNavNum;
+              else return;
+              return (
+                <button
+                  key={i + 1}
+                  className={`pageBtn ${btnActive === i + pageState.pageNavNum ? 'on ' : ''}`}
+                  data-index={i + 1}
+                  type="button"
+                  onClick={e => {
+                    setPageState({ ...pageState, ['pageQuery']: +e.target.textContent });
+                    setBtnActive(+e.target.textContent);
+                  }}
+                >
+                  {pageV}
+                </button>
+              );
+            })}
+        {pageState.pageNavNum <= 10 && currentPathname === 'members' && (
+          <button
+            type="button"
+            onClick={() => {
+              setPageState({
+                ...pageState,
+                ['pageNavNum']: pageState['pageNavNum'] + 10,
+              });
+            }}
+          >
+            ...
+          </button>
+        )}
+      </S.pageNation>
     </div>
   );
 };
@@ -218,6 +293,30 @@ const S = {
 
     button {
       margin-left: auto;
+    }
+  `,
+  pageNation: styled.div`
+    width: 380px;
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+
+    & > button[type='button'].pageBtn {
+      flex-shrink: 0;
+      width: 30px;
+      height: 30px;
+      display: block;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      background-color: gray;
+      color: #fff;
+      margin: 0 10px;
+
+      &.on {
+        background-color: royalblue;
+      }
     }
   `,
 };

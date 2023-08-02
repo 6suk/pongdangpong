@@ -6,22 +6,27 @@ interface TicketItemProps {
   ticket: Ticket_response;
 }
 
-export const TicketItem = ({ ticket }: TicketItemProps) => {
+export const TicketItem = ({ ticket, setTicketData }: TicketItemProps) => {
   const {
     id,
     title,
     lessonType,
-    isActive,
-    issuedTicketCount,
+    isActive = true,
+    serviceCount,
+    remainingCount,
     defaultCount,
-    dailyCountLimit,
     defaultTerm,
     defaultTermUnit,
+    startAt,
+    endAt,
   } = ticket;
+
+  console.log(ticket);
+
   return (
     <>
       <TS.Ticket $isActive={isActive}>
-        <TS.TicketLeft className="ticket-left">
+        <TS.TicketLeft className="ticket-left" style={{ padding: '1.2rem' }}>
           <TS.LeftTitle>
             <div className="title">
               <h3>{title}</h3>
@@ -34,20 +39,20 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
           <TS.LeftInfo>
             {/* 본인 데이터에 맞는 목록 추가 */}
             <dl>
-              <dt>부여</dt>
-              <dd>{`${issuedTicketCount}건`}</dd>
-            </dl>
-            <dl>
               <dt>수강권 횟수</dt>
               <dd>{`${defaultCount}회`}</dd>
             </dl>
             <dl>
-              <dt>수업 시간</dt>
-              <dd>{`${dailyCountLimit}분`}</dd>
+              <dt>서비스 횟수</dt>
+              <dd>{`${serviceCount}회`}</dd>
             </dl>
             <dl>
               <dt>수강권 기간</dt>
               <dd>{`${defaultTerm}${TermUnitEnum[defaultTermUnit]}`}</dd>
+            </dl>
+            <dl style={{ display: 'flex' }}>
+              <dt>유효 기간</dt>
+              <dd style={{ display: 'flex' }}>{`${startAt.replace(/-/gi, '.')}~${endAt.replace(/-/gi, '.')}`}</dd>
             </dl>
           </TS.LeftInfo>
         </TS.TicketLeft>
@@ -56,10 +61,10 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
           <button
             type="button"
             onClick={() => {
-              console.log(id + ' 수강권 부여내역 클릭');
+              setTicketData();
             }}
           >
-            수강권 부여내역
+            상세보기
           </button>
           {isActive ? (
             <button
@@ -68,28 +73,22 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
                 console.log(id + ' 판매종료 클릭');
               }}
             >
-              판매종료
+              수강권 일시중단
             </button>
           ) : (
             <>
-              {' '}
               <button
                 type="button"
                 onClick={() => {
                   console.log(id + ' 판매가능 클릭');
                 }}
               >
-                판매가능
+                수강권 재진행
               </button>
             </>
           )}
-          <button
-            type="button"
-            onClick={() => {
-              console.log(id + ' 수정/삭제');
-            }}
-          >
-            수정 / 삭제
+          <button type="button" onClick={() => {}}>
+            환불
           </button>
         </TS.TicketRight>
       </TS.Ticket>

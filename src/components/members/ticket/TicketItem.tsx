@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 import { LessonTypeEnum, TermUnitEnum, Ticket_response } from '@apis/ticketsAPIs';
 import { TicketIcon } from '@assets/icons/indexIcons';
 import { TS } from '@styles/center/ticketsStyle';
@@ -6,14 +8,20 @@ interface TicketItemProps {
   ticket: Ticket_response;
 }
 
-export const TicketItem = ({ ticket, setTicketData }: TicketItemProps) => {
+const TicketItemMemo = ({
+  ticket,
+  setTicketData,
+  suspendTicketFunc,
+  unsuspendTicketFunc,
+  refundTicketFunc,
+}: TicketItemProps) => {
   const {
     id,
     title,
     lessonType,
-    isActive = true,
+    isSuspended,
     serviceCount,
-    remainingCount,
+    isCanceled,
     defaultCount,
     defaultTerm,
     defaultTermUnit,
@@ -25,7 +33,7 @@ export const TicketItem = ({ ticket, setTicketData }: TicketItemProps) => {
 
   return (
     <>
-      <TS.Ticket $isActive={isActive}>
+      <TS.Ticket $isActive={!isSuspended && !isCanceled}>
         <TS.TicketLeft className="ticket-left" style={{ padding: '1.2rem' }}>
           <TS.LeftTitle>
             <div className="title">
@@ -40,16 +48,17 @@ export const TicketItem = ({ ticket, setTicketData }: TicketItemProps) => {
             {/* 본인 데이터에 맞는 목록 추가 */}
             <dl>
               <dt>수강권 횟수</dt>
-              <dd>{`${defaultCount}회`}</dd>
+              <dd>{`${defaultCount ? defaultCount + '회' : '무제한'}`}</dd>
             </dl>
             <dl>
               <dt>서비스 횟수</dt>
-              <dd>{`${serviceCount}회`}</dd>
+              <dd>{`${serviceCount ? serviceCount + '회' : '무제한'}`}</dd>
             </dl>
-            <dl>
+            {/* "새로운" <- 데이터 보고 고치기 */}
+            {/* <dl>
               <dt>수강권 기간</dt>
               <dd>{`${defaultTerm}${TermUnitEnum[defaultTermUnit]}`}</dd>
-            </dl>
+            </dl> */}
             <dl style={{ display: 'flex' }}>
               <dt>유효 기간</dt>
               <dd style={{ display: 'flex' }}>{`${startAt.replace(/-/gi, '.')}~${endAt.replace(/-/gi, '.')}`}</dd>
@@ -66,11 +75,11 @@ export const TicketItem = ({ ticket, setTicketData }: TicketItemProps) => {
           >
             상세보기
           </button>
-          {isActive ? (
+          {!isSuspended ? (
             <button
               type="button"
               onClick={() => {
-                console.log(id + ' 판매종료 클릭');
+                suspendTicketFunc();
               }}
             >
               수강권 일시중단
@@ -80,18 +89,25 @@ export const TicketItem = ({ ticket, setTicketData }: TicketItemProps) => {
               <button
                 type="button"
                 onClick={() => {
-                  console.log(id + ' 판매가능 클릭');
+                  unsuspendTicketFunc();
                 }}
               >
                 수강권 재진행
               </button>
             </>
           )}
-          <button type="button" onClick={() => {}}>
-            환불
+          <button
+            type="button"
+            onClick={() => {
+              refundTicketFunc();
+            }}
+          >
+            {!isCanceled ? '환불' : '환불 완료'}
           </button>
         </TS.TicketRight>
       </TS.Ticket>
     </>
   );
 };
+
+export const TicketItem = memo(TicketItemMemo);

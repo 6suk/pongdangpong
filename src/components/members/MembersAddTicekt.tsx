@@ -142,7 +142,11 @@ export const MembersAddTicekt = ({ id, members, tickets, staffsDatas }) => {
           }}
         />
       </div>
+
       {/* 수강권 부여완료 : 선택하신 수강권의 부여가 완료되었습니다. */}
+      <h3>수강권 갯수</h3>
+      <SC.InputField disabled value={1} />
+      
       <Button
         size="full"
         onClick={() => {

@@ -45,6 +45,7 @@ const Members = () => {
   const [totalUser, setTotalUser] = useState(0);
   const [btnActive, setBtnActive] = useState(1);
 
+  // 페이지네이션 계산 값
   const currentPageLen = useMemo(() => {
     const pageLen = subDatas?.datas.length / 10;
     return Math.ceil(pageLen);

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { SC } from '@/styles/styles';
+import { InputField } from '@components/center/ticket/Form/InputField';
 import { Button } from '@components/common/Button';
 import { Modal, ModalButton } from '@components/common/Modal';
 import { useRequests } from '@hooks/apis/useRequests';
@@ -92,10 +93,6 @@ export const MembersResgier: React.FC = () => {
     },
     [formState]
   );
-
-  // useEffect(() => {
-  //   console.log(formState);
-  // }, [formState]);
 
   const restInputData = () => {
     setFormState({

@@ -21,20 +21,16 @@ interface UserListProps {
 }
 
 const MembersDetail = ({ id, tickets, staffsDatas }) => {
-  // console.log(id);
-  // console.log(staffsDatas);
-  // console.log(tickets);
+  // console.log(id, staffsDatas);
 
-  const { data, isLoading } = useSwrData(`members/${id}`);
-  const { data: memberTicketData, isLoading: memberTicketDataIsLoading } = useSwrData(`members/${id}/issued-tickets`);
-
+  const { request } = useRequests();
   const navigate = useNavigate();
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [editTicketModalState, setEditTicketModalState] = useState(false);
-
+  const { data, isLoading } = useSwrData(`members/${id}`);
   const { name, birthDate, phone, sex }: UserListProps = data ?? {};
+  const { data: memberTicketData, isLoading: memberTicketDataIsLoading } = useSwrData(`members/${id}/issued-tickets`);
 
+  // 데이터 바인딩에 사용할 값
   const { dataArr, dataStr, dataStrKor } = useMemo(() => {
     return {
       dataArr: [name, birthDate, phone, sex],
@@ -43,11 +39,22 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
     };
   }, [data]);
 
+  // props로 전달받은 회원 데이터
   const [userData, setUserData] = useState({ ...data });
+  // Modal
+  const [isOpen, setIsOpen] = useState(false);
+  // editTicketModal
+  const [editTicketModalState, setEditTicketModalState] = useState(false);
+  // 회원 티켓id
+  const [issuedTicketId, setissuedTicketId] = useState(0);
+  const [editTicketData, setEditTicketData] = useState({});
+  // 수강권 수정
+  const [submitTicketData, setSubmitTicketData] = useState({
+    endAt: '',
+    tutorId: 0,
+  });
 
-  const { request } = useRequests();
-  const [ticketId, setTicketId] = useState(0);
-
+  // request요청
   const submitRequest = useCallback(
     async ({ url, method, body }) => {
       try {
@@ -63,6 +70,7 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
     [userData]
   );
 
+  // 문자 데이터 형식 변환
   const dataChange = useCallback((type: string, value: string) => {
     switch (type) {
       case 'birthDate':
@@ -81,21 +89,55 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
     return value;
   }, []);
 
-  const [editTicketData, setEditTicketData] = useState({});
-  const [submitTicketData, setSubmitTicketData] = useState({
-    endAt: '',
-    tutorId: 0,
-  });
-
   const setTicketData = i => () => {
     const targetTicket = memberTicketData?.issuedTickets[i];
-    setTicketId(targetTicket.id);
-
+    setissuedTicketId(targetTicket.id);
     setEditTicketData(targetTicket);
     setEditTicketModalState(true);
   };
 
-  useEffect(() => {}, [editTicketData, submitTicketData]);
+  // 수강권 일시중지
+  const suspendTicketFunc = i => () => {
+    const targetTicket = memberTicketData?.issuedTickets[i].id;
+
+    submitRequest({
+      url: `issued-tickets/${targetTicket}/suspend`,
+      method: 'post',
+      body: {},
+    });
+
+    alert(`${targetTicket}티켓이 일시중지되었습니다.`);
+  };
+
+  // 수강권 재진행
+  const unsuspendTicketFunc = i => () => {
+    const targetTicket = memberTicketData?.issuedTickets[i].id;
+
+    submitRequest({
+      url: `issued-tickets/${targetTicket}/unsuspend`,
+      method: 'post',
+      body: {},
+    });
+
+    alert(`${targetTicket}티켓이 일시중단이 해제 되었습니다.`);
+  };
+
+  // 수강권 환불
+  const refundTicketFunc = i => () => {
+    const targetTicket = memberTicketData?.issuedTickets[i].id;
+
+    submitRequest({
+      url: `issued-tickets/${targetTicket}/refund`,
+      method: 'post',
+      body: {},
+    });
+
+    alert(`${targetTicket}티켓이 환불 되었습니다.`);
+  };
+
+  useEffect(() => {
+    console.log(issuedTicketId);
+  }, [issuedTicketId]);
 
   return !isLoading && id ? (
     <div>
@@ -104,6 +146,7 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
           {
             <>
               <S.EditMemberInfo>
+                <h3>회원정보 수정</h3>
                 {dataArr.map((el, i) => {
                   return (
                     <li key={dataStr[i]}>
@@ -198,15 +241,19 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
             </dl>
             <dl>
               <dt>서비스 횟수</dt>
-              <dd>{editTicketData['serviceCount']}회</dd>
+              <dd>{editTicketData['serviceCount'] ? editTicketData['serviceCount'] + '회' : '무제한'}</dd>
             </dl>
             <dl>
               <dt>잔여 횟수</dt>
-              <dd>{editTicketData['remainingCount']}회</dd>
+              <dd>{editTicketData['remainingCount'] ? editTicketData['remainingCount'] + '회' : '무제한'}</dd>
             </dl>
             <dl>
               <dt>예약 가능 잔여 횟수</dt>
-              <dd>{editTicketData['availableReservationCount']}회</dd>
+              <dd>
+                {editTicketData['availableReservationCount']
+                  ? editTicketData['availableReservationCount'] + '회'
+                  : '무제한'}
+              </dd>
             </dl>
             <dl>
               <dt>수강권 기간</dt>
@@ -253,19 +300,13 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
           <ModalButton>취소</ModalButton>
           <ModalButton
             $isPrimary={true}
-            onClick={async () => {
-              try {
-                const submitEditTicket = {
-                  url: `issued-tickets/${ticketId}`,
-                  method: 'put',
-                  body: submitTicketData,
-                };
-                await submitRequest(submitEditTicket);
-
-                alert('수강권이 수정되었습니다.');
-              } catch (error) {
-                console.error(error);
-              }
+            onClick={() => {
+              submitRequest({
+                url: `issued-tickets/${issuedTicketId}`,
+                method: 'put',
+                body: submitTicketData,
+              });
+              alert('수강권이 수정되었습니다.');
             }}
           >
             수강권 수정
@@ -273,10 +314,11 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
         </Modal>
       )}
       <Top>
+        {/* 미완 */}
         <div className="ticket-active">
-          {/* 미완 */}
-          <Link className={'on'} to="?isActive=true">{`판매중`}</Link>
-          <Link className={''} to="?isActive=false">{`판매종료`}</Link>
+          <Link className={'on'} to="?isActive=true">{`이용중`}</Link>
+          <Link className={''} to="?isActive=false">{`이용 중단`}</Link>
+          <Link className={''} to="?isActive=false">{`환불`}</Link>
         </div>
         <Button
           size="md"
@@ -294,7 +336,16 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
               .sort((a, b) => a.id - b.id)
               .reverse()
               .map((el, i) => {
-                return <TicketItem key={el.id} setTicketData={setTicketData(i)} ticket={el} />;
+                return (
+                  <TicketItem
+                    key={el.id}
+                    refundTicketFunc={refundTicketFunc(i)}
+                    setTicketData={setTicketData(i)}
+                    suspendTicketFunc={suspendTicketFunc(i)}
+                    ticket={el}
+                    unsuspendTicketFunc={unsuspendTicketFunc(i)}
+                  />
+                );
               })}
         </TicketWrap>
       </TicketContainer>

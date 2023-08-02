@@ -38,7 +38,7 @@ const Select = styled.select`
   color: #1f2937;
   font-size: 0.875rem;
   border-radius: 0.375rem;
-  width: ${props => props.width || '100%'};
+  width: 100%;
   padding: 0.625rem;
   position: relative;
   appearance: none;
@@ -47,10 +47,12 @@ const Select = styled.select`
   background-image: url(/imgs/selectArrow.png);
   background-repeat: no-repeat;
   background-position: calc(100% - 10px) center;
+  background-size: 12px;
+  padding: 0.625rem 40px 0.625rem 0.625rem;
 
-  & .opion-title {
+  /* & .opion-title {
     color: blue;
-  }
+  } */
 
   & > option[value=''][disabled] {
     display: none;
@@ -61,6 +63,11 @@ const Select = styled.select`
     border-color: ${theme.colors.pri[800]};
     box-shadow: 0 0 0 1px ${theme.colors.pri[900]};
     background-image: url(/imgs/selectArrow.png);
+  }
+
+  &:disabled {
+    color: ${theme.colors.gray[500]};
+    background-color: ${theme.colors.gray[800]};
   }
 `;
 

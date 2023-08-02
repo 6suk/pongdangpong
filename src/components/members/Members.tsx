@@ -5,7 +5,7 @@ import { styled } from 'styled-components';
 
 import { mutate } from 'swr';
 
-import { MemberIcon, SearchIcon } from '@assets/icons/indexIcons';
+import { ArrowIcon, MemberIcon, SearchIcon } from '@assets/icons/indexIcons';
 import { StaffsLIstWrap } from '@components/center/staff/StaffsList';
 import { Button } from '@components/common/Button';
 import { MembersDetailComponent } from '@components/members//MembersDetail';
@@ -235,6 +235,7 @@ const Members = () => {
             })}
         {pageState.pageNavNum <= 10 && currentPathname === 'members' && (
           <button
+            className="pageBtn"
             type="button"
             onClick={() => {
               setPageState({
@@ -243,7 +244,7 @@ const Members = () => {
               });
             }}
           >
-            ...
+            <ArrowIcon />
           </button>
         )}
       </S.pageNation>
@@ -380,26 +381,38 @@ const S = {
   `,
 
   pageNation: styled.div`
-    width: 380px;
     display: flex;
     justify-content: center;
-    margin: 0 auto;
+    font-size: ${theme.font.sub};
+    margin-top: 2rem;
 
     & > button[type='button'].pageBtn {
-      flex-shrink: 0;
-      width: 30px;
-      height: 30px;
-      display: block;
+      width: 33px;
+      aspect-ratio: 1/1;
       display: flex;
       justify-content: center;
       align-items: center;
-      border-radius: 50%;
-      background-color: gray;
-      color: #fff;
-      margin: 0 10px;
-
+      background-color: transparent;
+      border: 1px solid ${theme.colors.inputBorder};
+      color: ${theme.colors.gray[600]};
       &.on {
-        background-color: royalblue;
+        background-color: ${theme.colors.pri[900]};
+        color: ${theme.colors.pri[500]};
+      }
+
+      &:first-child {
+        border-radius: 6px 0px 0px 6px;
+      }
+      &:last-child {
+        border-radius: 0px 6px 6px 0px;
+      }
+      &:not(:last-child) {
+        border-right: 0;
+      }
+
+      svg {
+        width: 8px;
+        fill: ${theme.colors.gray[600]};
       }
     }
   `,

@@ -51,6 +51,10 @@ export const LabelNotice = styled.span`
   color: ${theme.colors.gray[500]};
   margin-left: 0.5rem;
   font-weight: 300;
+
+  &::after {
+    display: none;
+  }
 `;
 
 export const InputCountStyle = styled.div`

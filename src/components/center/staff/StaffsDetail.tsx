@@ -207,12 +207,13 @@ const ListWrap = styled.div`
   }
 `;
 
-const StaffDetailWrap = styled.div`
+export const StaffDetailWrap = styled.div`
   width: 100%;
   margin-top: 3rem;
   display: flex;
   flex-direction: column;
   gap: 3rem;
+  max-width: 1024px;
 
   .memo {
     font-size: 16px;

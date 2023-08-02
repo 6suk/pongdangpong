@@ -1,5 +1,8 @@
+import { useState } from 'react';
+
 import { LessonTypeEnum, TermUnitEnum, Ticket_response } from '@apis/ticketsAPIs';
 import { TicketIcon } from '@assets/icons/indexIcons';
+import { IssuedTicketModal } from '@components/center/ticket/IssuedTicketModal';
 import { TS } from '@styles/center/ticketsStyle';
 
 interface TicketItemProps {
@@ -20,8 +23,7 @@ export const TicketItem = ({ ticket, setTicketData }: TicketItemProps) => {
     startAt,
     endAt,
   } = ticket;
-
-  console.log(ticket);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
@@ -40,15 +42,17 @@ export const TicketItem = ({ ticket, setTicketData }: TicketItemProps) => {
             {/* 본인 데이터에 맞는 목록 추가 */}
             <dl>
               <dt>수강권 횟수</dt>
-              <dd>{`${defaultCount}회`}</dd>
+              <dd>{defaultCount ? `${defaultCount}회` : '무제한'}</dd>
             </dl>
             <dl>
               <dt>서비스 횟수</dt>
-              <dd>{`${serviceCount}회`}</dd>
+              <dd>{serviceCount ? `${serviceCount}회` : '무제한'}</dd>
             </dl>
             <dl>
               <dt>수강권 기간</dt>
-              <dd>{`${defaultTerm}${TermUnitEnum[defaultTermUnit]}`}</dd>
+              <dd>
+                {defaultTerm && defaultTermUnit ? `${defaultTerm}${TermUnitEnum[defaultTermUnit]}` : '소진시 까지'}
+              </dd>
             </dl>
             <dl style={{ display: 'flex' }}>
               <dt>유효 기간</dt>
@@ -61,7 +65,7 @@ export const TicketItem = ({ ticket, setTicketData }: TicketItemProps) => {
           <button
             type="button"
             onClick={() => {
-              setTicketData();
+              setIsOpen(true);
             }}
           >
             상세보기
@@ -92,6 +96,7 @@ export const TicketItem = ({ ticket, setTicketData }: TicketItemProps) => {
           </button>
         </TS.TicketRight>
       </TS.Ticket>
+      {isOpen && <IssuedTicketModal issuedId={id} setIsOpen={setIsOpen} />}
     </>
   );
 };

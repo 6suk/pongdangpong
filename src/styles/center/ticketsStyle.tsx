@@ -8,6 +8,20 @@ export const TicketContainer = styled.div`
   flex-direction: column;
   max-width: 1024px;
   width: 100%;
+  margin: 0 auto;
+
+  .empty {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    color: ${theme.colors.gray[500]};
+    margin: 0 auto;
+
+    svg {
+      width: 60px;
+    }
+  }
 `;
 export const CenterContainer = styled.div`
   display: flex;

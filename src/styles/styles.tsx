@@ -24,7 +24,7 @@ const Label = styled.label`
   font-weight: 500;
   color: #4b5563;
 
-  &.required {
+  & {
     &::after {
       content: '*';
       color: ${theme.colors.pri[500]};
@@ -176,4 +176,36 @@ export const FormContentWrap = styled.div`
   margin-top: 3rem;
   padding-inline: 2rem;
   gap: 0.5rem;
+
+  .time-inputs,
+  .button-container {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+`;
+
+export const Chips = styled.div`
+  display: flex;
+  gap: 0.5rem;
+
+  button {
+  }
+  label {
+    padding-inline: 1.6rem;
+    padding-block: 0.5rem;
+    border-radius: 6px;
+    font-size: ${theme.font.sub};
+    border: 1px solid ${theme.colors.inputBorder};
+
+    &.on {
+      color: ${theme.colors.White};
+      border: 1px solid ${theme.colors.pri[500]};
+      background-color: ${theme.colors.pri[600]};
+    }
+  }
+
+  input[type='radio'] {
+    display: none;
+  }
 `;

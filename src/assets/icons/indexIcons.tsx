@@ -10,3 +10,5 @@ export { ReactComponent as BackIcon } from '@assets/icons/backIcon.svg';
 export { ReactComponent as RegisteredStaff } from '@assets/icons/staffs/registered_staff.svg';
 export { ReactComponent as UserIcon } from '@assets/icons/staffs/userIcon.svg';
 export { ReactComponent as Editicon } from '@assets/icons/editicon.svg';
+export { ReactComponent as DumbbellIcon } from '@assets/icons/schedules/dumbbell.svg';
+export { ReactComponent as UserColorIcon } from '@assets/icons/schedules/userIcon.svg';

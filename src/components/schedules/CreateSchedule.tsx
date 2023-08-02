@@ -4,6 +4,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Profile from '@/assets/icons/Profile.svg';
+import { MemberIcon, UserIcon } from '@assets/icons/indexIcons';
 import { Button } from '@components/common/Button';
 import { Modal } from '@components/common/Modal';
 import { useRequests } from '@hooks/apis/useRequests';
@@ -258,7 +259,7 @@ export const CreateSchedule = () => {
           </div>
         </div>
         {isOpen && (
-          <Modal setIsOpen={setIsOpen}>
+          <Modal maxWidth="43rem" setIsOpen={setIsOpen}>
             {modalType === 'USER' ? (
               userLoading ? (
                 <div>데이터를 불러오는 중...</div>
@@ -266,13 +267,29 @@ export const CreateSchedule = () => {
                 <div>오류가 발생했습니다.</div>
               ) : (
                 <ul>
+                  <ModalList>
+                    <button className="table-title" type="button">
+                      <p className="left">
+                        <p>목록</p>
+                        <p></p>
+                        <p>이름/아이디</p>
+                      </p>
+                      <p>핸드폰 번호</p>
+                    </button>
+                  </ModalList>
                   {userData?.users.map((user: UserData, index: number) => (
-                    <li key={index}>
+                    <ModalList key={index}>
                       <button type="button" onClick={() => handleUserSelect(user.id, user.name)}>
-                        아이디: {user.id}, 타입: {user.type}, 이름: {user.name}, 로그인 ID: {user.loginId}, 전화번호:{' '}
-                        {user.phone}
+                        <p className="left">
+                          <MemberIcon />
+                          <p className="tag">{user.type === 'ADMIN' ? '관리자' : '직원'}</p>
+                          <p className="info">
+                            {user.name} <span>{user.loginId}</span>
+                          </p>
+                        </p>
+                        <p>{user.phone}</p>
                       </button>
-                    </li>
+                    </ModalList>
                   ))}
                 </ul>
               )
@@ -282,12 +299,27 @@ export const CreateSchedule = () => {
               <div>오류가 발생했습니다.</div>
             ) : (
               <ul>
+                <ModalList>
+                  <button className="table-title" type="button">
+                    <p className="left">
+                      <p>목록</p>
+                      <p></p>
+                      <p>이름/아이디</p>
+                    </p>
+                    <p>핸드폰 번호</p>
+                  </button>
+                </ModalList>
                 {memberData?.members.map((member: MemberData, index: number) => (
-                  <li key={index}>
+                  <ModalList key={index}>
                     <button type="button" onClick={() => handleMemberSelect(member.id, member.name)}>
-                      이름: {member.name}, 전화번호: {member.phone}, 성별: {member.sex}
+                      <p className="left">
+                        <MemberIcon />
+                        <p className="tag">회원</p>
+                        <p className="info">{member.name}</p>
+                      </p>
+                      <p>{member.phone}</p>
                     </button>
-                  </li>
+                  </ModalList>
                 ))}
               </ul>
             )}
@@ -364,6 +396,7 @@ export const CreateSchedule = () => {
                 handleInputChange(e);
               }}
             />
+            ~
             <SC.InputField
               maxLength={5}
               name="endTime"
@@ -405,6 +438,66 @@ export const CreateSchedule = () => {
     </FormContentWrap>
   );
 };
+
+export const ModalList = styled.li`
+  font-size: 14px;
+  padding-block: 1rem;
+  transition: all 0.4s;
+
+  &:hover {
+    opacity: 0.5;
+  }
+
+  .table-title:hover {
+    opacity: 1;
+  }
+
+  .table-title {
+    color: ${theme.colors.gray[600]};
+  }
+
+  button {
+    text-align: left;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+  }
+
+  .left {
+    display: grid;
+    grid-template-columns: 0.2fr 0.5fr 2fr;
+    gap: 0.5rem;
+    text-align: left;
+  }
+
+  p {
+    font-size: 14px;
+    margin-bottom: 0;
+  }
+
+  svg {
+    width: 30px;
+  }
+
+  .tag {
+    height: min-content;
+    width: 53px;
+    text-align: center;
+    border-radius: 6px;
+    font-size: 12px;
+    padding-inline: 0.5rem;
+    padding-block: 0.2rem;
+    background-color: ${theme.colors.pri[900]};
+    color: ${theme.colors.pri[500]};
+  }
+  .info {
+    font-weight: 600;
+    span {
+      font-weight: 300;
+      color: ${theme.colors.gray[500]};
+    }
+  }
+`;
 
 export const NameButton = styled.button`
   font-size: 14px;

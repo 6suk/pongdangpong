@@ -176,6 +176,13 @@ export const FormContentWrap = styled.div`
   margin-top: 3rem;
   padding-inline: 2rem;
   gap: 0.5rem;
+
+  .time-inputs,
+  .button-container {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
 `;
 
 export const Chips = styled.div`

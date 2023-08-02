@@ -4,6 +4,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Profile from '@/assets/icons/Profile.svg';
+import { MemberIcon } from '@assets/icons/indexIcons';
 import { Button } from '@components/common/Button';
 import { Modal } from '@components/common/Modal';
 import { useRequests } from '@hooks/apis/useRequests';
@@ -12,7 +13,7 @@ import { FormButtonGroup, FormGridContainer } from '@styles/center/ticketFormSty
 import { FormContentWrap, SC, TopTitleWrap } from '@styles/styles';
 import theme from '@styles/theme';
 
-import { NameButton } from './CreateSchedule';
+import { ModalList, NameButton } from './CreateSchedule';
 
 type FormInputs = {
   userId: number;
@@ -156,20 +157,36 @@ export const CreateCounseling = () => {
             )}
           </div>
           {isOpen && (
-            <Modal setIsOpen={setIsOpen}>
+            <Modal maxWidth="43rem" setIsOpen={setIsOpen}>
               {isLoading ? (
                 <div>데이터를 불러오는 중...</div>
               ) : isError ? (
                 <div>오류가 발생했습니다.</div>
               ) : (
                 <ul>
+                  <ModalList>
+                    <button className="table-title" type="button">
+                      <p className="left">
+                        <p>목록</p>
+                        <p></p>
+                        <p>이름/아이디</p>
+                      </p>
+                      <p>핸드폰 번호</p>
+                    </button>
+                  </ModalList>
                   {data?.users.map((user: UserData, index: number) => (
-                    <li key={index}>
-                      <button onClick={() => handleUserSelect(user.id, user.name)}>
-                        아이디: {user.id}, 타입: {user.type}, 이름: {user.name}, 로그인 ID: {user.loginId}, 전화번호:{' '}
-                        {user.phone}
+                    <ModalList key={index}>
+                      <button type="button" onClick={() => handleUserSelect(user.id, user.name)}>
+                        <p className="left">
+                          <MemberIcon />
+                          <p className="tag">{user.type === 'ADMIN' ? '관리자' : '직원'}</p>
+                          <p className="info">
+                            {user.name} <span>{user.loginId}</span>
+                          </p>
+                        </p>
+                        <p>{user.phone}</p>
                       </button>
-                    </li>
+                    </ModalList>
                   ))}
                 </ul>
               )}

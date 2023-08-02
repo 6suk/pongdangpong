@@ -64,6 +64,7 @@ const ModalContent = styled.div<{ $maxWidth?: string }>`
   max-height: 100%;
   width: 100%;
   max-width: ${props => (!props.$maxWidth ? `28rem` : props.$maxWidth)};
+  max-height: 800px;
   overflow-y: auto;
   border-radius: 0.5rem;
   padding: 3rem 2.5rem 2.5rem 2.5rem;

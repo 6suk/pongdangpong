@@ -8,6 +8,7 @@ import { Button } from '@components/common/Button';
 import { Modal } from '@components/common/Modal';
 import { useRequests } from '@hooks/apis/useRequests';
 import { useSwrData } from '@hooks/apis/useSwrData';
+import { FormButtonGroup, FormGridContainer, LabelNotice } from '@styles/center/ticketFormStyle';
 import { FormContentWrap, SC, TopTitleWrap } from '@styles/styles';
 import theme from '@styles/theme';
 
@@ -200,226 +201,226 @@ export const CreateSchedule = () => {
 
   return (
     <FormContentWrap>
-      <S.Container theme={theme}>
-        <TopTitleWrap>
-          <h2>일정 생성</h2>
-          <p>개인 수업 일정을 생성합니다.</p>
-        </TopTitleWrap>
-        <S.wrap theme={theme}>
-          <div className="first-column">
-            <div>
-              <SC.Label>
-                담당 강사 선택 <span>*</span>
-              </SC.Label>
-              <div className="button-container">
-                <SelectButton onClick={handleSearchClick('USER')} disabled={!!selectedUserName}>
-                  선택하기 +
-                </SelectButton>
-                {selectedUserName && (
-                  <NameButton onClick={() => setSelectedUserName('')}>
-                    <span className="user-name">{selectedUserName}</span>
-                    <span
-                      className="close-button"
-                      onClick={e => {
-                        clearSelection();
-                        e.stopPropagation();
-                      }}
-                      onKeyDown={e => e.key === 'Enter' && clearSelection()}
-                      tabIndex={0}
-                      role="button"
-                    >
-                      x
-                    </span>
-                  </NameButton>
-                )}
-              </div>
-            </div>
-            <div>
-              <SC.Label>
-                회원 선택 <span>*</span>
-              </SC.Label>
-              <div className="button-container">
-                <SelectButton onClick={handleSearchClick('MEMBER')} disabled={!!selectedMemberName}>
-                  선택하기 +
-                </SelectButton>
-                {selectedMemberName && (
-                  <NameButton onClick={() => setSelectedMemberName('')}>
-                    <span className="user-name">{selectedMemberName}</span>
-                    <span
-                      className="close-button"
-                      onClick={() => clearMemberSelection()}
-                      onKeyDown={e => e.key === 'Enter' && setSelectedMemberName(null)}
-                      tabIndex={0}
-                      role="button"
-                    >
-                      x
-                    </span>
-                  </NameButton>
-                )}
-              </div>
-            </div>
-            {isOpen && (
-              <Modal setIsOpen={setIsOpen}>
-                {modalType === 'USER' ? (
-                  userLoading ? (
-                    <div>데이터를 불러오는 중...</div>
-                  ) : userError ? (
-                    <div>오류가 발생했습니다.</div>
-                  ) : (
-                    <ul>
-                      {userData?.users.map((user: UserData, index: number) => (
-                        <li key={index}>
-                          <button type="button" onClick={() => handleUserSelect(user.id, user.name)}>
-                            아이디: {user.id}, 타입: {user.type}, 이름: {user.name}, 로그인 ID: {user.loginId},
-                            전화번호: {user.phone}
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  )
-                ) : memberLoading ? (
-                  <div>데이터를 불러오는 중...</div>
-                ) : memberError ? (
-                  <div>오류가 발생했습니다.</div>
-                ) : (
-                  <ul>
-                    {memberData?.members.map((member: MemberData, index: number) => (
-                      <li key={index}>
-                        <button type="button" onClick={() => handleMemberSelect(member.id, member.name)}>
-                          이름: {member.name}, 전화번호: {member.phone}, 성별: {member.sex}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </Modal>
+      <TopTitleWrap>
+        <h3>개인 수업 일정 생성</h3>
+        <p>개인 수업 일정을 생성합니다.</p>
+      </TopTitleWrap>
+      <FormGridContainer>
+        <div>
+          <SC.Label>
+            담당 강사 선택 <span></span>
+          </SC.Label>
+          <div className="button-container">
+            <SelectButton disabled={!!selectedUserName} onClick={handleSearchClick('USER')}>
+              선택하기 +
+            </SelectButton>
+            {selectedUserName && (
+              <NameButton onClick={() => setSelectedUserName('')}>
+                <span className="user-name">{selectedUserName}</span>
+                <span
+                  className="close-button"
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={e => e.key === 'Enter' && clearSelection()}
+                  onClick={e => {
+                    clearSelection();
+                    e.stopPropagation();
+                  }}
+                >
+                  x
+                </span>
+              </NameButton>
             )}
-            <div>
-              <SC.Label>
-                수강권 선택 <span>*</span>
-              </SC.Label>
-              <SC.Select
-                name="lessonTicket"
-                disabled={!selectedMemberName}
-                value={selectedTicket ? selectedTicket.id : ''}
-                onChange={e => {
-                  const selectedTicketId = Number(e.target.value);
-                  const foundTicket = availableTickets?.find(ticket => ticket.id === selectedTicketId);
-                  setSelectedTicket(foundTicket || null);
-                  setFormInputs({ ...formInputs, issuedTicketId: selectedTicketId });
-                }}
-              >
-                <option className="option-title" defaultValue="">
-                  수강권을 선택해주세요.
-                </option>
-                {ticketsLoading ? (
-                  <option>데이터 불러오는 중...</option>
-                ) : ticketsError ? (
-                  <option>데이터를 불러올 수 없습니다.</option>
-                ) : (
-                  availableTickets
-                    ?.filter(ticket => ticket.privateTutorId === formInputs.userId)
-                    .map(ticket => (
-                      <option value={ticket.id} key={ticket.id}>
-                        {ticket.title} ({ticket.lessonDuration}분)
-                      </option>
-                    ))
-                )}
-              </SC.Select>
-            </div>
-            <div>
-              <SC.Label>참여회원</SC.Label>
-              {selectedTicket ? (
-                selectedTicket.owners.map((owner, ownerIndex) => (
-                  <NameButton key={ownerIndex} onClick={() => handleOwnerSelect(owner.id, owner.name)}>
-                    <span className="user-name">{owner.name}</span>
-                  </NameButton>
-                ))
+          </div>
+        </div>
+        <div>
+          <SC.Label>
+            회원 선택 <span></span>
+          </SC.Label>
+          <div className="button-container">
+            <SelectButton disabled={!!selectedMemberName} onClick={handleSearchClick('MEMBER')}>
+              선택하기 +
+            </SelectButton>
+            {selectedMemberName && (
+              <NameButton onClick={() => setSelectedMemberName('')}>
+                <span className="user-name">{selectedMemberName}</span>
+                <span
+                  className="close-button"
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => clearMemberSelection()}
+                  onKeyDown={e => e.key === 'Enter' && setSelectedMemberName(null)}
+                >
+                  x
+                </span>
+              </NameButton>
+            )}
+          </div>
+        </div>
+        {isOpen && (
+          <Modal setIsOpen={setIsOpen}>
+            {modalType === 'USER' ? (
+              userLoading ? (
+                <div>데이터를 불러오는 중...</div>
+              ) : userError ? (
+                <div>오류가 발생했습니다.</div>
               ) : (
-                <p className="info-text">회원과 수강권 선택 시 자동으로 입력됩니다.</p>
-              )}
-            </div>
-          </div>
+                <ul>
+                  {userData?.users.map((user: UserData, index: number) => (
+                    <li key={index}>
+                      <button type="button" onClick={() => handleUserSelect(user.id, user.name)}>
+                        아이디: {user.id}, 타입: {user.type}, 이름: {user.name}, 로그인 ID: {user.loginId}, 전화번호:{' '}
+                        {user.phone}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )
+            ) : memberLoading ? (
+              <div>데이터를 불러오는 중...</div>
+            ) : memberError ? (
+              <div>오류가 발생했습니다.</div>
+            ) : (
+              <ul>
+                {memberData?.members.map((member: MemberData, index: number) => (
+                  <li key={index}>
+                    <button type="button" onClick={() => handleMemberSelect(member.id, member.name)}>
+                      이름: {member.name}, 전화번호: {member.phone}, 성별: {member.sex}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Modal>
+        )}
+        <div>
+          <SC.Label>
+            수강권 선택 <span></span>
+          </SC.Label>
+          <SC.Select
+            disabled={!selectedMemberName}
+            name="lessonTicket"
+            value={selectedTicket ? selectedTicket.id : ''}
+            onChange={e => {
+              const selectedTicketId = Number(e.target.value);
+              const foundTicket = availableTickets?.find(ticket => ticket.id === selectedTicketId);
+              setSelectedTicket(foundTicket || null);
+              setFormInputs({ ...formInputs, issuedTicketId: selectedTicketId });
+            }}
+          >
+            <option className="option-title" defaultValue="">
+              수강권을 선택해주세요.
+            </option>
+            {ticketsLoading ? (
+              <option>데이터 불러오는 중...</option>
+            ) : ticketsError ? (
+              <option>데이터를 불러올 수 없습니다.</option>
+            ) : (
+              availableTickets
+                ?.filter(ticket => ticket.privateTutorId === formInputs.userId)
+                .map(ticket => (
+                  <option key={ticket.id} value={ticket.id}>
+                    {ticket.title} ({ticket.lessonDuration}분)
+                  </option>
+                ))
+            )}
+          </SC.Select>
+        </div>
+        <div>
+          <SC.Label>
+            참여회원 <LabelNotice>회원과 수강권 선택 시 자동으로 입력됩니다.</LabelNotice>
+          </SC.Label>
+          {selectedTicket &&
+            selectedTicket.owners.map((owner, ownerIndex) => (
+              <NameButton key={ownerIndex} className="info-btn" onClick={() => handleOwnerSelect(owner.id, owner.name)}>
+                <span className="user-name">{owner.name}</span>
+              </NameButton>
+            ))}
+        </div>
 
-          <div className="second-column">
-            <div>
-              <SC.Label>
-                일자 선택 <span>*</span>
-              </SC.Label>
-              <SC.InputField
-                maxLength={10}
-                name="date"
-                type="date"
-                onChange={e => {
-                  handleInputChange(e);
-                }}
-              />
-            </div>
-            <div>
-              <SC.Label>
-                시간 선택 <span>*</span>
-              </SC.Label>
-              <div className="time-inputs">
-                <SC.InputField
-                  maxLength={5}
-                  name="startTime"
-                  type="time"
-                  onChange={e => {
-                    handleInputChange(e);
-                  }}
-                />
-                <SC.InputField
-                  maxLength={5}
-                  name="endTime"
-                  type="time"
-                  onChange={e => {
-                    handleInputChange(e);
-                  }}
-                />
-              </div>
-            </div>
-            <div>
-              <SC.Label>일정 메모</SC.Label>
-              <SC.InputField
-                maxLength={500}
-                name="memo"
-                placeholder="내용을 입력해주세요. (500자 이내)"
-                type="text"
-                onChange={e => {
-                  handleInputChange(e);
-                }}
-              />
-            </div>
+        <div>
+          <SC.Label>
+            일자 선택 <span></span>
+          </SC.Label>
+          <SC.InputField
+            maxLength={10}
+            name="date"
+            type="date"
+            onChange={e => {
+              handleInputChange(e);
+            }}
+          />
+        </div>
+        <div>
+          <SC.Label>
+            시간 선택 <span></span>
+          </SC.Label>
+          <div className="time-inputs">
+            <SC.InputField
+              maxLength={5}
+              name="startTime"
+              type="time"
+              onChange={e => {
+                handleInputChange(e);
+              }}
+            />
+            <SC.InputField
+              maxLength={5}
+              name="endTime"
+              type="time"
+              onChange={e => {
+                handleInputChange(e);
+              }}
+            />
           </div>
-        </S.wrap>
-      </S.Container>
-      <S.BtnWrap>
+        </div>
+        <div>
+          <SC.Label>일정 메모</SC.Label>
+          <SC.InputField
+            maxLength={500}
+            name="memo"
+            placeholder="내용을 입력해주세요. (500자 이내)"
+            type="text"
+            onChange={e => {
+              handleInputChange(e);
+            }}
+          />
+        </div>
+      </FormGridContainer>
+      <FormButtonGroup>
+        <Button isPri={false} size="full" onClick={() => navigate(-1)}>
+          돌아가기
+        </Button>
         <Button
+          disabled={!isValid()}
           size="full"
+          type="submit"
           onClick={e => {
             handleSubmit(e);
           }}
-          disabled={!isValid()}
         >
           완료
         </Button>
-        <Button isPri={false} size="full" onClick={() => navigate(-1)}>
-          취소
-        </Button>
-      </S.BtnWrap>
+      </FormButtonGroup>
     </FormContentWrap>
   );
 };
 
-const NameButton = styled.button`
-  font-size: 12px;
+export const NameButton = styled.button`
+  font-size: 14px;
   background-color: ${({ theme }) => theme.colors.White};
-  border: 1px solid ${({ theme }) => theme.colors.gray[500]};
+  border: 1px solid ${({ theme }) => theme.colors.gray[600]};
   border-radius: 8px;
   padding: 1px 2px;
   display: flex;
   align-items: center;
   cursor: pointer;
+
+  &.info-btn {
+    cursor: default;
+    padding-right: 12px;
+    border: 1px solid ${({ theme }) => theme.colors.gray[600]};
+  }
 
   .user-name {
     color: ${({ theme }) => theme.colors.gray[300]};
@@ -487,7 +488,7 @@ const S = {
 
     .info-text {
       text-align: left;
-      color: ${theme.colors.gray[400]};
+      color: ${theme.colors.gray[700]};
       font-size: 14px;
     }
 

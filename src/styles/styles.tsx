@@ -24,7 +24,7 @@ const Label = styled.label`
   font-weight: 500;
   color: #4b5563;
 
-  &.required {
+  & {
     &::after {
       content: '*';
       color: ${theme.colors.pri[500]};

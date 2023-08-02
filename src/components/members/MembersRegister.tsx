@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
@@ -8,7 +8,6 @@ import { Modal, ModalButton } from '@components/common/Modal';
 import { useRequests } from '@hooks/apis/useRequests';
 import { FormButtonGroup, FormGridContainer } from '@styles/center/ticketFormStyle';
 import { Chips, FormContentWrap, SC, TopTitleWrap } from '@styles/styles';
-import { theme } from '@styles/theme';
 
 interface FormState {
   name: string;
@@ -156,7 +155,7 @@ export const MembersResgier: React.FC = () => {
         <FormGridContainer>
           <div>
             <SC.Label>
-              이름 <span>*</span>
+              이름 <span></span>
             </SC.Label>
             <SC.InputField
               ref={inputRef}
@@ -172,7 +171,7 @@ export const MembersResgier: React.FC = () => {
 
           <div>
             <SC.Label>
-              성별<span>*</span>
+              성별<span></span>
             </SC.Label>
             <div ref={BtnWrapRef} className="button-wrap">
               <Chips>
@@ -209,7 +208,7 @@ export const MembersResgier: React.FC = () => {
           {/*  화면상 . 으로 구분, 데이터 보낼때 - 추가  */}
           <div>
             <SC.Label>
-              생년월일 <span>*</span>
+              생년월일 <span></span>
             </SC.Label>
             <SC.InputField
               ref={inputRef}
@@ -225,7 +224,7 @@ export const MembersResgier: React.FC = () => {
 
           <div>
             <SC.Label>
-              휴대폰 번호 <span>*</span>
+              휴대폰 번호 <span></span>
             </SC.Label>
 
             <SC.InputField

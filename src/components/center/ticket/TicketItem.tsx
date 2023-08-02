@@ -9,8 +9,9 @@ import { TS } from '@styles/center/ticketsStyle';
 interface TicketItemProps {
   ticket: Ticket_response;
   ticketStatus: (id: number) => void;
+  deleteTicket: (id: number) => void;
 }
-export const TicketItem = ({ ticket, ticketStatus }: TicketItemProps) => {
+export const TicketItem = ({ ticket, ticketStatus, deleteTicket }: TicketItemProps) => {
   const navigate = useNavigate();
   const {
     id,
@@ -26,6 +27,18 @@ export const TicketItem = ({ ticket, ticketStatus }: TicketItemProps) => {
 
   const duration = bookableLessons[0].duration;
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isCannotDeleteModalOpen, setIsCannotDeleteModalOpen] = useState(false);
+
+  const handleDelete = async (ticketId: number) => {
+    if (issuedTicketCount !== 0) {
+      setIsCannotDeleteModalOpen(true);
+      setIsDeleteModalOpen(false);
+      return;
+    }
+    await deleteTicket(ticketId);
+    setIsDeleteModalOpen(false);
+  };
 
   return (
     <>
@@ -78,7 +91,6 @@ export const TicketItem = ({ ticket, ticketStatus }: TicketItemProps) => {
               onClick={e => {
                 e.stopPropagation();
                 setIsModalOpen(true);
-                console.log(id + ' 판매종료 클릭');
               }}
             >
               판매종료
@@ -92,7 +104,6 @@ export const TicketItem = ({ ticket, ticketStatus }: TicketItemProps) => {
                   e.stopPropagation();
                   ticketStatus(id);
                   navigate(`?isActive=true`);
-                  console.log(id + ' 판매가능 클릭');
                 }}
               >
                 판매가능
@@ -106,7 +117,15 @@ export const TicketItem = ({ ticket, ticketStatus }: TicketItemProps) => {
               navigate(`${id}/edit`);
             }}
           >
-            수정 / 삭제
+            수정
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setIsDeleteModalOpen(true);
+            }}
+          >
+            삭제
           </button>
         </TS.TicketRight>
       </TS.Ticket>
@@ -131,6 +150,34 @@ export const TicketItem = ({ ticket, ticketStatus }: TicketItemProps) => {
               확인
             </ModalButton>
             <ModalButton onClick={() => setIsModalOpen(false)}>취소</ModalButton>
+          </div>
+        </Modal>
+      )}
+
+      {isDeleteModalOpen && (
+        <Modal setIsOpen={setIsDeleteModalOpen}>
+          <h3>수강권 삭제</h3>
+          <p>수강권을 삭제하시겠습니까?</p>
+          <div className="buttonWrapper">
+            <ModalButton onClick={() => handleDelete(id)} $isPrimary>
+              확인
+            </ModalButton>
+            <ModalButton onClick={() => setIsDeleteModalOpen(false)}>취소</ModalButton>
+          </div>
+        </Modal>
+      )}
+
+      {isCannotDeleteModalOpen && (
+        <Modal setIsOpen={setIsCannotDeleteModalOpen}>
+          <h3>삭제 불가</h3>
+          <p>
+            부여내역이 있는 수강권은 <br />
+            삭제할 수 없습니다.
+            <br />
+            판매 종료로 진행해 주세요.
+          </p>
+          <div className="buttonWrapper">
+            <ModalButton onClick={() => setIsCannotDeleteModalOpen(false)}>확인</ModalButton>
           </div>
         </Modal>
       )}

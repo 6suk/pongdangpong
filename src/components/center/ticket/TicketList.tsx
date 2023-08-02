@@ -80,6 +80,19 @@ export const TicketList = () => {
     setTickets(updatedTickets);
   };
 
+  const deleteTicket = async (ticketId: number) => {
+    try {
+      await request({
+        url: `tickets/${ticketId}`,
+        method: 'delete',
+      });
+      const updatedTickets = tickets.filter((ticket: Ticket_response) => ticket.id !== ticketId);
+      setTickets(updatedTickets);
+    } catch (error) {
+      console.error('티켓 삭제 요청 실패:', error);
+    }
+  };
+
   return (
     <>
       <TicketContainer>
@@ -104,7 +117,9 @@ export const TicketList = () => {
           <TicketWrap>
             {Array.from({ length: displayedList.length }, (_, i) => displayedList[displayedList.length - 1 - i]).map(
               (ticket: Ticket_response) => {
-                return <TicketItem key={ticket.id} ticket={ticket} ticketStatus={ticketStatus} />;
+                return (
+                  <TicketItem key={ticket.id} ticket={ticket} ticketStatus={ticketStatus} deleteTicket={deleteTicket} />
+                );
               }
             )}
           </TicketWrap>

@@ -43,7 +43,7 @@ const Members = () => {
   const { datas: staffsDatas } = staffsData ?? {};
 
   const [totalUser, setTotalUser] = useState(0);
-  const [btnActive, setBtnActive] = useState(0);
+  const [btnActive, setBtnActive] = useState(1);
 
   const currentPageLen = useMemo(() => {
     const pageLen = subDatas?.datas.length / 10;
@@ -210,12 +210,12 @@ const Members = () => {
               return (
                 <button
                   key={i + 1}
-                  className={`pageBtn ${btnActive === i ? 'on ' : ''}`}
+                  className={`pageBtn ${btnActive === i + pageState.pageNavNum ? 'on ' : ''}`}
                   data-index={i + 1}
                   type="button"
                   onClick={e => {
                     setPageState({ ...pageState, ['pageQuery']: +e.target.textContent });
-                    setBtnActive(i);
+                    setBtnActive(+e.target.textContent);
                   }}
                 >
                   {pageV}

@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-import { InputField } from '@components/center/ticket/Form/InputField';
+import { Editicon } from '@assets/icons/indexIcons';
 import { TicketItem } from '@components/center/ticket/TicketItem';
 import { Button } from '@components/common/Button';
 import { Modal, ModalButton } from '@components/common/Modal';
@@ -176,18 +176,14 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
           </p>
         </li>
         <li className="btn-wrap">
-          <Button
-            size="md"
-            type="button"
+          <Editicon
+            style={{ cursor: 'pointer' }}
             onClick={() => {
               setIsOpen(true);
             }}
-          >
-            수정
-          </Button>
+          />
         </li>
       </S.list>
-
       {/* 수강권 수정 */}
       {editTicketModalState && (
         <Modal maxWidth="36rem" setIsOpen={setEditTicketModalState}>
@@ -277,7 +273,6 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
           </ModalButton>
         </Modal>
       )}
-
       <Top>
         <div className="ticket-active">
           {/* 미완 */}

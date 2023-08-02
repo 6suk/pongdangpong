@@ -9,3 +9,4 @@ export { ReactComponent as MemberIcon } from '@assets/icons/memberIcon.svg';
 export { ReactComponent as BackIcon } from '@assets/icons/backIcon.svg';
 export { ReactComponent as RegisteredStaff } from '@assets/icons/staffs/registered_staff.svg';
 export { ReactComponent as UserIcon } from '@assets/icons/staffs/userIcon.svg';
+export { ReactComponent as Editicon } from '@assets/icons/editicon.svg';

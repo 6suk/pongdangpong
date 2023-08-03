@@ -4,7 +4,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-import { ArrowIcon, MemberIcon, SearchIcon, Editicon } from '@assets/icons/indexIcons';
+import { MemberIcon, Editicon } from '@assets/icons/indexIcons';
 import { StaffsLIstWrap } from '@components/center/staff/StaffsList';
 import { Button } from '@components/common/Button';
 import { Modal, ModalButton } from '@components/common/Modal';
@@ -15,7 +15,7 @@ import { useSwrData } from '@hooks/apis/useSwrData';
 
 import { TicketContainer, TicketWrap, Top } from '@styles/center/ticketsStyle';
 import { SC } from '@styles/styles';
-import theme, { type } from '@styles/theme';
+import theme from '@styles/theme';
 
 interface UserListProps {
   [key: string]: string;
@@ -40,16 +40,15 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
     };
   }, [data]);
 
-  // props로 전달받은 회원 데이터
   const [userData, setUserData] = useState({ ...data });
-  // Modal
+
   const [isOpen, setIsOpen] = useState(false);
-  // editTicketModal
+
   const [editTicketModalState, setEditTicketModalState] = useState(false);
-  // 회원 티켓id
+
   const [issuedTicketId, setissuedTicketId] = useState(0);
   const [editTicketData, setEditTicketData] = useState({});
-  // 수강권 수정
+
   const [submitTicketData, setSubmitTicketData] = useState({
     endAt: '',
     tutorId: 0,
@@ -61,9 +60,8 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
       active: memberTicketData?.issuedTickets?.filter(el => !el.isSuspended && !el.isCanceled),
       inactive: memberTicketData?.issuedTickets?.filter(el => el.isSuspended || el.isCanceled),
     };
-  }, [memberTicketData, ticketActive]);
+  }, [memberTicketData]);
 
-  // request요청
   const submitRequest = useCallback(
     async ({ url, method, body }) => {
       try {
@@ -263,20 +261,18 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
                   : '소진시까지'}
               </dd>
             </dl>
-            <dl>
-              <dt>유효 기간</dt>
-              <div>
-                <SC.InputField disabled defaultValue={editTicketData['startAt']} type="date" />
-                <SC.InputField
-                  defaultValue={editTicketData['endAt']}
-                  name="endAt"
-                  type="date"
-                  onChange={({ target }) => {
-                    setSubmitTicketData({ ...submitTicketData, [target.name]: target.value });
-                  }}
-                />
-              </div>
-            </dl>
+            <dt>유효 기간</dt>
+            <dd>
+              <SC.InputField disabled defaultValue={editTicketData['startAt']} type="date" />
+              <SC.InputField
+                defaultValue={editTicketData['endAt']}
+                name="endAt"
+                type="date"
+                onChange={({ target }) => {
+                  setSubmitTicketData({ ...submitTicketData, [target.name]: target.value });
+                }}
+              />
+            </dd>
             <dl>
               <dt>담당 강사</dt>
               <dd>
@@ -313,6 +309,7 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
           </ModalButton>
         </Modal>
       )}
+
       <Top>
         <div className="ticket-active">
           {Array(2)
@@ -322,6 +319,7 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
                 <button
                   key={i}
                   className={ticketActive === i ? 'on' : ''}
+                  to="detail/active"
                   onClick={() => {
                     setTicketActive(i);
                   }}
@@ -345,17 +343,21 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
       <TicketContainer>
         <TicketWrap style={{ gridTemplateColumns: 'repeat(2, minmax(430px, 1fr))' }}>
           {!memberTicketDataIsLoading &&
-            memberTicketData.issuedTickets
-              .sort((a, b) => a.id - b.id)
+            memberTicketData?.issuedTickets
+              ?.sort((a, b) => a.id - b.id)
               .reverse()
               .map((el, i) => {
+                let value = null;
+                if (!ticketActive && !el.isSuspended && !el.isCanceled) value = el;
+                else if (ticketActive === 1 && (el.isSuspended || el.isCanceled)) value = el;
+                else return;
                 return (
                   <TicketItem
-                    key={el.id}
+                    key={value.id}
                     refundTicketFunc={refundTicketFunc(i)}
                     setTicketData={setTicketData(i)}
                     suspendTicketFunc={suspendTicketFunc(i)}
-                    ticket={el}
+                    ticket={value}
                     unsuspendTicketFunc={unsuspendTicketFunc(i)}
                   />
                 );

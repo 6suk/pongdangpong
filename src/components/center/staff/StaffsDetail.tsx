@@ -5,9 +5,9 @@ import { styled } from 'styled-components';
 
 import { MemberIcon, UserIcon } from '@assets/icons/indexIcons';
 import { useSwrData } from '@hooks/apis/useSwrData';
-
 import theme from '@styles/theme';
 
+import { StaffsResignModal, StaffConfirmModal } from './StaffResignModal';
 import { StaffsEditModal } from './StaffsEditModal';
 import { DetailButton } from '../ticket/TicketIssued';
 
@@ -16,6 +16,9 @@ export const StaffsDetail = () => {
   const { data, isLoading } = useSwrData(`staffs/${id}`);
   const { name, roles, phone, loginId, active, createdAt, members, prescriptionReviews, updatedAt, memo } = data ?? {};
   const [isOpen, setIsOpen] = useState(false);
+  const [isResignModalOpen, setIsResignModalOpen] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [isActive, setIsActive] = useState(active);
 
   return (
     !isLoading && (
@@ -30,7 +33,14 @@ export const StaffsDetail = () => {
               <div className="btns">
                 <button type="button">역할 설정</button>
                 <button type="button">비밀번호 초기화</button>
-                <button type="button">직원 퇴사 처리</button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsResignModalOpen(true);
+                  }}
+                >
+                  직원 퇴사 처리
+                </button>
               </div>
             </div>
             <StaffInfoBar>
@@ -51,7 +61,7 @@ export const StaffsDetail = () => {
                 </div>
                 <p>{phone}</p>
                 <p>{loginId}</p>
-                <p>{active && '재직중'}</p>
+                <p className={active ? '' : 'inactive'}>{active ? '재직중' : '퇴사'}</p>
               </div>
               <DetailButton
                 onClick={() => {
@@ -145,6 +155,16 @@ export const StaffsDetail = () => {
           </div>
         </StaffDetailWrap>
         {isOpen && id && <StaffsEditModal id={id} setIsOpen={setIsOpen} />}
+        {isResignModalOpen && id && (
+          <StaffsResignModal
+            id={id}
+            name={name}
+            setActive={setIsActive}
+            setIsOpen={setIsResignModalOpen}
+            setIsConfirmModalOpen={setIsConfirmModalOpen}
+          />
+        )}
+        {isConfirmModalOpen && <StaffConfirmModal name={name} setIsConfirmModalOpen={setIsConfirmModalOpen} />}
       </>
     )
   );
@@ -330,5 +350,9 @@ const StaffInfoBar = styled.div`
 
   p {
     transition: all 0.4s;
+  }
+
+  .inactive {
+    color: ${props => props.theme.colors.Error};
   }
 `;

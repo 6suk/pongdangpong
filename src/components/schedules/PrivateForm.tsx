@@ -106,6 +106,12 @@ export const PrivateForm = () => {
     if (MEMBER.id) updateValidationError('MEMBER', false);
   }, [inputValues, USER, MEMBER]);
 
+  useEffect(() => {
+    return () => {
+      dispatch(clearAll());
+    };
+  }, []);
+
   return (
     <>
       <FormContentWrap>
@@ -181,7 +187,13 @@ export const PrivateForm = () => {
           </div>
         </FormGridContainer>
         <FormButtonGroup>
-          <Button isPri={false} size="full" onClick={() => navigate(-1)}>
+          <Button
+            isPri={false}
+            size="full"
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
             돌아가기
           </Button>
           <Button disabled={false} size="full" type="submit" onClick={handleSubmit}>

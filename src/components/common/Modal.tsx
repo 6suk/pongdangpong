@@ -11,6 +11,7 @@ interface ModalProps {
   maxWidth?: string;
   minHeight?: string;
   isScollbar?: boolean;
+  closeOnClick?: boolean; // false일 시 배경 클릭 시에도 닫히지 않음
 }
 
 export interface ModalValueState {
@@ -19,14 +20,20 @@ export interface ModalValueState {
   button: { id: number; title: string; color: boolean }[];
 }
 
-const ModalComponent: FC<ModalProps> = ({ children, setIsOpen, maxWidth, minHeight, isScollbar = true }) => {
-  console.log(minHeight);
-
+const ModalComponent: FC<ModalProps> = ({
+  children,
+  setIsOpen,
+  maxWidth,
+  minHeight,
+  isScollbar = true,
+  closeOnClick = true,
+}) => {
   const handleClose = useCallback(
     (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      if (closeOnClick === false) return;
       if (event.target === event.currentTarget) setIsOpen(false);
     },
-    [setIsOpen]
+    [setIsOpen, closeOnClick]
   );
 
   return (
@@ -88,9 +95,15 @@ const ModalContent = styled.div<{ $maxWidth?: string; $minHeight?: string }>`
     padding-bottom: 1rem;
     align-items: flex-end;
     gap: 0.5rem;
-    border-bottom: 1px solid ${theme.colors.gray[800]};
+    /* border-bottom: 1px solid ${theme.colors.gray[800]}; */
     h3 {
       margin-bottom: 0;
+    }
+
+    h2 {
+      font-size: ${theme.font.subTitle};
+      font-weight: 800;
+      color: ${theme.colors.gray[100]};
     }
 
     p {

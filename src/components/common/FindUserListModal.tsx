@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { ArrowIcon, MemberIcon } from '@assets/icons/indexIcons';
+import { ArrowIcon, MemberIcon, SearchIcon } from '@assets/icons/indexIcons';
 import { Modal } from '@components/common/Modal';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
@@ -9,6 +9,12 @@ import { usePagination } from '@hooks/utils/usePagination';
 import { setFindMember, setFindUser } from '@stores/findUsersSlice';
 
 import { Pagination } from '@styles/paginaionStyle';
+
+import { ModalSearchTop, Searchbar } from '@styles/SearchBarStyle';
+
+import { SC } from '@styles/styles';
+
+import { formatPhoneNumber } from '@utils/formatPhoneNumber';
 
 import { MemberSearchType, UserType, UsersSearchType } from '../../apis/schedulesAPIs';
 import { ModalList } from '../schedules/backup/CreateSchedule';
@@ -30,7 +36,8 @@ const userTypeEnum: { [key in UserType]: string } = {
 
 export const MemberOrUserSearchModal = ({ type, setIsOpen }: MemberOrUserSearchModalProps) => {
   const dispatch = useDispatch();
-  const [requestURL, setrequestURL] = useState(`search?resource=${type}`);
+  const [requestURL, setrequestURL] = useState<string | null>(null);
+  const [query, setQuery] = useState<string>('');
   const { data, isLoading } = useSwrData(requestURL);
   const requestData = data?.[dataGetKey[type]];
 
@@ -73,77 +80,120 @@ export const MemberOrUserSearchModal = ({ type, setIsOpen }: MemberOrUserSearchM
     return 'type' in obj;
   }
 
+  const handleQuerySearch = () => {
+    if (query !== '') {
+      if (!isNaN(parseInt(query)) && query.length === 11) {
+        setrequestURL(`search?resource=${type}&query=${formatPhoneNumber(query)}`);
+      } else {
+        setrequestURL(`search?resource=${type}&query=${query}`);
+      }
+    } else {
+      setrequestURL(`search?resource=${type}`);
+    }
+  };
+
+  useEffect(() => {
+    if (query === '') {
+      setrequestURL(`search?resource=${type}`);
+    }
+  }, [query]);
+
   return (
     <>
-      {!isLoading && (
-        <Modal isScollbar={false} maxWidth="43rem" minHeight="800px" setIsOpen={setIsOpen}>
-          <div className="title-left">
-            <h3>{type === 'USER' ? '강사' : '회원'} 선택</h3>
-            <p>일정을 진행할 {type === 'USER' ? '강사' : '회원'}를 선택해 주세요.</p>
-          </div>
-          <ul>
-            <ModalList>
-              <button className="table-title" type="button">
-                <div className="left">
-                  <p>목록</p>
-                  <p></p>
-                  {type === 'USER' ? <p>이름/아이디</p> : <p>이름</p>}
-                </div>
-                <p>핸드폰 번호</p>
-              </button>
-            </ModalList>
-
-            {currentData.map((v: MemberSearchType | UsersSearchType) => {
-              const userType = isUsersSearchType(v) ? userTypeEnum[v.type] : '회원';
-              return (
-                <ModalList key={v.id}>
-                  <button type="button" onClick={() => setSelectedData(v.id, v.name)}>
-                    <div className="left">
-                      <MemberIcon />
-                      <p className="tag">{userType}</p>
-                      <p className="info">
-                        {v.name}
-                        {isUsersSearchType(v) ? <span> {v.loginId}</span> : ''}
-                      </p>
-                    </div>
-                    <p>{v.phone}</p>
+      <Modal closeOnClick={false} isScollbar={false} maxWidth="43rem" minHeight="800px" setIsOpen={setIsOpen}>
+        {!isLoading && (
+          <>
+            <ModalSearchTop>
+              <div className="title-left">
+                <h2>{type === 'USER' ? '담당 강사' : '회원'} 선택</h2>
+                {/* <p>일정을 진행할 {type === 'USER' ? '강사' : '회원'}를 선택해 주세요.</p> */}
+              </div>
+              <Searchbar>
+                <form
+                  onSubmit={e => {
+                    e.preventDefault();
+                    handleQuerySearch();
+                  }}
+                >
+                  <SC.InputField
+                    id="search"
+                    name="search"
+                    placeholder='이름 또는 "-"를 제외한 연락처를 입력해주세요.'
+                    type="text"
+                    value={query}
+                    width={'350px'}
+                    onChange={e => setQuery(e.target.value)}
+                  />
+                  <button className="search-submit" type="submit">
+                    <SearchIcon />
                   </button>
-                </ModalList>
-              );
-            })}
-          </ul>
+                </form>
+              </Searchbar>
+            </ModalSearchTop>
+            <ul>
+              <ModalList>
+                <button className="table-title" type="button">
+                  <div className="left">
+                    <p>목록</p>
+                    <p></p>
+                    {type === 'USER' ? <p>이름/아이디</p> : <p>이름</p>}
+                  </div>
+                  <p>핸드폰 번호</p>
+                </button>
+              </ModalList>
 
-          {/* 페이지 네이션 시작 */}
-          {totalPages > 1 && (
-            <Pagination className="modal">
-              {pageRange[0] > 1 && (
-                <button className="pageBtn prev" type="button" onClick={() => updatePageRange('prev')}>
-                  <ArrowIcon />
-                </button>
-              )}
-              {Array.from({ length: totalPages }, (_, i) => i + 1)
-                .filter(pageNum => pageNum >= pageRange[0] && pageNum <= pageRange[1])
-                .map(pageNum => (
-                  <button
-                    key={pageNum}
-                    className={`pageBtn ${currentPage === pageNum ? 'on' : ''}`}
-                    disabled={currentPage === pageNum}
-                    type="button"
-                    onClick={() => setCurrentPage(pageNum)}
-                  >
-                    {pageNum}
+              {currentData.map((v: MemberSearchType | UsersSearchType) => {
+                const userType = isUsersSearchType(v) ? userTypeEnum[v.type] : '회원';
+                return (
+                  <ModalList key={v.id}>
+                    <button type="button" onClick={() => setSelectedData(v.id, v.name)}>
+                      <div className="left">
+                        <MemberIcon />
+                        <p className="tag">{userType}</p>
+                        <p className="info">
+                          {v.name}
+                          {isUsersSearchType(v) ? <span> {v.loginId}</span> : ''}
+                        </p>
+                      </div>
+                      <p>{v.phone}</p>
+                    </button>
+                  </ModalList>
+                );
+              })}
+            </ul>
+
+            {/* 페이지 네이션 시작 */}
+            {totalPages > 1 && (
+              <Pagination className="modal">
+                {pageRange[0] > 1 && (
+                  <button className="pageBtn prev" type="button" onClick={() => updatePageRange('prev')}>
+                    <ArrowIcon />
                   </button>
-                ))}
-              {pageRange[1] < totalPages && (
-                <button className="pageBtn next" type="button" onClick={() => updatePageRange('next')}>
-                  <ArrowIcon />
-                </button>
-              )}
-            </Pagination>
-          )}
-          {/* 페이지 네이션 끝 */}
-        </Modal>
-      )}
+                )}
+                {Array.from({ length: totalPages }, (_, i) => i + 1)
+                  .filter(pageNum => pageNum >= pageRange[0] && pageNum <= pageRange[1])
+                  .map(pageNum => (
+                    <button
+                      key={pageNum}
+                      className={`pageBtn ${currentPage === pageNum ? 'on' : ''}`}
+                      disabled={currentPage === pageNum}
+                      type="button"
+                      onClick={() => setCurrentPage(pageNum)}
+                    >
+                      {pageNum}
+                    </button>
+                  ))}
+                {pageRange[1] < totalPages && (
+                  <button className="pageBtn next" type="button" onClick={() => updatePageRange('next')}>
+                    <ArrowIcon />
+                  </button>
+                )}
+              </Pagination>
+            )}
+            {/* 페이지 네이션 끝 */}
+          </>
+        )}
+      </Modal>
     </>
   );
 };

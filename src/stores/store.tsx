@@ -8,6 +8,8 @@ import { menuReducer } from '@stores/menuSlice';
 import { calendarReducer } from '@stores/selectedDateSlice';
 import { tokenReducer } from '@stores/tokenSilce';
 
+import { findUsersReducer } from './findUsersSlice';
+
 const middlewares: Middleware<AnyAction>[] = [];
 
 if (process.env.NODE_ENV === 'development') {
@@ -19,6 +21,7 @@ const reducers = combineReducers({
   tokens: tokenReducer,
   menu: menuReducer,
   calendar: calendarReducer,
+  findUsers: findUsersReducer,
 });
 
 const persistConfig = {

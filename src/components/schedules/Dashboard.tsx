@@ -3,8 +3,9 @@ import { styled } from 'styled-components';
 import { ScheduleType } from '@stores/selectedDateSlice';
 import theme from '@styles/theme';
 
+import { DayType } from '@utils/generateCalendar';
+
 import { DAYOFWEEK_ENUM } from './Calendar';
-import { DayType } from './utils/generateCalendar';
 
 interface DashboardProps {
   selectedDay: DayType;
@@ -89,7 +90,7 @@ export const Dashboard = ({ selectedDay, sortSchedules }: DashboardProps) => {
                     </li>
                     <li>{`${getTime(startAt)} - ${getTime(endAt)}`}</li>
                     <li>{`${attendanceHistories[0].member.name} (${attendanceHistories.length})`}</li>
-                    <li>{availableReservationCount}회</li>
+                    <li>{availableReservationCount ? `${availableReservationCount}회` : '무제한'}</li>
                   </ul>
                 );
               } else {

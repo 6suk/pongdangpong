@@ -8,8 +8,6 @@ import { styled } from 'styled-components';
 import calendarIcon from '@assets/icons/schedules/calendar.svg';
 
 import { Button } from '@components/common/Button';
-import { Modal } from '@components/common/Modal';
-import { getLastDateOfMonth } from '@components/schedules/utils/getDate';
 
 import { useSwrData } from '@hooks/apis/useSwrData';
 
@@ -19,13 +17,15 @@ import { AppDispatch, RootState } from '@stores/store';
 import { SC } from '@styles/styles';
 import theme from '@styles/theme';
 
-import { Calendar } from './Calendar';
-import { SchedulesModal } from './SchedulesModal';
-import { filterAndSortSchedulesByDate } from './utils/filterAndSortSchedulesByDate';
-import { getEventCountbyDate } from './utils/getEventCountbyDate';
+import { filterAndSortSchedulesByDate } from '@utils/filterAndSortSchedulesByDate';
+import { getLastDateOfMonth } from '@utils/getDate';
 
-export const SchedulesList = () => {
-  const navigate = useNavigate();
+import { getEventCountbyDate } from '@utils/getEventCountbyDate';
+
+import { Calendar } from './Calendar';
+import { SchedulesFormModal } from './SchedulesFormModal';
+
+export const SchedulesHome = () => {
   const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
   const { data, isError } = useSwrData(location.search ? location.pathname + location.search : '');
@@ -100,7 +100,7 @@ export const SchedulesList = () => {
         </Top>
         <Calendar />
       </SchedulesContainer>
-      {isOpen && <SchedulesModal setIsOpen={setIsOpen} />}
+      {isOpen && <SchedulesFormModal setIsOpen={setIsOpen} />}
     </>
   );
 };

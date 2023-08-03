@@ -13,7 +13,6 @@ import theme from '@styles/theme';
 function App() {
   const Login = lazy(() => import('@/pages/Login'));
   const Home = lazy(() => import('@/pages/Home'));
-  const Schedule = lazy(() => import('@/pages/Schedule'));
   const Center = lazy(() => import('@/pages/Center'));
   const Me = lazy(() => import('@/pages/Me'));
   const Sample = lazy(() => import('@/pages/Sample'));

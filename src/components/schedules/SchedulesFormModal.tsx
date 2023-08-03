@@ -8,7 +8,7 @@ import { DumbbellIcon, UserColorIcon } from '@assets/icons/indexIcons';
 import { Modal } from '@components/common/Modal';
 import theme from '@styles/theme';
 
-export const SchedulesModal = ({ setIsOpen }: { setIsOpen: Dispatch<SetStateAction<boolean>> }) => {
+export const SchedulesFormModal = ({ setIsOpen }: { setIsOpen: Dispatch<SetStateAction<boolean>> }) => {
   const navigate = useNavigate();
 
   return (

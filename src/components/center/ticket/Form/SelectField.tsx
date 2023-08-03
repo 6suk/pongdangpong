@@ -1,9 +1,6 @@
 import { ChangeEvent, FC } from 'react';
 
-import { styled } from 'styled-components';
-
 import { SC } from '@styles/styles';
-import theme from '@styles/theme';
 
 type SelectProps = {
   className?: 'required';
@@ -13,6 +10,8 @@ type SelectProps = {
   disabled?: boolean;
   options: { value: string | number; label: string }[];
   label?: string;
+  placeholder?: string;
+  error?: boolean;
 };
 
 export const SelectField: FC<SelectProps> = ({
@@ -23,6 +22,8 @@ export const SelectField: FC<SelectProps> = ({
   onChange,
   disabled = false,
   options,
+  placeholder,
+  error,
 }) => {
   return (
     <>
@@ -31,7 +32,19 @@ export const SelectField: FC<SelectProps> = ({
           {label}
         </SC.Label>
       )}
-      <SC.Select disabled={disabled} id={name} name={name} value={value} onChange={onChange}>
+      <SC.Select
+        className={error ? 'error' : ''}
+        disabled={disabled}
+        id={name}
+        name={name}
+        value={value}
+        onChange={onChange}
+      >
+        {placeholder && (
+          <option disabled value="">
+            {placeholder}
+          </option>
+        )}
         {options.map(option => (
           <option key={option.value} value={option.value}>
             {option.label}
@@ -41,23 +54,3 @@ export const SelectField: FC<SelectProps> = ({
     </>
   );
 };
-
-const StyledSelect = styled.select`
-  border: 1px solid #e5e7eb;
-  color: #1f2937;
-  font-size: 0.875rem;
-  border-radius: 0.375rem;
-  width: 100%;
-  padding: 0.625rem;
-  height: 43px;
-  &:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 1px #3b82f6;
-  }
-
-  &:disabled {
-    color: ${theme.colors.gray[500]};
-    background-color: ${theme.colors.gray[800]};
-  }
-`;

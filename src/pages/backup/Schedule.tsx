@@ -1,16 +1,11 @@
-import React, { useState, useCallback } from 'react';
-import { Routes, Route, useNavigate, useLocation, Outlet } from 'react-router-dom';
-
-import styled from 'styled-components';
+import { useState } from 'react';
+import { Outlet, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
 import { Button } from '@components/common/Button';
-import { Modal } from '@components/common/Modal';
 
-import CreateCounseling from '@components/schedules/CreateCounseling';
-import CreateSchedule from '@components/schedules/CreateSchedule';
-import ScheduleModal from '@components/schedule/ScheduleModal';
-
-import theme from '@styles/theme';
+import CreateCounseling from '@components/schedules/backup/CreateCounseling';
+import CreateSchedule from '@components/schedules/backup/CreateSchedule';
+import { SchedulesFormModal } from '@components/schedules/SchedulesFormModal';
 
 export const Schedule = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,7 +19,7 @@ export const Schedule = () => {
           + 일정 생성
         </Button>
       )}
-      <ScheduleModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} navigate={navigate} />
+      {isModalOpen && <SchedulesFormModal setIsOpen={setIsModalOpen} />}
 
       <Routes>
         <Route element={<CreateSchedule />} path="createschedule" />

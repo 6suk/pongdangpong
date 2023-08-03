@@ -69,6 +69,26 @@ const ModalContent = styled.div<{ $maxWidth?: string }>`
   border-radius: 0.5rem;
   padding: 3rem 2.5rem 2.5rem 2.5rem;
   text-align: center;
+
+  .title-left {
+    padding-top: 1rem;
+    display: flex;
+    text-align: left;
+    flex-direction: row;
+    padding-bottom: 1rem;
+    align-items: flex-end;
+    gap: 0.5rem;
+    border-bottom: 1px solid ${theme.colors.gray[800]};
+    h3 {
+      margin-bottom: 0;
+    }
+
+    p {
+      margin-bottom: 0;
+      font-size: ${theme.font.sub};
+      color: ${theme.colors.gray[500]};
+    }
+  }
 `;
 
 const S = {

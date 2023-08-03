@@ -3,13 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import styled from 'styled-components';
 
-import { getCurrentDate } from '@components/schedules/utils/getDate';
 import { setLastNextDates, setSelectedDate } from '@stores/selectedDateSlice';
 import { AppDispatch, RootState } from '@stores/store';
 import theme from '@styles/theme';
 
+import { DayType, generateCalendar } from '@utils/generateCalendar';
+import { getCurrentDate } from '@utils/getDate';
+
 import { Dashboard } from './Dashboard';
-import { DayType, generateCalendar } from './utils/generateCalendar';
 
 export interface CalendarEventType {
   date: number;

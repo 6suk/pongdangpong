@@ -25,7 +25,7 @@ type FormInputs = {
   endAt: string;
 };
 
-const initialInputs: FormInputs = {
+export const initialInputs: FormInputs = {
   userId: 0,
   issuedTicketId: 0,
   memberId: 0,

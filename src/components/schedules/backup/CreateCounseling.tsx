@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-import Profile from '@/assets/icons/Profile.svg';
 import { MemberIcon } from '@assets/icons/indexIcons';
 import { Button } from '@components/common/Button';
 import { Modal } from '@components/common/Modal';

@@ -41,6 +41,12 @@ export const CounselingForm = () => {
   const USER = useSelector((state: RootState) => state.findUsers.USER);
   const [isSubmit, setIsSubmit] = useState(false);
 
+  useEffect(() => {
+    return () => {
+      dispatch(clearAll());
+    };
+  }, []);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmit(true);

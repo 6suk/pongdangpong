@@ -9,6 +9,9 @@ interface ModalProps {
   children: React.ReactNode;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   maxWidth?: string;
+  minHeight?: string;
+  isScollbar?: boolean;
+  closeOnClick?: boolean; // false일 시 배경 클릭 시에도 닫히지 않음
 }
 
 export interface ModalValueState {
@@ -17,18 +20,31 @@ export interface ModalValueState {
   button: { id: number; title: string; color: boolean }[];
 }
 
-const ModalComponent: FC<ModalProps> = ({ children, setIsOpen, maxWidth }) => {
+const ModalComponent: FC<ModalProps> = ({
+  children,
+  setIsOpen,
+  maxWidth,
+  minHeight,
+  isScollbar = true,
+  closeOnClick = true,
+}) => {
   const handleClose = useCallback(
     (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      if (closeOnClick === false) return;
       if (event.target === event.currentTarget) setIsOpen(false);
     },
-    [setIsOpen]
+    [setIsOpen, closeOnClick]
   );
 
   return (
     <>
       <S.ModalBackground onClick={handleClose}>
-        <ModalContent $maxWidth={maxWidth} onClick={e => e.stopPropagation()}>
+        <ModalContent
+          $maxWidth={maxWidth}
+          $minHeight={minHeight}
+          className={isScollbar ? '' : 'no-scroll'}
+          onClick={e => e.stopPropagation()}
+        >
           <S.CloseButton onClick={() => setIsOpen(false)}>
             <img alt="close" src={x} />
           </S.CloseButton>
@@ -57,13 +73,14 @@ const fadeOut = keyframes`
   }
 `;
 
-const ModalContent = styled.div<{ $maxWidth?: string }>`
+const ModalContent = styled.div<{ $maxWidth?: string; $minHeight?: string }>`
   position: relative;
   background: white;
   border: 1px solid ${theme.colors.gray[600]};
   max-height: 100%;
   width: 100%;
   max-width: ${props => (!props.$maxWidth ? `28rem` : props.$maxWidth)};
+  min-height: ${props => (!props.$minHeight ? `0` : props.$minHeight)};
   max-height: 800px;
   overflow-y: auto;
   border-radius: 0.5rem;
@@ -78,9 +95,15 @@ const ModalContent = styled.div<{ $maxWidth?: string }>`
     padding-bottom: 1rem;
     align-items: flex-end;
     gap: 0.5rem;
-    border-bottom: 1px solid ${theme.colors.gray[800]};
+    /* border-bottom: 1px solid ${theme.colors.gray[800]}; */
     h3 {
       margin-bottom: 0;
+    }
+
+    h2 {
+      font-size: ${theme.font.subTitle};
+      font-weight: 800;
+      color: ${theme.colors.gray[100]};
     }
 
     p {
@@ -88,6 +111,10 @@ const ModalContent = styled.div<{ $maxWidth?: string }>`
       font-size: ${theme.font.sub};
       color: ${theme.colors.gray[500]};
     }
+  }
+
+  &.no-scroll {
+    overflow: hidden;
   }
 `;
 

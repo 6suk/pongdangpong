@@ -10,7 +10,7 @@ import { MemberOrUserSearchModal } from './FindUserListModal';
 
 interface MemberOrUserSearchButtonProps {
   initiateSearch?: () => boolean;
-  error: boolean;
+  error?: boolean;
   type: 'MEMBER' | 'USER';
 }
 

@@ -45,6 +45,10 @@ export const StaffsRoleModal: React.FC<StaffsRoleModalProps> = ({ setIsOpen, set
   };
 
   const RoleUpdate = async () => {
+    if (checkedValues.length < 1) {
+      return;
+    }
+
     const newRole = { roleIds: checkedValues.map(Number) };
 
     try {

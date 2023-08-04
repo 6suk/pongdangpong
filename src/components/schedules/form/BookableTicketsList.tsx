@@ -22,9 +22,16 @@ interface BookableTicketsListProps {
   inputValues: PrivateLessonFormInputsType;
   error: boolean;
   inputReset: (data: PrivateLessonFormInputsType) => void;
+  disabled?: boolean;
 }
 
-export const BookableTicketsList = ({ onChange, inputValues, error, inputReset }: BookableTicketsListProps) => {
+export const BookableTicketsList = ({
+  onChange,
+  inputValues,
+  error,
+  inputReset,
+  disabled = false,
+}: BookableTicketsListProps) => {
   const {
     USER: { id: tutorId },
     MEMBER: { id: memberId },
@@ -75,7 +82,7 @@ export const BookableTicketsList = ({ onChange, inputValues, error, inputReset }
 
         {!isLoading && memberId && tutorId ? (
           <SelectField
-            disabled={!isData}
+            disabled={!isData || disabled}
             error={error}
             name="issuedTicketId"
             options={optionData}
@@ -95,17 +102,21 @@ export const BookableTicketsList = ({ onChange, inputValues, error, inputReset }
           />
         )}
       </div>
-      <div>
-        <SC.Label>
-          참여회원 <LabelNotice>회원과 수강권 선택 시 자동으로 입력됩니다.</LabelNotice>
-        </SC.Label>
-        {ownerList !== undefined &&
-          ownerList.map(owner => (
-            <NameButton key={owner.id} className="info-btn">
-              <span className="user-name">{owner.name}</span>
-            </NameButton>
-          ))}
-      </div>
+      {!disabled && (
+        <div>
+          <>
+            <SC.Label>
+              참여회원 <LabelNotice>회원과 수강권 선택 시 자동으로 입력됩니다.</LabelNotice>
+            </SC.Label>
+            {ownerList !== undefined &&
+              ownerList.map(owner => (
+                <NameButton key={owner.id} className="info-btn">
+                  <span className="user-name">{owner.name}</span>
+                </NameButton>
+              ))}
+          </>
+        </div>
+      )}
     </>
   );
 };

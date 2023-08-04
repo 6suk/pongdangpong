@@ -133,7 +133,49 @@ const InputField = styled.input`
   &:disabled {
     color: ${theme.colors.gray[500]};
     background-color: ${theme.colors.gray[800]} !important;
-import { Profile } from '@/assets/icons/Profile.svg';
+
+    & + .unit {
+      color: ${theme.colors.gray[500]};
+    }
+  }
+
+  &::placeholder {
+    color: ${theme.colors.gray[600]};
+  }
+
+  &.error {
+    border: 1px solid rgba(${theme.colors.ErrorRGB}, 0.7);
+    transition: all 0.3s;
+  }
+`;
+
+type TextareaFieldProps = {
+  width?: string;
+};
+
+const TextareaField = styled.textarea<TextareaFieldProps>`
+  border: 1px solid #e5e7eb;
+  color: #1f2937;
+  font-size: 0.875rem;
+  border-radius: 0.375rem;
+  width: ${props => props.width || '100%'};
+  padding: 0.625rem;
+  resize: none;
+
+  &:focus {
+    outline: none;
+    border-color: ${theme.colors.pri[800]};
+    box-shadow: 0 0 0 1px ${theme.colors.pri[900]};
+
+    &[readonly] {
+      border-color: #e5e7eb;
+      box-shadow: none;
+    }
+  }
+
+  &:disabled {
+    color: ${theme.colors.gray[500]};
+    background-color: ${theme.colors.gray[800]} !important;
 
     & + .unit {
       color: ${theme.colors.gray[500]};
@@ -157,6 +199,7 @@ export const SC = {
   InputField,
   Select,
   Select__,
+  TextareaField,
 };
 
 export const TopTitleWrap = styled.div`
@@ -165,11 +208,13 @@ export const TopTitleWrap = styled.div`
   h3 {
     font-weight: 800;
     font-size: ${theme.font.title};
+    color: ${theme.colors.pri[500]};
     margin-bottom: 0.5rem;
   }
 
   p {
     font-size: ${theme.font.body};
+    color: ${theme.colors.gray[300]};
   }
 `;
 
@@ -181,14 +226,14 @@ export const ContentWrap = styled.div`
   margin-top: 3rem;
 `;
 
-export const FormContentWrap = styled.div`
+export const FormContentWrap = styled.div<{ isSubHeader?: boolean }>`
   display: flex;
   flex-direction: column;
   max-width: 1024px;
   width: 100%;
-  margin-top: 3rem;
+  margin-top: ${props => (props.isSubHeader === false ? '2rem' : '3rem')};
   padding-inline: 2rem;
-  gap: 0.5rem;
+  gap: 1rem;
 
   .time-inputs,
   .button-container {
@@ -288,5 +333,10 @@ export const NameButton = styled.button`
     cursor: pointer;
     flex-shrink: 0;
     font-size: 16px;
+  }
+
+  &:disabled {
+    cursor: default;
+    padding-right: 14px;
   }
 `;

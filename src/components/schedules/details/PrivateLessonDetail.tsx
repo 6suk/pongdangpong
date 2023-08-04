@@ -1,21 +1,28 @@
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { styled } from 'styled-components';
 
-import { BackIcon, MemberIcon } from '@assets/icons/indexIcons';
+import { Schedules_detail_private } from '@apis/schedulesAPIs';
+import { BackIcon } from '@assets/icons/indexIcons';
 import { BackButton, DetailButton } from '@components/center/ticket/TicketIssued';
-import { TypeInfoProps } from '@components/schedules/calendar/Dashboard';
+import { NoticeModal } from '@components/common/NoticeModal';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
 import { TicketWrap } from '@styles/center/ticketsStyle';
 import theme from '@styles/theme';
+import { formatDate, formatTimeRange, formatTimestamp } from '@utils/formatTimestamp';
+
+import { MemberCardItem } from './MemberCardItem';
 
 export const PrivateLessonDetail = () => {
   const navigate = useNavigate();
-  const { scheduleId } = useParams();
   const { pathname } = useLocation();
   const { data, isLoading } = useSwrData(pathname);
-  console.log(data);
+  const { createdAt, createdBy, startAt, endAt, attendanceHistories, tutor, issuedTicket, memo } =
+    (data as Schedules_detail_private) || {};
+  const membersCount = attendanceHistories?.length || '0';
+  const [isMemoModalOpen, setIsMemoModalOpen] = useState(false);
 
   return (
     !isLoading && (
@@ -25,7 +32,9 @@ export const PrivateLessonDetail = () => {
             <div className="header">
               <div className="title">
                 <h3>수업 정보</h3>
-                <p className="createdAt">생성일 2023년 7월 20일 (목) 00시 36분 고예림</p>
+                <p className="createdAt">
+                  생성일 {formatTimestamp(createdAt)} {createdBy.name}
+                </p>
               </div>
               <BackButton onClick={() => navigate(-1)}>
                 <BackIcon />
@@ -36,23 +45,45 @@ export const PrivateLessonDetail = () => {
               <div className="infos">
                 <dl>
                   <dt>일정</dt>
-                  <dd>2023.07.21 (금)</dd>
+                  <dd>{formatDate(startAt)}</dd>
                 </dl>
                 <dl>
                   <dt>시간</dt>
-                  <dd>09:00 ~ 10:00</dd>
+                  <dd>{formatTimeRange(startAt, endAt)}</dd>
                 </dl>
                 <dl>
                   <dt>정원</dt>
-                  <dd>1명</dd>
+                  <dd>{membersCount}명</dd>
                 </dl>
                 <dl>
                   <dt>강사</dt>
-                  <dd>고예림</dd>
+                  <dd>{tutor.name}</dd>
+                </dl>
+                <dl>
+                  <dt>메모</dt>
+                  <dd>
+                    <MemoPreview>
+                      {memo ? memo.substring(0, 5) + (memo.length > 5 ? '...' : '') : '-'}
+                      {memo && memo.length > 5 && (
+                        <MoreButton
+                          onClick={() => {
+                            setIsMemoModalOpen(true);
+                          }}
+                        >
+                          더보기
+                        </MoreButton>
+                      )}
+                    </MemoPreview>
+                  </dd>
                 </dl>
               </div>
               <div className="btns">
-                <DetailButton className="pri" onClick={() => {}}>
+                <DetailButton
+                  className="pri"
+                  onClick={() => {
+                    navigate('edit');
+                  }}
+                >
                   변경
                 </DetailButton>
                 <DetailButton onClick={() => {}}>취소</DetailButton>
@@ -66,174 +97,33 @@ export const PrivateLessonDetail = () => {
               </div>
             </div>
             <TicketWrap>
-              <CardItem>
-                <div className="card-top">
-                  <div className="top-left">
-                    <MemberIcon />
-                    <div className="name-box">
-                      <p className="name">정현철</p>
-                      <p>010 - 6645 - 9116</p>
-                    </div>
-                  </div>
-                  <div className="top-btns">
-                    <button className="border-btn" type="button">
-                      출석
-                    </button>
-                    <button className="border-btn" type="button">
-                      결석
-                    </button>
-                  </div>
-                </div>
-                <div className="card-bottom">
-                  <div className="infos">
-                    <dl>
-                      <dt>출결상태</dt>
-                      <dd className="type-box">
-                        <TypeInfo type={'WAIT'} />
-                        <p>예약</p>
-                      </dd>
-                    </dl>
-                    <dl>
-                      <dt>수강권명</dt>
-                      <dd>통증관리</dd>
-                    </dl>
-                    <dl>
-                      <dt>잔여</dt>
-                      <dd>3회 (총3회)</dd>
-                    </dl>
-                    <dl>
-                      <dt>예약 가능</dt>
-                      <dd>3회 (총3회)</dd>
-                    </dl>
-                  </div>
-                </div>
-              </CardItem>
+              <MemberCardItem attendanceHistories={attendanceHistories} issuedTicket={issuedTicket} />
             </TicketWrap>
           </div>
         </SchedulesDetailWrap>
+        {isMemoModalOpen && (
+          <NoticeModal innerNotice={{ title: '메모', content: memo }} setIsOpen={setIsMemoModalOpen} />
+        )}
       </>
     )
   );
 };
 
-const TypeInfo = styled.p.attrs<TypeInfoProps>(() => ({}))`
-  &::before {
-    content: '';
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 2px;
-    background-color: ${({ type, theme }) => {
-      switch (type) {
-        case 'PRESENT':
-          return theme.colors.pri[500];
-        case 'ABSENT':
-          return theme.colors.Error;
-        case 'WAIT':
-          return theme.colors.gray[500];
-        case 'counseling':
-          return 'transparent';
-        default:
-          return 'transparent';
-      }
-    }};
-    border: ${({ type }) => (type === 'counseling' ? `2px solid #4FB564` : 'none')};
-  }
+const MemoPreview = styled.div`
+  cursor: pointer;
+  display: flex;
+  align-items: center;
 `;
 
-const CardItem = styled.div`
-  box-sizing: border-box;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  /* aspect-ratio: 12/6; */
+const MoreButton = styled.span`
+  padding-inline: 0.3rem;
+  padding-block: 0.1rem;
   border: 1px solid ${theme.colors.gray[700]};
-  border-radius: 10px;
-  overflow: hidden;
-  font-size: ${theme.font.sub};
-
-  .card-top {
-    padding-inline: 1.5rem;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    padding-block: 1.25rem;
-    flex: 3;
-    align-items: center;
-    border-bottom: 1px solid ${theme.colors.gray[700]};
-
-    .top-left {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.8rem;
-
-      svg {
-        width: 1.8rem;
-      }
-
-      .name-box {
-        display: flex;
-        flex-direction: column;
-
-        .name {
-          font-weight: 600;
-          /* font-size: ${theme.font.body}; */
-        }
-      }
-    }
-    .top-btns {
-      display: flex;
-      gap: 0.25rem;
-
-      .border-btn {
-        color: ${theme.colors.gray[200]};
-        padding-inline: 1.25rem;
-        padding-block: 0.5rem;
-        font-size: ${theme.font.sub};
-        border-radius: 0.375rem;
-        transition: all 0.4s;
-        outline: none;
-        border: 1px solid ${theme.colors.gray[700]};
-        border-radius: 6px;
-
-        &:hover {
-          font-weight: 600;
-          background-color: ${theme.colors.gray[900]};
-        }
-      }
-    }
-  }
-  .card-bottom {
-    padding-inline: 1.5rem;
-    padding-block: 2rem;
-    flex: 7;
-
-    .type-box {
-      display: flex;
-      gap: 0.2rem;
-    }
-
-    .infos {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      padding-inline: 2.6rem; // svg + gap
-      dl {
-        display: flex;
-        gap: 1rem;
-
-        dt {
-          color: ${theme.colors.gray[400]};
-          flex: 2;
-        }
-        dd {
-          font-weight: 600;
-          flex: 8;
-        }
-      }
-    }
-  }
+  color: ${theme.colors.gray[500]};
+  border-radius: 6px;
+  cursor: pointer;
+  margin-left: 7px;
+  font-size: ${theme.font.sm};
 `;
 
 export const SchedulesDetailWrap = styled.div`
@@ -324,6 +214,8 @@ export const SchedulesInfoBar = styled.div`
     dl {
       display: flex;
       gap: 0.5rem;
+      align-items: center;
+}
 
       dt {
         font-weight: 600;

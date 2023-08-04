@@ -54,6 +54,8 @@ const colors = {
   ErrorRGB: '223, 41, 29',
   Positive: '#1fb881',
   inputBorder: '#e5e7eb;',
+  RedBorder: '#DF291D',
+  RedBack: '#FF7B72',
 };
 
 const fontSize = {

@@ -4,8 +4,10 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-import { MemberIcon, Editicon, closeIcon } from '@assets/icons/indexIcons';
+import { MemberIcon, Editicon, closeIcon, BackIcon } from '@assets/icons/indexIcons';
+import { StaffDetailWrap } from '@components/center/staff/StaffsDetail';
 import { StaffsLIstWrap } from '@components/center/staff/StaffsList';
+import { BackButton } from '@components/center/ticket/TicketIssued';
 import { Button } from '@components/common/Button';
 import { Modal, ModalButton } from '@components/common/Modal';
 import { TicketItem } from '@components/members/ticket/TicketItem';
@@ -140,7 +142,7 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
   };
 
   return !isLoading && id ? (
-    <div style={{ padding: '40px' }}>
+    <>
       {isOpen && (
         <Modal setIsOpen={setIsOpen}>
           {
@@ -192,178 +194,197 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
           }
         </Modal>
       )}
-
-      <StaffsLIstWrap key={data.id}>
-        <div className="table">
-          <div className="table-row title">
-            <p>이름</p>
-            <p>전화번호</p>
-            <p>생년월일</p>
-            <p>성별</p>
-            <p>등록일</p>
-            <p>수정</p>
+      <StaffDetailWrap>
+        <div>
+          <div className="header">
+            <div className="title">
+              <h3>회원 정보</h3>
+            </div>
+            <BackButton onClick={() => navigate(-1)}>
+              <BackIcon />
+              <p>뒤로가기</p>
+            </BackButton>
           </div>
-          <div className="table-row">
-            <p className="icon-box">
-              <MemberIcon /> <span>{name}</span>
-            </p>
-            <p>{dataChange('phone', data.phone)}</p>
-            <p>{dataChange('birthDate', data.birthDate)}</p>
-            <p>{dataChange('sex', data.sex)}</p>
-            <p>{dataChange('createdAt', data.createdAt)}</p>
-            <button type="button">
+          <S.list key={data.id}>
+            <li>
+              <div className="pic">
+                <img alt="profile" src="/imgs/profile.png" />
+              </div>
+              <p>
+                <span>이름</span>
+                {data.name}
+              </p>
+              <p>
+                <span>생년월일</span>
+                {dataChange('birthDate', data.birthDate)}
+              </p>
+              <p>
+                <span>등록일</span>
+                {dataChange('createdAt', data.createdAt)}
+              </p>
+              <p>
+                <span>성별</span>
+                {dataChange('sex', data.sex)}
+              </p>
+              <p>
+                <span>전화번호</span>
+                {dataChange('phone', data.phone)}
+              </p>
+            </li>
+            <li className="btn-wrap">
               <Editicon
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                   setIsOpen(true);
                 }}
               />
-            </button>
-          </div>
+            </li>
+          </S.list>
         </div>
-      </StaffsLIstWrap>
 
-      {editTicketModalState && (
-        <Modal maxWidth="36rem" setIsOpen={setEditTicketModalState}>
-          <S.ModalInfoTop>
-            <h3 className="modal-info-title">{editTicketData['title']}</h3>
-            <p className="modal-tag">{editTicketData['lessonType'] === 'SINGLE' && '1:1 개인수업'}</p>
-          </S.ModalInfoTop>
-          <S.ModalInfoStyle>
-            <dl>
-              <dt>기본 횟수</dt>
-              <dd>{editTicketData['defaultCount'] ? editTicketData['defaultCount'] + '회' : '무제한'}</dd>
-            </dl>
-            <dl>
-              <dt>서비스 횟수</dt>
-              <dd>{editTicketData['serviceCount'] ? editTicketData['serviceCount'] + '회' : '무제한'}</dd>
-            </dl>
-            <dl>
-              <dt>잔여 횟수</dt>
-              <dd>{editTicketData['remainingCount'] ? editTicketData['remainingCount'] + '회' : '무제한'}</dd>
-            </dl>
-            <dl>
-              <dt>예약 가능 잔여 횟수</dt>
+        {editTicketModalState && (
+          <Modal maxWidth="36rem" setIsOpen={setEditTicketModalState}>
+            <S.ModalInfoTop>
+              <h3 className="modal-info-title">{editTicketData['title']}</h3>
+              <p className="modal-tag">{editTicketData['lessonType'] === 'SINGLE' && '1:1 개인수업'}</p>
+            </S.ModalInfoTop>
+            <S.ModalInfoStyle>
+              <dl>
+                <dt>기본 횟수</dt>
+                <dd>{editTicketData['defaultCount'] ? editTicketData['defaultCount'] + '회' : '무제한'}</dd>
+              </dl>
+              <dl>
+                <dt>서비스 횟수</dt>
+                <dd>{editTicketData['serviceCount'] ? editTicketData['serviceCount'] + '회' : '무제한'}</dd>
+              </dl>
+              <dl>
+                <dt>잔여 횟수</dt>
+                <dd>{editTicketData['remainingCount'] ? editTicketData['remainingCount'] + '회' : '무제한'}</dd>
+              </dl>
+              <dl>
+                <dt>예약 가능 잔여 횟수</dt>
+                <dd>
+                  {editTicketData['availableReservationCount']
+                    ? editTicketData['availableReservationCount'] + '회'
+                    : '무제한'}
+                </dd>
+              </dl>
+              <dl>
+                <dt>수강권 기간</dt>
+                <dd>
+                  {editTicketData['defaultTerm'] && editTicketData['defaultTermUnit']
+                    ? editTicketData['defaultTerm'] + editTicketData['defaultTermUnit']
+                    : '소진시까지'}
+                </dd>
+              </dl>
+              <dt>유효 기간</dt>
               <dd>
-                {editTicketData['availableReservationCount']
-                  ? editTicketData['availableReservationCount'] + '회'
-                  : '무제한'}
-              </dd>
-            </dl>
-            <dl>
-              <dt>수강권 기간</dt>
-              <dd>
-                {editTicketData['defaultTerm'] && editTicketData['defaultTermUnit']
-                  ? editTicketData['defaultTerm'] + editTicketData['defaultTermUnit']
-                  : '소진시까지'}
-              </dd>
-            </dl>
-            <dt>유효 기간</dt>
-            <dd>
-              <SC.InputField disabled defaultValue={editTicketData['startAt']} type="date" />
-              <SC.InputField
-                defaultValue={editTicketData['endAt']}
-                name="endAt"
-                type="date"
-                onChange={({ target }) => {
-                  setSubmitTicketData({ ...submitTicketData, [target.name]: target.value });
-                }}
-              />
-            </dd>
-            <dl>
-              <dt>담당 강사</dt>
-              <dd>
-                <SC.Select
-                  name="tutorId"
+                <SC.InputField disabled defaultValue={editTicketData['startAt']} type="date" />
+                <SC.InputField
+                  defaultValue={editTicketData['endAt']}
+                  name="endAt"
+                  type="date"
                   onChange={({ target }) => {
-                    setSubmitTicketData({ ...submitTicketData, [target.name]: parseInt(target.value) });
+                    setSubmitTicketData({ ...submitTicketData, [target.name]: target.value });
                   }}
-                >
-                  {staffsDatas.map(el => {
+                />
+              </dd>
+              <dl>
+                <dt>담당 강사</dt>
+                <dd>
+                  <SC.Select
+                    name="tutorId"
+                    onChange={({ target }) => {
+                      setSubmitTicketData({ ...submitTicketData, [target.name]: parseInt(target.value) });
+                    }}
+                  >
+                    {staffsDatas.map(el => {
+                      return (
+                        <option key={el.id} value={el.id}>
+                          {el.name}
+                        </option>
+                      );
+                    })}
+                  </SC.Select>
+                </dd>
+              </dl>
+            </S.ModalInfoStyle>
+
+            <ModalButton>취소</ModalButton>
+
+            <ModalButton
+              $isPrimary={true}
+              onClick={() => {
+                submitRequest({
+                  url: `issued-tickets/${issuedTicketId}`,
+                  method: 'put',
+                  body: submitTicketData,
+                });
+                alert('수강권이 수정되었습니다.');
+              }}
+            >
+              수강권 수정
+            </ModalButton>
+          </Modal>
+        )}
+        <div>
+          <Top>
+            <div className="ticket-active">
+              {Array(2)
+                .fill(0)
+                .map((el, i) => {
+                  return (
+                    <button
+                      key={i}
+                      className={ticketActive === i ? 'on' : ''}
+                      to="detail/active"
+                      onClick={() => {
+                        setTicketActive(i);
+                      }}
+                    >
+                      {!i % 2 && !memberTicketDataIsLoading
+                        ? `이용중(${ticketList?.active?.length})`
+                        : `이용 중단(${ticketList?.inactive?.length})`}
+                    </button>
+                  );
+                })}
+            </div>
+            <Button
+              size="md"
+              onClick={() => {
+                navigate('addTicket');
+              }}
+            >
+              + 수강권 부여
+            </Button>
+          </Top>
+          <TicketContainer>
+            <TicketWrap style={{ gridTemplateColumns: 'repeat(2, minmax(430px, 1fr))' }}>
+              {!memberTicketDataIsLoading &&
+                memberTicketData?.issuedTickets
+                  ?.sort((a, b) => a.id - b.id)
+                  .reverse()
+                  .map((el, i) => {
+                    let value = null;
+                    if (!ticketActive && !el.isSuspended && !el.isCanceled) value = el;
+                    else if (ticketActive === 1 && (el.isSuspended || el.isCanceled)) value = el;
+                    else return;
                     return (
-                      <option key={el.id} value={el.id}>
-                        {el.name}
-                      </option>
+                      <TicketItem
+                        key={value.id}
+                        refundTicketFunc={refundTicketFunc(i)}
+                        setTicketData={setTicketData(i)}
+                        suspendTicketFunc={suspendTicketFunc(i)}
+                        ticket={value}
+                        unsuspendTicketFunc={unsuspendTicketFunc(i)}
+                      />
                     );
                   })}
-                </SC.Select>
-              </dd>
-            </dl>
-          </S.ModalInfoStyle>
-
-          <ModalButton>취소</ModalButton>
-
-          <ModalButton
-            $isPrimary={true}
-            onClick={() => {
-              submitRequest({
-                url: `issued-tickets/${issuedTicketId}`,
-                method: 'put',
-                body: submitTicketData,
-              });
-              alert('수강권이 수정되었습니다.');
-            }}
-          >
-            수강권 수정
-          </ModalButton>
-        </Modal>
-      )}
-
-      <Top>
-        <div className="ticket-active">
-          {Array(2)
-            .fill(0)
-            .map((el, i) => {
-              return (
-                <button
-                  key={i}
-                  className={ticketActive === i ? 'on' : ''}
-                  to="detail/active"
-                  onClick={() => {
-                    setTicketActive(i);
-                  }}
-                >
-                  {!i % 2 && !memberTicketDataIsLoading
-                    ? `이용중(${ticketList?.active?.length})`
-                    : `이용 중단(${ticketList?.inactive?.length})`}
-                </button>
-              );
-            })}
+            </TicketWrap>
+          </TicketContainer>
         </div>
-        <Button
-          size="md"
-          onClick={() => {
-            navigate('addTicket');
-          }}
-        >
-          + 수강권 부여
-        </Button>
-      </Top>
-      <TicketContainer>
-        <TicketWrap style={{ gridTemplateColumns: 'repeat(2, minmax(430px, 1fr))' }}>
-          {!memberTicketDataIsLoading &&
-            memberTicketData?.issuedTickets
-              ?.sort((a, b) => a.id - b.id)
-              .reverse()
-              .map((el, i) => {
-                let value = null;
-                if (!ticketActive && !el.isSuspended && !el.isCanceled) value = el;
-                else if (ticketActive === 1 && (el.isSuspended || el.isCanceled)) value = el;
-                else return;
-                return (
-                  <TicketItem
-                    key={value.id}
-                    refundTicketFunc={refundTicketFunc(i)}
-                    setTicketData={setTicketData(i)}
-                    suspendTicketFunc={suspendTicketFunc(i)}
-                    ticket={value}
-                    unsuspendTicketFunc={unsuspendTicketFunc(i)}
-                  />
-                );
-              })}
-        </TicketWrap>
-      </TicketContainer>
-    </div>
+      </StaffDetailWrap>
+    </>
   ) : (
     <h2 style={{ textAlign: 'center' }}>
       선택된 회원이 없습니다 <br></br> <strong>회원관리 페이지</strong>에서 회원을 선택해주세요!
@@ -373,13 +394,14 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
 
 const S = {
   list: styled.ul`
-    width: 100%;
     display: flex;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid ${theme.colors.gray[800]};
+    text-align: left;
+    border-radius: 6px;
+    font-size: 15px;
     justify-content: space-between;
-    margin-bottom: 20px;
-    padding: 6px 10px;
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
 
     & > li {
       display: flex;

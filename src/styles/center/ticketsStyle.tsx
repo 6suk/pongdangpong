@@ -72,7 +72,8 @@ export const Top = styled.div`
   .ticket-active {
     display: flex;
 
-    a {
+    a,
+    button {
       font-size: ${theme.font.sub};
       color: ${theme.colors.gray[500]};
       padding: 12px;

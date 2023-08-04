@@ -14,7 +14,7 @@ function App() {
   const Login = lazy(() => import('@/pages/Login'));
   const Home = lazy(() => import('@/pages/Home'));
   const Center = lazy(() => import('@/pages/Center'));
-  const Me = lazy(() => import('@/pages/Me'));
+  const Mypage = lazy(() => import('@/pages/Mypage'));
   const Sample = lazy(() => import('@/pages/Sample'));
   const Members = lazy(() => import('@components/members/Members'));
 
@@ -33,7 +33,7 @@ function App() {
                 <Route element={<Home />} path="/" />
                 <Route element={<Members />} path="members/*" />
                 <Route element={<Sample />} path="sample/*" />
-                <Route element={<Me />} path="me" />
+                <Route element={<Mypage />} path="mypage" />
                 <Route element={<Center />} path="center/*" />
                 <Route element={<Schedules />} path="schedules/*" />
               </Route>

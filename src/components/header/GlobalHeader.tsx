@@ -32,7 +32,7 @@ export const GlobalHeader: React.FC<PropsState> = props => {
     { id: 'Schedules', content: '일정관리', path: 'schedules' },
     { id: 'Member', content: '회원관리', path: 'members' },
     { id: 'Center', content: '센터관리', path: 'center', initPath: 'center/tickets' },
-    { id: 'Mypage', content: '마이페이지', path: 'me' },
+    { id: 'Mypage', content: '마이페이지', path: 'mypage' },
   ];
 
   const [active, setActive] = useState('');

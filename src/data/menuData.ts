@@ -13,9 +13,4 @@ export const subMenuList: MenuState = {
     { id: '직원 관리', content: '직원 관리', path: '/center/staffs', hide: false },
     { id: '센터 정보', content: '센터 정보', path: '/center/info', hide: false },
   ],
-  mypage: [],
-  me: [
-    { id: '티켓 리스트', content: '티켓 리스트', path: '/sample/list', hide: false },
-    { id: '티켓 생성', content: '티켓 생성', path: '/sample/create', hide: false },
-  ],
 };

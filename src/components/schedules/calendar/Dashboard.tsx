@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+
 import { styled } from 'styled-components';
 
 import { ScheduleType } from '@stores/selectedDateSlice';
@@ -13,6 +15,7 @@ interface DashboardProps {
 }
 
 export const Dashboard = ({ selectedDay, sortSchedules }: DashboardProps) => {
+  const navigate = useNavigate();
   const { year, month, date, dayOfWeek } = selectedDay;
   const formattedDate = `${year}.${month.toString().padStart(2, '0')}.${date.toString().padStart(2, '0')}(${
     DAYOFWEEK_ENUM[dayOfWeek]
@@ -84,7 +87,8 @@ export const Dashboard = ({ selectedDay, sortSchedules }: DashboardProps) => {
                 } = schedule;
 
                 return (
-                  <ul key={id} className="table-row">
+                  // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
+                  <ul key={id} className="table-row" onClick={() => navigate(`${type}/${id}`)}>
                     <li className="type-box">
                       <TypeInfo type={schedule.attendanceHistories[0].status} />
                     </li>
@@ -101,7 +105,8 @@ export const Dashboard = ({ selectedDay, sortSchedules }: DashboardProps) => {
                   client: { name },
                 } = schedule;
                 return (
-                  <ul key={id} className="table-row">
+                  // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
+                  <ul key={id} className="table-row" onClick={() => navigate(`${type}/${id}`)}>
                     <li className="type-box">
                       <TypeInfo type={type} />
                     </li>
@@ -234,7 +239,7 @@ const DashboardBottom = styled.div`
   }
 `;
 
-interface TypeInfoProps {
+export interface TypeInfoProps {
   type: string;
 }
 

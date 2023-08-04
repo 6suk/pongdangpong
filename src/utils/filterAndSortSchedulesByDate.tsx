@@ -7,7 +7,7 @@ export const filterAndSortSchedulesByDate = (
 ) => {
   const allSchedules = [
     ...counselingSchedules.map(schedule => ({ type: 'counseling', schedule })),
-    ...privateSchedules.map(schedule => ({ type: 'private', schedule })),
+    ...privateSchedules.map(schedule => ({ type: 'private-lesson', schedule })),
   ];
 
   return allSchedules

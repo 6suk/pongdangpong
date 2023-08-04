@@ -70,6 +70,7 @@ const font = {
   title: '1.5rem', // 24
   subTitle: '1.125rem', // 18
   body: '1rem', // 16
+  subBody: '0.9375rem', //15
   sub: '.875rem', // 14
   sm: '.75rem', // 12
 };

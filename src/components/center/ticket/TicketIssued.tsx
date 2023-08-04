@@ -91,7 +91,7 @@ export const TicketIssued = () => {
   );
 };
 
-const BackButton = styled.button`
+export const BackButton = styled.button`
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -113,6 +113,16 @@ export const DetailButton = styled.button`
   color: ${theme.colors.gray[400]};
   border-radius: 6px;
   transition: all 0.4s;
+
+  &.pri {
+    background-color: ${theme.colors.pri[900]};
+    color: ${theme.colors.pri[500]};
+
+    &:hover {
+      font-weight: 600;
+      background-color: ${theme.colors.pri[800]};
+    }
+  }
 
   &:hover {
     font-weight: 600;

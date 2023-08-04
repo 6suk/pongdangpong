@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 
 import { styled } from 'styled-components';
 
@@ -61,7 +61,7 @@ export const SchedulesHome = () => {
       const combinedAndSortedSchedules = filterData();
       dispatch(setSortSchedules(combinedAndSortedSchedules));
     }
-  }, [selectedDate]);
+  }, [selectedDate, data]);
 
   // 달력 검색
   useEffect(() => {

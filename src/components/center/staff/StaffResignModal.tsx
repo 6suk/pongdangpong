@@ -12,7 +12,7 @@ interface StaffsResignModalProps {
   name: string;
 }
 
-interface StaffConfirmModalProps {
+interface StaffsConfirmModalProps {
   setIsConfirmModalOpen: Dispatch<SetStateAction<boolean>>;
   name: string;
 }
@@ -71,7 +71,7 @@ export const StaffsResignModal: React.FC<StaffsResignModalProps> = ({
   );
 };
 
-export const StaffConfirmModal: React.FC<StaffConfirmModalProps> = ({ setIsConfirmModalOpen, name }) => {
+export const StaffsConfirmModal: React.FC<StaffsConfirmModalProps> = ({ setIsConfirmModalOpen, name }) => {
   return (
     <Modal setIsOpen={setIsConfirmModalOpen}>
       <p>[{name}] 퇴사 처리 완료</p>

@@ -7,8 +7,9 @@ import { MemberIcon, UserIcon } from '@assets/icons/indexIcons';
 import { useSwrData } from '@hooks/apis/useSwrData';
 import theme from '@styles/theme';
 
-import { StaffsResignModal, StaffConfirmModal } from './StaffResignModal';
+import { StaffsResignModal, StaffsConfirmModal } from './StaffResignModal';
 import { StaffsEditModal } from './StaffsEditModal';
+import { StaffsRoleModal, StaffRoleConfirmModal } from './StaffsRoleModal';
 import { DetailButton } from '../ticket/TicketIssued';
 
 export const StaffsDetail = () => {
@@ -19,6 +20,8 @@ export const StaffsDetail = () => {
   const [isResignModalOpen, setIsResignModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [isActive, setIsActive] = useState(active);
+  const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
 
   return (
     !isLoading && (
@@ -31,7 +34,14 @@ export const StaffsDetail = () => {
                 <p className="createdAt">{createdAt.split('T')[0].replace(/-/g, '.')} 등록</p>
               </div>
               <div className="btns">
-                <button type="button">역할 설정</button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsRoleModalOpen(true);
+                  }}
+                >
+                  역할 설정
+                </button>
                 <button type="button">비밀번호 초기화</button>
                 <button
                   type="button"
@@ -155,6 +165,7 @@ export const StaffsDetail = () => {
           </div>
         </StaffDetailWrap>
         {isOpen && id && <StaffsEditModal id={id} setIsOpen={setIsOpen} />}
+
         {isResignModalOpen && id && (
           <StaffsResignModal
             id={id}
@@ -164,7 +175,12 @@ export const StaffsDetail = () => {
             setIsConfirmModalOpen={setIsConfirmModalOpen}
           />
         )}
-        {isConfirmModalOpen && <StaffConfirmModal name={name} setIsConfirmModalOpen={setIsConfirmModalOpen} />}
+        {isConfirmModalOpen && <StaffsConfirmModal name={name} setIsConfirmModalOpen={setIsConfirmModalOpen} />}
+
+        {isRoleModalOpen && id && (
+          <StaffsRoleModal id={id} setIsOpen={setIsRoleModalOpen} setIsSaveModalOpen={setIsSaveModalOpen} />
+        )}
+        {isSaveModalOpen && <StaffRoleConfirmModal setIsSaveModalOpen={setIsSaveModalOpen} />}
       </>
     )
   );

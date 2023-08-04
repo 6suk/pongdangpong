@@ -2,14 +2,13 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { AxiosError } from 'axios';
-
 import { PrivateLessonInitInput, PrivatelessonRequest } from '@apis/schedulesAPIs';
 import { Button } from '@components/common/Button';
 import { MemberOrUserSearchButton } from '@components/common/FindUserButton';
 import { NoticeModal } from '@components/common/NoticeModal';
 import { BookableTicketsList } from '@components/schedules/form/BookableTicketsList';
 import { useRequests } from '@hooks/apis/useRequests';
+import { useErrorModal } from '@hooks/utils/useErrorModal';
 import useInput from '@hooks/utils/useInput';
 import { ValidationProps, useValidation } from '@hooks/utils/useValidation';
 import { clearAll } from '@stores/findUsersSlice';
@@ -17,8 +16,6 @@ import { setSelectedDate } from '@stores/selectedDateSlice';
 import { RootState } from '@stores/store';
 import { FormButtonGroup, FormGridContainer } from '@styles/center/ticketFormStyle';
 import { FormContentWrap, SC, TopTitleWrap } from '@styles/styles';
-
-import { handleModalNotice } from '@utils/handleModalNotice';
 
 export interface ErrorResponse {
   message: string;
@@ -39,10 +36,9 @@ export const PrivateLessonForm = () => {
   const { request } = useRequests();
   const [isSubmit, setIsSubmit] = useState(false);
   const [inputValues, onChange, inputReset] = useInput(PrivateLessonInitInput);
-  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
-  const [errorModal, serErrorModal] = useState({ title: '', content: '' });
   const { validationErrors, checkForErrors, updateValidationError } = useValidation();
   const { USER, MEMBER } = useSelector((state: RootState) => state.findUsers);
+  const { isErrorModalOpen, errorModal, handleAxiosError, handleModalNotice, closeErrorModal } = useErrorModal();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,10 +70,7 @@ export const PrivateLessonForm = () => {
       dispatch(clearAll());
       navigate('/schedules');
     } catch (error) {
-      const axiosError = error as AxiosError;
-      const errorData = axiosError.response?.data as ErrorResponse;
-      handleModalNotice('일정 등록 오류', errorData?.message, setIsErrorModalOpen, serErrorModal);
-      setIsErrorModalOpen(true);
+      handleAxiosError(error, '일정 등록 오류');
     }
   };
 
@@ -93,7 +86,7 @@ export const PrivateLessonForm = () => {
   // 회원 모달 오픈 전 실행해야하는 이벤트
   const initiateSearchMember = () => {
     if (!USER.id) {
-      handleModalNotice('강사 선택 필수', '담당 강사를 먼저 선택해주세요!', setIsErrorModalOpen, serErrorModal);
+      handleModalNotice('강사 선택 필수', '담당 강사를 먼저 선택해주세요!');
       return false;
     }
     return true;
@@ -202,7 +195,7 @@ export const PrivateLessonForm = () => {
       </FormContentWrap>
 
       {/* 에러 모달 */}
-      {isErrorModalOpen && <NoticeModal innerNotice={errorModal} setIsOpen={setIsErrorModalOpen} />}
+      {isErrorModalOpen && <NoticeModal innerNotice={errorModal} setIsOpen={closeErrorModal} />}
     </>
   );
 };

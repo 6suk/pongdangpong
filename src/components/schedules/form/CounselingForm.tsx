@@ -2,14 +2,13 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { AxiosError } from 'axios';
-
 import { CounselingInitInput, CounselingRequest } from '@apis/schedulesAPIs';
 import { InputField } from '@components/center/ticket/form/InputField';
 import { Button } from '@components/common/Button';
 import { MemberOrUserSearchButton } from '@components/common/FindUserButton';
 import { NoticeModal } from '@components/common/NoticeModal';
 import { useRequests } from '@hooks/apis/useRequests';
+import { useErrorModal } from '@hooks/utils/useErrorModal';
 import useInput from '@hooks/utils/useInput';
 import { ValidationProps, useValidation } from '@hooks/utils/useValidation';
 import { clearAll } from '@stores/findUsersSlice';
@@ -17,9 +16,6 @@ import { setSelectedDate } from '@stores/selectedDateSlice';
 import { RootState } from '@stores/store';
 import { FormButtonGroup, FormGridContainer } from '@styles/center/ticketFormStyle';
 import { FormContentWrap, SC, TopTitleWrap } from '@styles/styles';
-import { handleModalNotice } from '@utils/handleModalNotice';
-
-import { ErrorResponse } from './PrivateLessonForm';
 
 const errorCheckInput: ValidationProps[] = [
   { name: 'USER', type: 'number' },
@@ -35,9 +31,8 @@ export const CounselingForm = () => {
   const dispatch = useDispatch();
   const { request } = useRequests();
   const { validationErrors, checkForErrors, updateValidationError } = useValidation();
-  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
-  const [errorModal, serErrorModal] = useState({ title: '', content: '' });
-  const [inputValues, onChange, inputReset] = useInput(CounselingInitInput);
+  const { isErrorModalOpen, errorModal, handleAxiosError, closeErrorModal } = useErrorModal();
+  const [inputValues, onChange] = useInput(CounselingInitInput);
   const USER = useSelector((state: RootState) => state.findUsers.USER);
   const [isSubmit, setIsSubmit] = useState(false);
 
@@ -80,10 +75,7 @@ export const CounselingForm = () => {
       dispatch(clearAll());
       navigate('/schedules');
     } catch (error) {
-      const axiosError = error as AxiosError;
-      const errorData = axiosError.response?.data as ErrorResponse;
-      handleModalNotice('상담 등록 오류', errorData?.message, setIsErrorModalOpen, serErrorModal);
-      setIsErrorModalOpen(true);
+      handleAxiosError(error, '상담 등록 오류');
     }
   };
 
@@ -196,7 +188,7 @@ export const CounselingForm = () => {
       </FormContentWrap>
 
       {/* 에러 모달 */}
-      {isErrorModalOpen && <NoticeModal innerNotice={errorModal} setIsOpen={setIsErrorModalOpen} />}
+      {isErrorModalOpen && <NoticeModal innerNotice={errorModal} setIsOpen={closeErrorModal} />}
     </>
   );
 };

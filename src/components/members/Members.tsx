@@ -38,12 +38,13 @@ const Members = () => {
   const pageNationRef = useRef(null);
 
   const len = 10;
-  const { data, isLoading } = useSwrData(`members?page=${pageState['pageQuery']}&size=${len}&sort=createdAt%2CDesc`);
+  const url = `members?page=${pageState['pageQuery']}&size=${len}&sort=createdAt%2CDesc`;
+  const { data: userListData, isLoading } = useSwrData(url);
   const { data: subDatas, isLoading: subDatasIsLoading } = useSwrData(`members?page=0&size=200&sort=createdAt%2CDesc`);
   const { data: ticketData } = useSwrData('tickets') ?? {};
   const { data: staffsData } = useSwrData('staffs');
 
-  const { datas } = data ?? ({} as UserListProps);
+  const { datas } = userListData ?? ({} as UserListProps);
   const { datas: staffsDatas } = staffsData ?? {};
 
   const [totalUser, setTotalUser] = useState(0);
@@ -74,12 +75,9 @@ const Members = () => {
   }, []);
 
   useEffect(() => {
+    setTotalUser(subDatas?.datas.length);
     mutate(`members?page=${pageState.pageQuery}&size=${len}&sort=createdAt%2CDesc`);
   });
-
-  useEffect(() => {
-    setTotalUser(subDatas?.datas.length);
-  }, [subDatasIsLoading, subDatas?.datas]);
 
   // 전체 회원조회
   // search?resource=MEMBER
@@ -90,6 +88,14 @@ const Members = () => {
 
   // const query = encodeURIComponent('치킨');
   // const [urlQuery, setUrlQuery] = useState('');
+
+  const [searchState, setSearchState] = useState('');
+
+  const [seachMemberList, setSeachMemberList] = useState(null);
+
+  useEffect(() => {
+    console.log(searchState);
+  }, [searchState]);
 
   return (
     <>
@@ -125,8 +131,20 @@ const Members = () => {
                     placeholder="회원/멤버 이름, 연락처로 검색하세요"
                     type="search"
                     width={'300px'}
+                    onChange={e => {
+                      setSearchState(e.target.value);
+                    }}
+                    onKeyDown={() => {
+                      console.log(`${searchState}키 이벤트`);
+                    }}
                   />
-                  <button className="search-submit" type="submit">
+                  <button
+                    className="search-submit"
+                    type="submit"
+                    onClick={() => {
+                      console.log(`${searchState} 아이콘 클릭`);
+                    }}
+                  >
                     <SearchIcon />
                   </button>
                 </div>
@@ -155,9 +173,15 @@ const Members = () => {
                   <p>등록일</p>
                   <p></p>
                 </div>
-                {!isLoading &&
+
+                {/* 회원 리스트 */}
+                {/* 
+                    만약 새로운 검색한 데이터가 있으면 그걸로 리스트를 돌리고
+                    검색한 데이터가 없으면 기존 회원데이터 datas를 렌더링
+                */}
+                {seachMemberList ||
                   datas
-                    .sort((a, b) => a.id - b.id)
+                    ?.sort((a, b) => a.id - b.id)
                     .reverse()
                     .map(({ name, phone, sex, birthDate, createdAt }: UserListProps, idx: number) => {
                       return (

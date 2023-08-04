@@ -78,17 +78,6 @@ export const MembersResgier: React.FC = () => {
         console.log('등록 완료');
 
         setIsOpen(true);
-
-        // setFormState({
-        //   name: '',
-        //   birthDate: '',
-        //   phone: '',
-        //   sex: '',
-        //   job: '',
-        //   acqusitionFunnel: '',
-        //   acquisitionFunnel: '',
-        //   toss: [],
-        // });
       } catch (error) {
         console.error(error);
         // input 빨간색으로 어디부분 잘못되었는지 출력

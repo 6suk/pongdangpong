@@ -31,8 +31,6 @@ const TicketItemMemo = ({
   } = ticket;
   const [isOpen, setIsOpen] = useState(false);
 
-  console.log(ticket);
-
   return (
     <>
       <TS.Ticket $isActive={!isSuspended && !isCanceled}>

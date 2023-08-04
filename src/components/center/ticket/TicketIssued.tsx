@@ -91,7 +91,7 @@ export const TicketIssued = () => {
   );
 };
 
-const BackButton = styled.button`
+export const BackButton = styled.button`
   display: flex;
   align-items: center;
   gap: 1rem;

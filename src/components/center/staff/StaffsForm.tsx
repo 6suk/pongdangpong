@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
 import { Roles, staff_form } from '@apis/staffsAPIs';
-import { InputField } from '@components/center/ticket/Form/InputField';
+import { InputField } from '@components/center/ticket/form/InputField';
 import { Button } from '@components/common/Button';
 import { useRequests } from '@hooks/apis/useRequests';
 import { useSwrData } from '@hooks/apis/useSwrData';

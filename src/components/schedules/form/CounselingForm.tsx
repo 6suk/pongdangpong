@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import { CounselingInitInput, CounselingRequest } from '@apis/schedulesAPIs';
-import { InputField } from '@components/center/ticket/Form/InputField';
+import { InputField } from '@components/center/ticket/form/InputField';
 import { Button } from '@components/common/Button';
 import { MemberOrUserSearchButton } from '@components/common/FindUserButton';
 import { NoticeModal } from '@components/common/NoticeModal';
@@ -19,7 +19,7 @@ import { FormButtonGroup, FormGridContainer } from '@styles/center/ticketFormSty
 import { FormContentWrap, SC, TopTitleWrap } from '@styles/styles';
 import { handleModalNotice } from '@utils/handleModalNotice';
 
-import { ErrorResponse } from './PrivateForm';
+import { ErrorResponse } from './PrivateLessonForm';
 
 const errorCheckInput: ValidationProps[] = [
   { name: 'USER', type: 'number' },

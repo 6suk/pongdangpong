@@ -6,7 +6,9 @@ import { AxiosError } from 'axios';
 
 import { PrivateLessonInitInput, PrivatelessonRequest } from '@apis/schedulesAPIs';
 import { Button } from '@components/common/Button';
+import { MemberOrUserSearchButton } from '@components/common/FindUserButton';
 import { NoticeModal } from '@components/common/NoticeModal';
+import { BookableTicketsList } from '@components/schedules/form/BookableTicketsList';
 import { useRequests } from '@hooks/apis/useRequests';
 import useInput from '@hooks/utils/useInput';
 import { ValidationProps, useValidation } from '@hooks/utils/useValidation';
@@ -17,9 +19,6 @@ import { FormButtonGroup, FormGridContainer } from '@styles/center/ticketFormSty
 import { FormContentWrap, SC, TopTitleWrap } from '@styles/styles';
 
 import { handleModalNotice } from '@utils/handleModalNotice';
-
-import { BookableTicketsList } from './BookableTicketsList';
-import { MemberOrUserSearchButton } from '../common/FindUserButton';
 
 export interface ErrorResponse {
   message: string;
@@ -34,7 +33,7 @@ const errorCheckInput: ValidationProps[] = [
   { name: 'endTime', type: 'string' },
 ];
 
-export const PrivateForm = () => {
+export const PrivateLessonForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { request } = useRequests();

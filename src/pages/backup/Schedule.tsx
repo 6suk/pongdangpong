@@ -5,7 +5,7 @@ import { Button } from '@components/common/Button';
 
 import CreateCounseling from '@components/schedules/backup/CreateCounseling';
 import CreateSchedule from '@components/schedules/backup/CreateSchedule';
-import { SchedulesFormModal } from '@components/schedules/SchedulesFormModal';
+import { SchedulesFormModal } from '@components/schedules/form/SchedulesFormModal';
 
 export const Schedule = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

@@ -23,7 +23,7 @@ import { getLastDateOfMonth } from '@utils/getDate';
 import { getEventCountbyDate } from '@utils/getEventCountbyDate';
 
 import { Calendar } from './Calendar';
-import { SchedulesFormModal } from './SchedulesFormModal';
+import { SchedulesFormModal } from '../form/SchedulesFormModal';
 
 export const SchedulesHome = () => {
   const location = useLocation();

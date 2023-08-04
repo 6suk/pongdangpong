@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import {
   AvailableTicketsOwnerType,
@@ -8,7 +8,7 @@ import {
   PrivateLessonFormInputsType,
   PrivateLessonInitInput,
 } from '@apis/schedulesAPIs';
-import { SelectField } from '@components/center/ticket/Form/SelectField';
+import { SelectField } from '@components/center/ticket/form/SelectField';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
 import { RootState } from '@stores/store';

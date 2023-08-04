@@ -1,22 +1,25 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { styled } from 'styled-components';
 
 import { Button } from '@components/common/Button';
+import { MemberOrUserSearchButton } from '@components/common/FindUserButton';
 import { Modal, ModalButton } from '@components/common/Modal';
 import { useRequests } from '@hooks/apis/useRequests';
 
-import { useSwrData } from '@hooks/apis/useSwrData';
+import { clearAll } from '@stores/findUsersSlice';
+import { RootState } from '@stores/store';
 import { SC } from '@styles/styles';
 import theme from '@styles/theme';
 
 export const MembersAddTicekt = ({ id, members, tickets, staffsDatas }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [staffModalIsOpen, setStaffModalIsOpen] = useState(false);
-
   const [submitTicketData, setSubmitTicketData] = useState({
     memberIds: [id],
     serviceCount: 0,
@@ -24,6 +27,7 @@ export const MembersAddTicekt = ({ id, members, tickets, staffsDatas }) => {
     startAt: '',
     endAt: '',
   });
+  const privateTutorId = useSelector((state: RootState) => state.findUsers.USER.id);
 
   const [ticketId, setTicketId] = useState(0);
 
@@ -34,18 +38,20 @@ export const MembersAddTicekt = ({ id, members, tickets, staffsDatas }) => {
   }, [ticketId]);
 
   const addTicket = useCallback(async () => {
+    const requestData = { ...submitTicketData, privateTutorId };
+
     try {
       await request({
         url: `tickets/${ticketId}/issue`,
         method: 'post',
-        body: submitTicketData,
+        body: requestData,
       });
-
       alert('부여완료');
+      dispatch(clearAll());
     } catch (error) {
       console.error(error);
     }
-  }, [ticketId, submitTicketData]);
+  }, [ticketId, submitTicketData, privateTutorId]);
 
   return (
     <S.addTicketContainer>
@@ -104,7 +110,7 @@ export const MembersAddTicekt = ({ id, members, tickets, staffsDatas }) => {
           </Modal>
         )}
       </div>
-      <p>
+      {/* <p>
         담당강사 선택 <span>*</span>
       </p>
       <div className="tutor-wrap wrap">
@@ -118,7 +124,10 @@ export const MembersAddTicekt = ({ id, members, tickets, staffsDatas }) => {
           선택하기 +
         </S.selectButton>
         {staffsDatas?.filter(el => el.id === submitTicketData['privateTutorId'])[0]?.name || ''}
-      </div>
+      </div> */}
+      {/* 강사선택 */}
+      <MemberOrUserSearchButton type="USER" />
+
       <p>
         유효기간 <span>*</span>
       </p>

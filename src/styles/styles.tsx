@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import Profile from '@/assets/icons/Profile.svg';
+
 import theme from './theme';
 
 const Container = styled.div`
@@ -24,12 +26,10 @@ const Label = styled.label`
   font-weight: 500;
   color: #4b5563;
 
-  & {
-    &::after {
-      content: '*';
-      color: ${theme.colors.pri[500]};
-      margin-left: 0.1rem;
-    }
+  span::after {
+    content: '*';
+    color: ${theme.colors.pri[500]};
+    margin-left: 0.1rem;
   }
 `;
 
@@ -68,6 +68,18 @@ const Select = styled.select`
   &:disabled {
     color: ${theme.colors.gray[500]};
     background-color: ${theme.colors.gray[800]};
+  }
+
+  option[value='0'][disabled] {
+    display: none;
+  }
+  option[value=''][disabled] {
+    display: none;
+  }
+
+  &.error {
+    border: 1px solid rgba(${theme.colors.ErrorRGB}, 0.7);
+    transition: all 0.3s;
   }
 `;
 
@@ -121,6 +133,7 @@ const InputField = styled.input`
   &:disabled {
     color: ${theme.colors.gray[500]};
     background-color: ${theme.colors.gray[800]} !important;
+import { Profile } from '@/assets/icons/Profile.svg';
 
     & + .unit {
       color: ${theme.colors.gray[500]};
@@ -207,5 +220,73 @@ export const Chips = styled.div`
 
   input[type='radio'] {
     display: none;
+  }
+`;
+
+export const SelectButton = styled.button`
+  font-size: 14px;
+  padding: 8px 16px;
+  background-color: ${theme.colors.White};
+  color: ${theme.colors.pri[500]};
+  border: 1px solid ${theme.colors.pri[500]};
+  border-radius: 8px;
+  transition: background-color 0.2s ease-in-out;
+  outline: none;
+  cursor: pointer;
+
+  &.error {
+    border: 1px solid rgba(${theme.colors.ErrorRGB}, 0.7);
+    transition: all 0.3s;
+  }
+
+  &:hover {
+    background-color: ${theme.colors.pri[900]};
+    color: ${theme.colors.pri[400]};
+  }
+
+  &:disabled {
+    background-color: ${theme.colors.gray[800]};
+    cursor: not-allowed;
+    color: ${theme.colors.gray[500]};
+    border: 1px solid ${theme.colors.gray[500]};
+  }
+`;
+
+export const NameButton = styled.button`
+  font-size: 14px;
+  background-color: ${({ theme }) => theme.colors.White};
+  border: 1px solid ${({ theme }) => theme.colors.gray[600]};
+  border-radius: 8px;
+  padding: 1px 2px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  &.info-btn {
+    cursor: default;
+    padding-right: 12px;
+    border: 1px solid ${({ theme }) => theme.colors.gray[600]};
+  }
+
+  .user-name {
+    color: ${({ theme }) => theme.colors.gray[300]};
+    display: flex;
+    align-items: center;
+  }
+
+  .user-name::before {
+    content: url(${Profile});
+    margin-right: 8px;
+    margin-top: 5px;
+    margin-left: 8px;
+  }
+
+  .close-button {
+    color: ${({ theme }) => theme.colors.gray[500]};
+    margin-left: 8px;
+    margin-right: 8px;
+    cursor: pointer;
+    flex-shrink: 0;
+    font-size: 16px;
   }
 `;

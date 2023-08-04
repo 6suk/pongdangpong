@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { LessonTypeEnum, TermUnitEnum, Ticket_put_body, Tickets_request, tickets_create } from '@apis/ticketsAPIs';
 import { Button } from '@components/common/Button';
 import useInput from '@hooks/utils/useInput';
+import { ValidationProps, useValidation } from '@hooks/utils/useValidation';
 import {
   FormButtonGroup,
   FormGridContainer,
@@ -29,6 +30,13 @@ export interface ValidationErrors {
   [key: string]: boolean;
 }
 
+const errorCheckInput: ValidationProps[] = [
+  { name: 'title', type: 'string' },
+  { name: 'defaultTerm', type: 'number' },
+  { name: 'defaultCount', type: 'number' },
+  { name: 'duration', type: 'number' },
+];
+
 export const TicketFormComponent: React.FC<TicketFormProps> = ({
   initialData = tickets_create.body,
   onSubmit,
@@ -36,52 +44,17 @@ export const TicketFormComponent: React.FC<TicketFormProps> = ({
 }) => {
   const navigate = useNavigate();
   const [inputValues, onChange, inputReset] = useInput({ ...initialData });
-  const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
   const [count, setCount] = useState(0);
   const [toggles, setToggles] = useState<{ [key: string]: boolean }>({ termToggle: true, countToggle: true });
-
-  useEffect(() => {
-    inputReset(initialData);
-    setToggles({
-      termToggle: isEditMode ? !initialData.defaultTerm : false,
-      countToggle: isEditMode ? !initialData.defaultCount : false,
-    });
-    setCount(0);
-  }, [initialData, inputReset, setToggles, isEditMode]);
-
-  const toggleHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const name = e.currentTarget.name;
-    setToggles(prev => ({
-      ...prev,
-      termToggle: name === 'termToggle' ? !prev.termToggle : false,
-      countToggle: name === 'countToggle' ? !prev.countToggle : false,
-    }));
-  };
-
-  // 에러 체크
-  const checkForErrors = () => {
-    const errors: ValidationErrors = {};
-    if (inputValues.title === '') errors['title'] = true;
-    if (!toggles.termToggle && Number(inputValues.defaultTerm) === 0) errors['defaultTerm'] = true;
-    if (Number(inputValues.duration) === 0) errors['duration'] = true;
-    if (!toggles.countToggle && Number(inputValues.defaultCount) === 0) errors['defaultCount'] = true;
-
-    return errors;
-  };
-
-  // 에러 상태 업데이트
-  const validateInputs = () => {
-    const errors = checkForErrors();
-    setValidationErrors(errors);
-  };
+  const { checkForErrors, updateValidationError, validationErrors } = useValidation();
+  const [isSubmit, setIsSubmit] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    validateInputs();
-    const errors = checkForErrors();
-    const isError = Object.keys(errors).length !== 0;
+    setIsSubmit(true);
+    const isValid = checkForErrorAddToggle();
 
-    if (!isError) {
+    if (isValid) {
       // 소진시까지, 무제한 클릭 시
       let valuesCopy;
 
@@ -112,6 +85,47 @@ export const TicketFormComponent: React.FC<TicketFormProps> = ({
       }
     }
   };
+
+  // 유효성 검사
+  const checkForErrorAddToggle = () => {
+    if (toggles.countToggle) {
+      const filteredInput = errorCheckInput.filter(item => item.name !== 'defaultCount');
+      console.log(filteredInput);
+      return checkForErrors(filteredInput, inputValues);
+    }
+    if (toggles.termToggle) {
+      const filteredInput = errorCheckInput.filter(item => item.name !== 'defaultTerm');
+      return checkForErrors(filteredInput, inputValues);
+    }
+
+    return checkForErrors(errorCheckInput, inputValues);
+  };
+
+  const toggleHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const name = e.currentTarget.name;
+
+    setToggles(prev => ({
+      ...prev,
+      termToggle: name === 'termToggle' ? !prev.termToggle : false,
+      countToggle: name === 'countToggle' ? !prev.countToggle : false,
+    }));
+
+    const inputName = name === 'termToggle' ? 'defaultTerm' : 'defaultCount';
+    updateValidationError(inputName, toggles[name]);
+  };
+
+  useEffect(() => {
+    inputReset(initialData);
+    setToggles({
+      termToggle: isEditMode ? !initialData.defaultTerm : false,
+      countToggle: isEditMode ? !initialData.defaultCount : false,
+    });
+    setCount(0);
+  }, [initialData, inputReset, setToggles, isEditMode]);
+
+  useEffect(() => {
+    if (isSubmit) checkForErrorAddToggle();
+  }, [inputValues, isSubmit]);
 
   return (
     <FormContentWrap>

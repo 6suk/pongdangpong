@@ -7,6 +7,10 @@ const useInput = <T extends Record<string, unknown>>(initialState: T) => {
     const { name, type } = e.target;
     let value = e.target.value;
 
+    if (name.toLocaleLowerCase().includes('phone')) {
+      value = value.replace(/[^0-9]/g, '').replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
+    }
+
     switch (name) {
       case 'phone': {
         value = value.replace(/[^0-9]/g, '').replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);

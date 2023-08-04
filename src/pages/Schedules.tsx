@@ -1,15 +1,15 @@
 import { Route, Routes } from 'react-router-dom';
 
-import CreateCounseling from '@components/schedules/CreateCounseling';
-import CreateSchedule from '@components/schedules/CreateSchedule';
-import { SchedulesList } from '@components/schedules/SchedulesList';
+import { CounselingForm } from '@components/schedules/CounselingForm';
+import { PrivateForm } from '@components/schedules/PrivateForm';
+import { SchedulesHome } from '@components/schedules/SchedulesHome';
 
 export const Schedules = () => {
   return (
     <Routes>
-      <Route index element={<SchedulesList />} path="" />
-      <Route element={<CreateSchedule />} path="private-lesson/new" />
-      <Route element={<CreateCounseling />} path="counseling/new" />
+      <Route index element={<SchedulesHome />} path="" />
+      <Route element={<PrivateForm />} path="private-lesson/new" />
+      <Route element={<CounselingForm />} path="counseling/new" />
     </Routes>
   );
 };

@@ -1,12 +1,17 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { LessonTypeEnum, TermUnitEnum, Ticket_response } from '@apis/ticketsAPIs';
 import { TicketIcon } from '@assets/icons/indexIcons';
+import { Modal, ModalButton } from '@components/common/Modal';
 import { TS } from '@styles/center/ticketsStyle';
+
 interface TicketItemProps {
   ticket: Ticket_response;
+  ticketStatus: (id: number) => void;
+  deleteTicket: (id: number) => void;
 }
-export const TicketItem = ({ ticket }: TicketItemProps) => {
+export const TicketItem = ({ ticket, ticketStatus, deleteTicket }: TicketItemProps) => {
   const navigate = useNavigate();
   const {
     id,
@@ -19,7 +24,22 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
     defaultTermUnit,
     bookableLessons,
   } = ticket;
+
   const duration = bookableLessons[0].duration;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isCannotDeleteModalOpen, setIsCannotDeleteModalOpen] = useState(false);
+
+  const handleDelete = async (ticketId: number) => {
+    if (issuedTicketCount !== 0) {
+      setIsCannotDeleteModalOpen(true);
+      setIsDeleteModalOpen(false);
+      return;
+    }
+    await deleteTicket(ticketId);
+    setIsDeleteModalOpen(false);
+  };
+
   return (
     <>
       <TS.Ticket $isActive={isActive}>
@@ -64,11 +84,13 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
           >
             수강권 부여내역
           </button>
+
           {isActive ? (
             <button
               type="button"
-              onClick={() => {
-                console.log(id + ' 판매종료 클릭');
+              onClick={e => {
+                e.stopPropagation();
+                setIsModalOpen(true);
               }}
             >
               판매종료
@@ -78,8 +100,10 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
               {' '}
               <button
                 type="button"
-                onClick={() => {
-                  console.log(id + ' 판매가능 클릭');
+                onClick={e => {
+                  e.stopPropagation();
+                  ticketStatus(id);
+                  navigate(`?isActive=true`);
                 }}
               >
                 판매가능
@@ -93,10 +117,70 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
               navigate(`${id}/edit`);
             }}
           >
-            수정 / 삭제
+            수정
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setIsDeleteModalOpen(true);
+            }}
+          >
+            삭제
           </button>
         </TS.TicketRight>
       </TS.Ticket>
+
+      {isModalOpen && (
+        <Modal setIsOpen={setIsModalOpen}>
+          <h3>수강권 판매 종료</h3>
+          <p>
+            해당 수강권을 판매 종료하시겠습니까?
+            <br />
+            새로운 회원에게 부여할 수 없습니다.
+          </p>
+          <div className="buttonWrapper">
+            <ModalButton
+              onClick={() => {
+                ticketStatus(id);
+                navigate(`?isActive=false`);
+                setIsModalOpen(false);
+              }}
+              $isPrimary
+            >
+              확인
+            </ModalButton>
+            <ModalButton onClick={() => setIsModalOpen(false)}>취소</ModalButton>
+          </div>
+        </Modal>
+      )}
+
+      {isDeleteModalOpen && (
+        <Modal setIsOpen={setIsDeleteModalOpen}>
+          <h3>수강권 삭제</h3>
+          <p>수강권을 삭제하시겠습니까?</p>
+          <div className="buttonWrapper">
+            <ModalButton onClick={() => handleDelete(id)} $isPrimary>
+              확인
+            </ModalButton>
+            <ModalButton onClick={() => setIsDeleteModalOpen(false)}>취소</ModalButton>
+          </div>
+        </Modal>
+      )}
+
+      {isCannotDeleteModalOpen && (
+        <Modal setIsOpen={setIsCannotDeleteModalOpen}>
+          <h3>삭제 불가</h3>
+          <p>
+            부여내역이 있는 수강권은 <br />
+            삭제할 수 없습니다.
+            <br />
+            판매 종료로 진행해 주세요.
+          </p>
+          <div className="buttonWrapper">
+            <ModalButton onClick={() => setIsCannotDeleteModalOpen(false)}>확인</ModalButton>
+          </div>
+        </Modal>
+      )}
     </>
   );
 };

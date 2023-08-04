@@ -11,7 +11,7 @@ import { Button } from '@components/common/Button';
 
 import { useSwrData } from '@hooks/apis/useSwrData';
 
-import { clearSelectedDate, setEventCount, setSelectedDate, setSortSchedules } from '@stores/selectedDateSlice';
+import { setEventCount, setSelectedDate, setSortSchedules } from '@stores/selectedDateSlice';
 import { AppDispatch, RootState } from '@stores/store';
 
 import { SC } from '@styles/styles';
@@ -36,12 +36,6 @@ export const SchedulesHome = () => {
     lastNextDates: { last, next },
   } = useSelector((state: RootState) => state.calendar);
   const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    return () => {
-      dispatch(clearSelectedDate());
-    };
-  }, []);
 
   // 일정 데이터 (카운트)
   useEffect(() => {

@@ -4,7 +4,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-import { MemberIcon, Editicon } from '@assets/icons/indexIcons';
+import { MemberIcon, Editicon, closeIcon } from '@assets/icons/indexIcons';
 import { StaffsLIstWrap } from '@components/center/staff/StaffsList';
 import { Button } from '@components/common/Button';
 import { Modal, ModalButton } from '@components/common/Modal';
@@ -22,8 +22,6 @@ interface UserListProps {
 }
 
 const MembersDetail = ({ id, tickets, staffsDatas }) => {
-  // console.log(id, staffsDatas);
-
   const { request } = useRequests();
   const navigate = useNavigate();
 
@@ -31,7 +29,6 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
   const { name, birthDate, phone, sex }: UserListProps = data ?? {};
   const { data: memberTicketData, isLoading: memberTicketDataIsLoading } = useSwrData(`members/${id}/issued-tickets`);
 
-  // 데이터 바인딩에 사용할 값
   const { dataArr, dataStr, dataStrKor } = useMemo(() => {
     return {
       dataArr: [name, birthDate, phone, sex],
@@ -293,7 +290,9 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
               </dd>
             </dl>
           </S.ModalInfoStyle>
+
           <ModalButton>취소</ModalButton>
+
           <ModalButton
             $isPrimary={true}
             onClick={() => {

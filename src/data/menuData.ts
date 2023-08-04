@@ -5,7 +5,6 @@ export const subMenuList: MenuState = {
   members: [
     { id: '전체 리스트', content: '전체 리스트', path: '/members', hide: false },
     { id: '회원 수강권 관리', content: '회원 수강권 관리', path: '/members/detail', hide: false },
-    { id: '기록지', content: '기록지', path: '/members/record', hide: false },
     { id: '만족도 및 후기', content: '만족도 및 후기', path: '/members/review', hide: false },
     { id: '앨범', content: '앨범', path: '/members/album', hide: false },
   ],

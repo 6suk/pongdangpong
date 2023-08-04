@@ -11,7 +11,6 @@ import { Button } from '@components/common/Button';
 import { MembersDetailComponent } from '@components/members//MembersDetail';
 import { MembersAddTicekt } from '@components/members/MembersAddTicekt';
 import { MembersAlbum } from '@components/members/MembersAlbum';
-import { MembersRecord } from '@components/members/MembersRecord';
 import { MembersResgier } from '@components/members/MembersRegister';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
@@ -79,7 +78,6 @@ const Members = () => {
     mutate(`members?page=${pageState.pageQuery}&size=${len}&sort=createdAt%2CDesc`);
   });
 
-  // 전체 회원조회
   // search?resource=MEMBER
 
   // query 특정 회원조회
@@ -89,13 +87,18 @@ const Members = () => {
   // const query = encodeURIComponent('치킨');
   // const [urlQuery, setUrlQuery] = useState('');
 
-  const [searchState, setSearchState] = useState('');
+  // enter 또는 클릭하면 해당 데이터를 불러옴
+  // 불러온 데이터로 기존의  데이터를 갈아치운다.
+  // 만약 데이터 값들이 비어있다면 기존 데이터를 출력
 
-  const [seachMemberList, setSeachMemberList] = useState(null);
+  const [searchState, setSearchState] = useState('');
+  const searchUrl = `search?query=${searchState}&resource=MEMBER`;
+  const { data: searchData, isLoading: searchIsLoading } = useSwrData(searchUrl);
+  const [searchUserList, setSearchUserList] = useState(null);
 
   useEffect(() => {
-    console.log(searchState);
-  }, [searchState]);
+    console.log(searchUserList);
+  }, [searchUserList]);
 
   return (
     <>
@@ -103,7 +106,6 @@ const Members = () => {
       {currentPathname === 'detail' && (
         <MembersDetailComponent id={userIdRef.current} staffsDatas={staffsDatas} tickets={ticketData?.tickets} />
       )}
-      {currentPathname === 'record' && <MembersRecord />}
       {currentPathname === 'album' && <MembersAlbum />}
       {currentPathname === 'addTicket' && (
         <MembersAddTicekt
@@ -134,15 +136,16 @@ const Members = () => {
                     onChange={e => {
                       setSearchState(e.target.value);
                     }}
-                    onKeyDown={() => {
-                      console.log(`${searchState}키 이벤트`);
-                    }}
+                    // onKeyDown={() => {
+                    //   console.log(`${searchState}키 이벤트`);
+                    // }}
                   />
                   <button
                     className="search-submit"
                     type="submit"
                     onClick={() => {
                       console.log(`${searchState} 아이콘 클릭`);
+                      setSearchUserList(searchData?.members);
                     }}
                   >
                     <SearchIcon />
@@ -175,15 +178,12 @@ const Members = () => {
                 </div>
 
                 {/* 회원 리스트 */}
-                {/* 
-                    만약 새로운 검색한 데이터가 있으면 그걸로 리스트를 돌리고
-                    검색한 데이터가 없으면 기존 회원데이터 datas를 렌더링
-                */}
-                {seachMemberList ||
+                {/* !searchIsLoading && searchUserList?.members?.length ? searchUserList?.members :  */}
+                {(searchUserList?.length && JSON.stringify(searchUserList)) ||
                   datas
                     ?.sort((a, b) => a.id - b.id)
                     .reverse()
-                    .map(({ name, phone, sex, birthDate, createdAt }: UserListProps, idx: number) => {
+                    ?.map(({ name, phone, sex, birthDate, createdAt }: UserListProps, idx: number) => {
                       return (
                         // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
                         <div

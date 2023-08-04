@@ -57,7 +57,10 @@ export const MembersAddTicekt = ({ id, members, tickets, staffsDatas }) => {
     <S.addTicketContainer>
       <h2 className="main-title">수강권 부여</h2>
       <p className="add-ticket-username">
-        수강권 부여할 회원 <span> {members?.filter(el => el.id === id)[0]?.name || '선택된 회원이 없습니다'}</span>
+        수강권 부여할 회원{' '}
+        <span style={members?.filter(el => el.id === id)[0]?.name ? { color: '#4679fc' } : { color: '#DB4455' }}>
+          {members?.filter(el => el.id === id)[0]?.name || '선택된 회원이 없습니다'}
+        </span>
       </p>
       <div className="ticket-wrap wrap">
         <h3>
@@ -110,27 +113,14 @@ export const MembersAddTicekt = ({ id, members, tickets, staffsDatas }) => {
           </Modal>
         )}
       </div>
-      {/* <p>
-        담당강사 선택 <span>*</span>
-      </p>
-      <div className="tutor-wrap wrap">
-        <S.selectButton
-          size="md"
-          type="button"
-          onClick={() => {
-            setStaffModalIsOpen(true);
-          }}
-        >
-          선택하기 +
-        </S.selectButton>
-        {staffsDatas?.filter(el => el.id === submitTicketData['privateTutorId'])[0]?.name || ''}
-      </div> */}
-      {/* 강사선택 */}
-      <MemberOrUserSearchButton type="USER" />
 
-      <p>
+      <div className="wrap">
+        <MemberOrUserSearchButton type="USER" />
+      </div>
+
+      <h3>
         유효기간 <span>*</span>
-      </p>
+      </h3>
       <div className="date-wrap wrap">
         <label htmlFor="startAt"></label>
         <SC.InputField
@@ -151,24 +141,29 @@ export const MembersAddTicekt = ({ id, members, tickets, staffsDatas }) => {
           }}
         />
       </div>
+
       {/* 수강권 부여완료 : 선택하신 수강권의 부여가 완료되었습니다. */}
-      <Button
-        size="full"
-        onClick={() => {
-          addTicket();
-        }}
-      >
-        완료
-      </Button>
-      <Button
-        isPri={false}
-        size="full"
-        onClick={() => {
-          navigate(-1);
-        }}
-      >
-        취소
-      </Button>
+      <h3>수강권 갯수</h3>
+      <SC.InputField disabled value={1} />
+      <div className="btn-wrap">
+        <Button
+          size="full"
+          onClick={() => {
+            addTicket();
+          }}
+        >
+          완료
+        </Button>
+        <Button
+          isPri={false}
+          size="full"
+          onClick={() => {
+            navigate(-1);
+          }}
+        >
+          취소
+        </Button>
+      </div>
     </S.addTicketContainer>
   );
 };
@@ -179,8 +174,44 @@ const S = {
     flex-flow: column nowrap;
     width: 420px;
 
+    h2.main-title {
+      padding-top: 48px;
+      font-weight: 800;
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .add-ticket-username {
+      margin-bottom: 32px;
+
+      & > span {
+        color: #4679fc;
+      }
+    }
+
+    h3 {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #4b5563;
+
+      & > span {
+        color: #4679fc;
+        margin-left: 0.1rem;
+      }
+    }
+
     .wrap {
       margin-bottom: 24px;
+
+      .button-container {
+        display: flex;
+
+        & > button {
+          margin-right: 10px;
+        }
+      }
     }
 
     .date-wrap {
@@ -198,6 +229,14 @@ const S = {
 
       & > span {
         font-weight: 700;
+      }
+    }
+
+    .btn-wrap {
+      padding-top: 40px;
+
+      & > button {
+        margin-bottom: 10px;
       }
     }
   `,

@@ -92,7 +92,7 @@ export const Calendar = () => {
                   {getEventCount(day) > 0 ? (
                     <StyleDayEvent data-current-month={day.currentMonth}>일정 {getEventCount(day)}건</StyleDayEvent>
                   ) : (
-                    <StyleDayEvent className="none" />
+                    <StyleDayEvent className="none" data-current-month={day.currentMonth} />
                   )}
                 </>
               )}
@@ -135,7 +135,7 @@ const StyledDay = styled.div`
   }
 `;
 
-const StyleDayNumber = styled.div<{ 'data-current-month': boolean; 'data-day-of-week': number }>`
+const StyleDayNumber = styled.div<{ 'data-current-month': boolean; 'data-day-of-week'?: number }>`
   width: 25px;
   height: 25px;
   background-color: transparent;

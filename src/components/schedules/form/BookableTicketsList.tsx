@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import {
   AvailableTicketsOwnerType,
   AvailableTicketsType,
+  BookableTicketsRequest,
   PrivateLessonFormInputsType,
   PrivateLessonInitInput,
 } from '@apis/schedulesAPIs';
-import { SelectField } from '@components/center/ticket/Form/SelectField';
+import { SelectField } from '@components/center/ticket/form/SelectField';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
 import { RootState } from '@stores/store';
@@ -22,18 +23,25 @@ interface BookableTicketsListProps {
   inputValues: PrivateLessonFormInputsType;
   error: boolean;
   inputReset: (data: PrivateLessonFormInputsType) => void;
+  disabled?: boolean;
 }
 
-export const BookableTicketsList = ({ onChange, inputValues, error, inputReset }: BookableTicketsListProps) => {
+export const BookableTicketsList = ({
+  onChange,
+  inputValues,
+  error,
+  inputReset,
+  disabled = false,
+}: BookableTicketsListProps) => {
   const {
     USER: { id: tutorId },
     MEMBER: { id: memberId },
   } = useSelector((state: RootState) => state.findUsers);
   const url = memberId && tutorId ? `/members/${memberId}/bookable-tickets?tutorId=${tutorId}` : null;
-  const { data, isLoading } = useSwrData(url);
+  const { data, isLoading } = useSwrData<BookableTicketsRequest>(url);
   const availableTickets = data?.availableTickets;
   const isData = availableTickets !== undefined && availableTickets.length > 0;
-  const [optionData, setOptionData] = useState([]);
+  const [optionData, setOptionData] = useState<{ value: number; label: string }[]>([]);
   const [ownerList, setOwnerList] = useState<AvailableTicketsOwnerType[]>();
 
   useEffect(() => {
@@ -57,7 +65,7 @@ export const BookableTicketsList = ({ onChange, inputValues, error, inputReset }
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     onChange(e);
     const selectedValue = e.target.value;
-    const selectedOwners = availableTickets.find(
+    const selectedOwners = availableTickets?.find(
       (ticket: AvailableTicketsType) => ticket.id === parseInt(selectedValue)
     )?.owners;
 
@@ -75,7 +83,7 @@ export const BookableTicketsList = ({ onChange, inputValues, error, inputReset }
 
         {!isLoading && memberId && tutorId ? (
           <SelectField
-            disabled={!isData}
+            disabled={!isData || disabled}
             error={error}
             name="issuedTicketId"
             options={optionData}
@@ -95,17 +103,21 @@ export const BookableTicketsList = ({ onChange, inputValues, error, inputReset }
           />
         )}
       </div>
-      <div>
-        <SC.Label>
-          참여회원 <LabelNotice>회원과 수강권 선택 시 자동으로 입력됩니다.</LabelNotice>
-        </SC.Label>
-        {ownerList !== undefined &&
-          ownerList.map(owner => (
-            <NameButton key={owner.id} className="info-btn">
-              <span className="user-name">{owner.name}</span>
-            </NameButton>
-          ))}
-      </div>
+      {!disabled && (
+        <div>
+          <>
+            <SC.Label>
+              참여회원 <LabelNotice>회원과 수강권 선택 시 자동으로 입력됩니다.</LabelNotice>
+            </SC.Label>
+            {ownerList !== undefined &&
+              ownerList.map(owner => (
+                <NameButton key={owner.id} className="info-btn">
+                  <span className="user-name">{owner.name}</span>
+                </NameButton>
+              ))}
+          </>
+        </div>
+      )}
     </>
   );
 };

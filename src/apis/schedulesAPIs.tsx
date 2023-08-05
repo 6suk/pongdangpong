@@ -28,6 +28,31 @@ export interface Schedules_list_counseling {
   updatedAt: string; // $date-time;
 }
 
+export interface Schedules_detail_counseling extends Schedules_list_counseling {
+  counselingRecord: {
+    id: number;
+    content: string;
+    createdBy: {
+      id: number;
+      name: string;
+    };
+    updatedBy: {
+      id: number;
+      name: string;
+    };
+    createdAt: string; // date-time;
+    updatedAt: string; // date-time;
+  };
+  createdBy: {
+    id: number;
+    name: string;
+  };
+  updatedBy: {
+    id: number;
+    name: string;
+  };
+}
+
 /**
  * 일정
  */
@@ -42,45 +67,66 @@ export interface Schedules_list_private {
   memo: string;
   isCanceled: boolean;
   canceledAt?: string; // $date-time;
-  issuedTicket: {
-    id: number;
-    lessonType: ticket_lessonType;
-    title: string;
-    startAt: string; // $date;
-    endAt?: string; // $date;
-    remainingCount?: number;
-    defaultCount?: number;
-    serviceCount?: number;
-    availableReservationCount?: number;
-    defaultTerm?: number;
-    defaultTermUnit?: ticket_defaultTermUnit;
-    isSuspended: boolean;
-    suspendedAt?: string; // $date-time;
-    isCanceled: boolean;
-    canceledAt?: string; // $date-time;
-    createdAt: string; // $date-time;
-    updatedAt: string; // $date-time;
-  };
-  attendanceHistories: [
-    {
-      id: number;
-      member: {
-        id: number;
-        name: string;
-        phone: string;
-      };
-      status: 'WAIT' | 'PRESENT' | 'ABSENT';
-    },
-  ];
+  issuedTicket: SchedulesIssuedTicketType;
+  attendanceHistories: AttendanceHistoriesType[];
   createdAt: string; // $date-time;
   updatedAt: string; // $date-time;
 }
+
+export interface Schedules_detail_private extends Schedules_list_private {
+  createdBy: {
+    id: number;
+    name: string;
+  };
+  updatedBy: {
+    id: number;
+    name: string;
+  };
+}
+
+export interface AttendanceHistoriesType {
+  id: number;
+  member: {
+    id: number;
+    name: string;
+    phone: string;
+  };
+  status: StatusType;
+}
+
+export type StatusType = 'WAIT' | 'PRESENT' | 'ABSENT';
 
 export const StatusEnum = {
   WAIT: '예약',
   PRESENT: '출석',
   ABSENT: '결석',
 };
+
+export const statusNumberEnum = {
+  WAIT: 0,
+  PRESENT: 1,
+  ABSENT: 2,
+};
+
+export interface SchedulesIssuedTicketType {
+  id: number;
+  lessonType: ticket_lessonType;
+  title: string;
+  startAt: string; // $date;
+  endAt?: string; // $date;
+  remainingCount?: number;
+  defaultCount?: number;
+  serviceCount?: number;
+  availableReservationCount?: number;
+  defaultTerm?: number;
+  defaultTermUnit?: ticket_defaultTermUnit;
+  isSuspended: boolean;
+  suspendedAt?: string; // $date-time;
+  isCanceled: boolean;
+  canceledAt?: string; // $date-time;
+  createdAt: string; // $date-time;
+  updatedAt: string; // $date-time;
+}
 
 export interface Schedules_list {
   users: Schedules_list_user[];
@@ -115,6 +161,10 @@ export interface UsersSearchType {
 
 export type UserType = 'ADMIN' | 'STAFF';
 
+export interface BookableTicketsRequest {
+  availableTickets: AvailableTicketsType[];
+}
+
 export interface AvailableTicketsType {
   id: number;
   title: string;
@@ -133,71 +183,60 @@ export interface AvailableTicketsOwnerType {
 }
 
 /** 일정 생성 Form */
-
-export type PrivateLessonFormInputsType = {
-  userId: number;
-  issuedTicketId: number;
-  memberId: number;
-  memo: string;
-  date: string;
-  startTime: string;
-  endTime: string;
-  startAt: string;
-  endAt: string;
-};
-
-export const PrivateLessonInitInput: PrivateLessonFormInputsType = {
-  userId: 0,
-  issuedTicketId: 0,
-  memberId: 0,
-  memo: '',
-  date: '',
-  startTime: '',
-  endTime: '',
-  startAt: '',
-  endAt: '',
-};
-
 export interface PrivatelessonRequest {
   userId: number;
   issuedTicketId: number;
   startAt: string; // date-time;
   endAt: string; // date-time;
 }
+export interface PrivatelessonEditRequest {
+  memo: string;
+  startAt: string; // date-time;
+  endAt: string; // date-time;
+}
+
+export type PrivateLessonFormInputsType = {
+  issuedTicketId: number;
+  memo: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+};
+
+export const PrivateLessonInitInput: PrivateLessonFormInputsType = {
+  issuedTicketId: 0,
+  memo: '',
+  date: '',
+  startTime: '',
+  endTime: '',
+};
 
 /** 상담 생성 Form */
 export type CounselingFormInputsType = {
-  userId: number;
-  memberId: number;
   clientName: string;
   clientPhone: string;
   memo: string;
   date: string;
   startTime: string;
   endTime: string;
-  startAt: string;
-  endAt: string;
 };
 
 export const CounselingInitInput: CounselingFormInputsType = {
-  userId: 0,
-  memberId: 0,
   clientName: '',
   clientPhone: '',
   memo: '',
   date: '',
   startTime: '',
   endTime: '',
-  startAt: '',
-  endAt: '',
 };
 
 export interface CounselingRequest {
   userId: number;
-  memberId: number;
+  memberId?: number;
   clientName: string;
   clientPhone: string;
   memo: string;
   startAt: string; // date-time;
   endAt: string; // date-time;
+  counselingRecordContent?: string;
 }

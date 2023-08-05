@@ -114,6 +114,16 @@ export const DetailButton = styled.button`
   border-radius: 6px;
   transition: all 0.4s;
 
+  &.pri {
+    background-color: ${theme.colors.pri[900]};
+    color: ${theme.colors.pri[500]};
+
+    &:hover {
+      font-weight: 600;
+      background-color: ${theme.colors.pri[800]};
+    }
+  }
+
   &:hover {
     font-weight: 600;
     background-color: ${theme.colors.gray[700]};

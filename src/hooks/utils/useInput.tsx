@@ -3,7 +3,7 @@ import { useState, useCallback } from 'react';
 const useInput = <T extends Record<string, unknown>>(initialState: T) => {
   const [inputValues, setInputValues] = useState<T>(initialState);
 
-  const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, type } = e.target;
     let value = e.target.value;
 
@@ -32,7 +32,7 @@ const useInput = <T extends Record<string, unknown>>(initialState: T) => {
     setInputValues(prev => ({ ...prev, [name]: value }));
   }, []);
 
-  const inputReset = useCallback((data: T) => {
+  const inputReset = useCallback((data?: T) => {
     if (data) setInputValues(data);
     else {
       const keys = Object.keys(inputValues);

@@ -7,15 +7,22 @@ export interface NoticeModalProps {
     title: string;
     content: string;
   };
+  onClick?: () => void;
 }
 
-export const NoticeModal = ({ setIsOpen, innerNotice }: NoticeModalProps) => {
+export const NoticeModal = ({ setIsOpen, innerNotice, onClick }: NoticeModalProps) => {
   return (
     <Modal setIsOpen={setIsOpen}>
       <h3>{innerNotice.title}</h3>
       <p>{innerNotice.content}</p>
       <div className="buttonWrapper">
-        <Button isPri={false} onClick={() => setIsOpen(false)}>
+        <Button
+          isPri={false}
+          onClick={() => {
+            setIsOpen(false);
+            if (onClick) onClick();
+          }}
+        >
           확인
         </Button>
       </div>

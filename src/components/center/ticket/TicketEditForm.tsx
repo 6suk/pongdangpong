@@ -4,7 +4,7 @@ import { tickets_put } from '@apis/ticketsAPIs';
 import { useRequests } from '@hooks/apis/useRequests';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
-import { TicketFormComponent, TicketFormDataType } from './Form/TicketFormComponent';
+import { TicketFormComponent, TicketFormDataType } from './form/TicketFormComponent';
 
 export const TicketEditForm = () => {
   const { id } = useParams();

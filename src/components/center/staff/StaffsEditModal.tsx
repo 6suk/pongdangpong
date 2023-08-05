@@ -13,7 +13,7 @@ import useInput from '@hooks/utils/useInput';
 
 import theme from '@styles/theme';
 
-import { InputField } from '../ticket/Form/InputField';
+import { InputField } from '../ticket/form/InputField';
 
 interface StaffEditPropsType {
   setIsOpen: Dispatch<SetStateAction<boolean>>;

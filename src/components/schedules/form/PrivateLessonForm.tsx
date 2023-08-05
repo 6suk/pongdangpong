@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import {
+  PrivateLessonFormInputsType,
   PrivateLessonInitInput,
   PrivatelessonEditRequest,
   PrivatelessonRequest,

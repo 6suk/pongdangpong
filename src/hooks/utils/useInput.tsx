@@ -32,7 +32,7 @@ const useInput = <T extends Record<string, unknown>>(initialState: T) => {
     setInputValues(prev => ({ ...prev, [name]: value }));
   }, []);
 
-  const inputReset = useCallback((data: T) => {
+  const inputReset = useCallback((data?: T) => {
     if (data) setInputValues(data);
     else {
       const keys = Object.keys(inputValues);

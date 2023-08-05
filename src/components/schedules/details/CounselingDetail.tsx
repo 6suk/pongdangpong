@@ -9,20 +9,22 @@ import { BackButton, DetailButton } from '@components/center/ticket/TicketIssued
 import { NoticeModal } from '@components/common/NoticeModal';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
+import { useErrorModal } from '@hooks/utils/useErrorModal';
 import { TicketWrap } from '@styles/center/ticketsStyle';
 import { SC } from '@styles/styles';
 import theme from '@styles/theme';
 import { formatDate, formatTimeRange, formatTimestamp } from '@utils/formatTimestamp';
 
-import { MemberCardItem } from './MemberCardItem';
+import { CounselingRecordFormModal } from './CounselingRecordFormModal';
 
 export const CounselingDetail = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { data, isLoading } = useSwrData(pathname);
-  const { createdAt, createdBy, startAt, endAt, memo, counselor, client } = (data as Schedules_detail_counseling) || {};
-
-  console.log(data);
+  const { createdAt, createdBy, startAt, endAt, memo, counselor, client, counselingRecord } =
+    (data as Schedules_detail_counseling) || {};
+  const [isRecordOpen, setIsRecordOpen] = useState(false);
+  const { isErrorModalOpen, closeErrorModal, handleModalNotice, errorModal } = useErrorModal();
 
   return (
     !isLoading && (
@@ -69,10 +71,10 @@ export const CounselingDetail = () => {
               </div>
             </SchedulesInfoBar>
           </div>
-          <TicketWrap>
+          <TicketWrap style={{ minHeight: '400px' }}>
             <CounselingInfoWrap>
               <div>
-                <div className="header">
+                <div className="header sub">
                   <div className="title">
                     <h3>상담 회원</h3>
                   </div>
@@ -87,23 +89,64 @@ export const CounselingDetail = () => {
                       </div>
                     </div>
                     <div className="top-btns">
-                      <button type="button">상담기록</button>
-                      <button type="button">회원 정보 등록</button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsRecordOpen(true);
+                        }}
+                      >
+                        상담기록
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          navigate('/members/register');
+                        }}
+                      >
+                        회원 정보 등록
+                      </button>
                     </div>
                   </div>
                 </CardItem>
               </div>
-              <div>
-                <div className="header">
+              <div style={{ height: '100%' }}>
+                <div className="header sub">
                   <div className="title">
                     <h3>일정 메모</h3>
                   </div>
                 </div>
-                <SC.TextareaField readOnly style={{ height: '250px' }} value={memo} />
+                <SC.TextareaField readOnly style={{ height: '100%' }} value={memo || '-'} />
+              </div>
+            </CounselingInfoWrap>
+            <CounselingInfoWrap>
+              <div style={{ height: '100%' }}>
+                <div className="header sub">
+                  <div className="title">
+                    <h3>상담 기록</h3>
+                  </div>
+                </div>
+                <SC.TextareaField
+                  readOnly
+                  disabled={counselingRecord?.content ? false : true}
+                  style={{ height: '100%' }}
+                  value={counselingRecord?.content || '상담 기록을 작성해 주세요.'}
+                />
               </div>
             </CounselingInfoWrap>
           </TicketWrap>
         </SchedulesDetailWrap>
+
+        {/* 상담기록 등록 모달 */}
+        {isRecordOpen && (
+          <CounselingRecordFormModal
+            data={data as Schedules_detail_counseling}
+            handleModalNotice={handleModalNotice}
+            setIsOpen={setIsRecordOpen}
+          />
+        )}
+
+        {/* 상담기록 Notice 모달 */}
+        {isErrorModalOpen && <NoticeModal innerNotice={errorModal} setIsOpen={closeErrorModal} />}
       </>
     )
   );
@@ -182,23 +225,6 @@ const CardItem = styled.div`
   }
 `;
 
-const MemoPreview = styled.div`
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-`;
-
-const MoreButton = styled.span`
-  padding-inline: 0.3rem;
-  padding-block: 0.1rem;
-  border: 1px solid ${theme.colors.gray[700]};
-  color: ${theme.colors.gray[500]};
-  border-radius: 6px;
-  cursor: pointer;
-  margin-left: 7px;
-  font-size: ${theme.font.sm};
-`;
-
 export const SchedulesDetailWrap = styled.div`
   width: 100%;
   display: flex;
@@ -221,6 +247,13 @@ export const SchedulesDetailWrap = styled.div`
     margin-bottom: 1rem;
     margin-inline: 1rem;
     justify-content: space-between;
+
+    &.sub {
+      margin-inline: 0.5rem;
+      h3 {
+        /* font-size: ${theme.font.body}; */
+      }
+    }
 
     .title {
       display: flex;
@@ -288,11 +321,10 @@ export const SchedulesInfoBar = styled.div`
       display: flex;
       gap: 0.5rem;
       align-items: center;
-}
+    }
 
-      dt {
-        font-weight: 600;
-      }
+    dt {
+      font-weight: 600;
     }
   }
 

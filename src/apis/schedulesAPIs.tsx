@@ -230,10 +230,11 @@ export const CounselingInitInput: CounselingFormInputsType = {
 
 export interface CounselingRequest {
   userId: number;
-  memberId: number;
+  memberId?: number;
   clientName: string;
   clientPhone: string;
   memo: string;
   startAt: string; // date-time;
   endAt: string; // date-time;
+  counselingRecordContent?: string;
 }

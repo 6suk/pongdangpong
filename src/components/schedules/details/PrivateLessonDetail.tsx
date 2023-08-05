@@ -9,7 +9,7 @@ import { useSwrData } from '@hooks/apis/useSwrData';
 
 import { TicketWrap } from '@styles/center/ticketsStyle';
 import { MemoPreview, MoreButton, SchedulesDetailWrap, SchedulesInfoBar } from '@styles/SchedulesStyle';
-import { formatDate, formatTimeRange, formatTimestamp } from '@utils/formatTimestamp';
+import { formatDate, formatTimeRange, formatTimestamp } from '@utils/schedules/formatTimestamp';
 
 import { MemberCardItem } from './MemberCardItem';
 import { SchedulesCancelModal } from './SchedulesCancelModal';
@@ -36,7 +36,7 @@ export const PrivateLessonDetail = () => {
                   생성일 {formatTimestamp(createdAt)} {createdBy.name}
                 </p>
               </div>
-              <BackButton onClick={() => navigate(-1)}>
+              <BackButton onClick={() => navigate('/schedules')}>
                 <BackIcon />
                 <p>뒤로가기</p>
               </BackButton>

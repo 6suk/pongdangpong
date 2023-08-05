@@ -1,3 +1,5 @@
+import { getDateDetails } from './formatTimestamp';
+
 export interface DayType {
   date: number;
   month: number;
@@ -6,7 +8,10 @@ export interface DayType {
   dayOfWeek: number;
 }
 
-export const generateCalendar = (year: number, month: number) => {
+export const generateCalendar = (dateString: string) => {
+  const dateDetails = getDateDetails(dateString);
+  console.log('dateDetails:', dateDetails);
+  const [year, month] = dateString.split('-').map(Number);
   const startDay = new Date(year, month - 1, 1).getDay();
   const daysInMonth = 32 - new Date(year, month - 1, 32).getDate();
   const weeksInMonth = Math.ceil((startDay + daysInMonth) / 7);

@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { Schedules_list } from '@apis/schedulesAPIs';
+import { useFilterAndSortSchedules } from '@hooks/utils/useFilterAndSortSchedules';
+
 import { ScheduleType } from '@stores/selectedDateSlice';
 import { RootState } from '@stores/store';
 import {
@@ -13,50 +13,19 @@ import {
   SchedulesTypeInfoText,
 } from '@styles/SchedulesStyle';
 
-import { filterAndSortSchedulesByDate, filterAndSortSchedulesByDateType } from '@utils/filterAndSortSchedulesByDate';
-import { formatTimeRange } from '@utils/formatTimestamp';
+import { formatDate, formatTimeRange } from '@utils/schedules/formatTimestamp';
 
-import { getDateDetails } from '@utils/getDate';
-
-import { DAYOFWEEK_ENUM } from './Calendar';
-import { SchedulesPropsType } from './SchedulesHome';
-
-interface DashboardProps {
-  propsData: SchedulesPropsType;
-}
-
-export const Dashboard = ({ propsData }: DashboardProps) => {
+export const Dashboard = () => {
   const selectedDate = useSelector((state: RootState) => state.calendar.checkDate);
   const navigate = useNavigate();
-  const selectedDay = getDateDetails(selectedDate);
-  const { year, month, date, dayOfWeek } = selectedDay;
-  const formattedDate = `${year}.${month.toString().padStart(2, '0')}.${date.toString().padStart(2, '0')}(${
-    DAYOFWEEK_ENUM[dayOfWeek]
-  })`;
-  const [sortSchedules, setSortSchedules] = useState<ScheduleType[]>([]);
-
-  // 필터 및 정렬, 취소 카운트
-  const filterDataResult = useMemo(
-    () => filterAndSortSchedulesByDate(selectedDate, propsData),
-    [selectedDate, propsData]
-  );
-
-  // 일정 상세 데이터
-  useEffect(() => {
-    setSortSchedules(filterDataResult.sortedSchedules);
-  }, [filterDataResult]);
-
-  // 총 일정, 취소 일정, 취소율
-  const canceledSchedules = filterDataResult.canceledCount;
-  const totalSchedules = sortSchedules.length + canceledSchedules;
-  const cancellationRate = totalSchedules > 0 ? Math.floor((canceledSchedules / totalSchedules) * 100) : 0;
+  const { sortedSchedules, totalSchedules, cancellationRate, canceledCount } = useFilterAndSortSchedules(selectedDate);
 
   return (
     <>
       <DashboardWrap>
         <DashboardTop>
           <div className="selected-date">
-            <h3>{formattedDate}</h3>
+            <h3>{formatDate(selectedDate)}</h3>
           </div>
           <div className="total-info">
             <dl>
@@ -65,7 +34,7 @@ export const Dashboard = ({ propsData }: DashboardProps) => {
             </dl>
             <dl>
               <dt>취소 일정</dt>
-              <dd>{canceledSchedules}건</dd>
+              <dd>{canceledCount}건</dd>
             </dl>
             <dl>
               <dt>취소율</dt>
@@ -99,8 +68,9 @@ export const Dashboard = ({ propsData }: DashboardProps) => {
               <li>회원명(총인원)</li>
               <li>잔여횟수</li>
             </ul>
-            {sortSchedules.map((v: ScheduleType) => {
+            {sortedSchedules.map((v: ScheduleType) => {
               const { type, schedule } = v;
+              // 개인 수업 일정
               if ('attendanceHistories' in schedule) {
                 const {
                   startAt,
@@ -109,7 +79,6 @@ export const Dashboard = ({ propsData }: DashboardProps) => {
                   issuedTicket: { availableReservationCount },
                   id,
                 } = schedule;
-
                 return (
                   // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
                   <ul key={id} className="table-row" onClick={() => navigate(`${type}/${id}`)}>
@@ -121,7 +90,9 @@ export const Dashboard = ({ propsData }: DashboardProps) => {
                     <li>{availableReservationCount ? `${availableReservationCount}회` : '무제한'}</li>
                   </ul>
                 );
-              } else {
+              }
+              // 상담 일정
+              else {
                 const {
                   id,
                   startAt,

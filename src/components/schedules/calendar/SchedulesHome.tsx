@@ -1,14 +1,12 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
-import { Schedules_list, Schedules_list_counseling, Schedules_list_private } from '@apis/schedulesAPIs';
+import { Schedules_list_counseling, Schedules_list_private } from '@apis/schedulesAPIs';
 
-import { SelectField } from '@components/center/ticket/form/SelectField';
+import { SelectField } from '@components/center/ticket/Form/SelectField';
 import { Button } from '@components/common/Button';
-
-import { useSwrData } from '@hooks/apis/useSwrData';
 
 import useInput from '@hooks/utils/useInput';
 import { setSelectedDate } from '@stores/selectedDateSlice';
@@ -16,8 +14,8 @@ import { AppDispatch, RootState } from '@stores/store';
 
 import { CalendarContainer, DateStyle, SchedulesContainer, SchedulesTop } from '@styles/SchedulesStyle';
 
-import { formatDate } from '@utils/formatTimestamp';
-import { getLastDateOfMonth } from '@utils/getDate';
+import { formatDate } from '@utils/schedules/formatTimestamp';
+import { getLastDateOfMonth } from '@utils/schedules/getDate';
 
 import { Calendar } from './Calendar';
 import { Dashboard } from './Dashboard';
@@ -34,31 +32,22 @@ export interface SchedulesPropsType {
 }
 
 export const SchedulesHome = () => {
-  const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
   const [searchParams, setSearchParams] = useSearchParams();
   const [inputValues, onChange] = useInput(initInput);
-  const { data } = useSwrData<Schedules_list>(location.search ? location.pathname + location.search : '');
-  const {
-    checkDate: selectedDate,
-    lastNextDates: { last, next },
-  } = useSelector((state: RootState) => state.calendar);
   const [isOpen, setIsOpen] = useState(false);
-  const propsData = useMemo<SchedulesPropsType | undefined>(() => {
-    if (data?.counselingSchedules && data?.privateSchedules) {
-      const { counselingSchedules, privateSchedules } = data;
-      return { counselingSchedules, privateSchedules };
-    }
-  }, [data]);
+  const selectedDate = useSelector((state: RootState) => state.calendar.checkDate);
+  const lastNextDates = useSelector((state: RootState) => state.calendar.lastNextDates);
 
   // 초기 진입 시 셀렉트될 날짜
   useEffect(() => {
     const { formattedFirstDate, formattedLastDate } = getLastDateOfMonth(selectedDate);
+    const { last, next } = lastNextDates;
     setSearchParams({
       from: last !== '' ? last : formattedFirstDate,
       to: next !== '' ? next : formattedLastDate,
     });
-  }, [last, next, setSearchParams]);
+  }, [selectedDate, setSearchParams, lastNextDates]);
 
   /** 달력 검색 날짜 저장 */
   const handleChangeDate = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,15 +95,12 @@ export const SchedulesHome = () => {
             + 일정 추가
           </Button>
         </SchedulesTop>
+        {/* 캘린더 & 대시보드 */}
         <CalendarContainer>
-          {/* 데이터를 받아온 후 렌더링 */}
-          {propsData && (
-            <>
-              <Calendar propsData={propsData} />
-              <Dashboard propsData={propsData} />
-            </>
-          )}
+          <Calendar />
+          <Dashboard />
         </CalendarContainer>
+        {/* 캘린더 & 대시보드 */}
       </SchedulesContainer>
       {isOpen && <SchedulesFormModal setIsOpen={setIsOpen} />}
     </>

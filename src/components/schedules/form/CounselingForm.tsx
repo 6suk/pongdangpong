@@ -19,7 +19,7 @@ import { FormButtonGroup, FormGridContainer } from '@styles/center/ticketFormSty
 import { FormContentWrap, SC, TopTitleWrap } from '@styles/styles';
 
 import { extractBasePath } from '@utils/extractBasePath';
-import { combineDateTime, extractDate, extractTime } from '@utils/formatTimestamp';
+import { combineDateTime, extractDate, extractTime } from '@utils/schedules/formatTimestamp';
 
 import { SchedulesFormProps } from './PrivateLessonForm';
 

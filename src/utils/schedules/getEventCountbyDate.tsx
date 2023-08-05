@@ -1,6 +1,8 @@
 import { Schedules_list_counseling, Schedules_list_private } from '@apis/schedulesAPIs';
 import { CalendarEventType } from '@components/schedules/calendar/Calendar';
 
+import { extractDate, getDateDetails } from './formatTimestamp';
+
 interface Schedule {
   startAt: string;
   isCanceled: boolean;
@@ -15,11 +17,10 @@ const getEventCountbyDateUtil = (schedules: Schedule[]): { [key: string]: Calend
         return acc;
       }
 
-      const date = new Date(schedule.startAt);
-      const key = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+      const key = extractDate(schedule.startAt);
 
       if (!acc[key]) {
-        acc[key] = { year: date.getFullYear(), month: date.getMonth() + 1, date: date.getDate(), count: 0 };
+        acc[key] = { ...getDateDetails(schedule.startAt), count: 0 };
       }
 
       acc[key].count++;

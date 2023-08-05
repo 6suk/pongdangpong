@@ -11,7 +11,7 @@ import { useErrorModal } from '@hooks/utils/useErrorModal';
 import { TicketWrap } from '@styles/center/ticketsStyle';
 import { CounselingCardItem, CounselingInfoWrap, SchedulesDetailWrap, SchedulesInfoBar } from '@styles/SchedulesStyle';
 import { SC } from '@styles/styles';
-import { formatDate, formatTimeRange, formatTimestamp } from '@utils/formatTimestamp';
+import { formatDate, formatTimeRange, formatTimestamp } from '@utils/schedules/formatTimestamp';
 
 import { CounselingRecordFormModal } from './CounselingRecordFormModal';
 import { SchedulesCancelModal } from './SchedulesCancelModal';
@@ -38,7 +38,7 @@ export const CounselingDetail = () => {
                   생성일 {formatTimestamp(createdAt)} {createdBy.name}
                 </p>
               </div>
-              <BackButton onClick={() => navigate(-1)}>
+              <BackButton onClick={() => navigate('/schedules')}>
                 <BackIcon />
                 <p>뒤로가기</p>
               </BackButton>

@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { Schedules_list_counseling, Schedules_list_private } from '@apis/schedulesAPIs';
 import { CalendarEventType } from '@components/schedules/calendar/Calendar';
-import { getCurrentDate } from '@utils/getDate';
+import { getCurrentDate } from '@utils/schedules/getDate';
 
 const { month: curMonth, year: curYear, date: curDate } = getCurrentDate();
 

@@ -25,7 +25,7 @@ import { RootState } from '@stores/store';
 import { FormButtonGroup, FormGridContainer } from '@styles/center/ticketFormStyle';
 import { FormContentWrap, SC, TopTitleWrap } from '@styles/styles';
 import { extractBasePath } from '@utils/extractBasePath';
-import { combineDateTime, combineDateTimeToISO, extractDate, extractTime } from '@utils/formatTimestamp';
+import { combineDateTime, combineDateTimeToISO, extractDate, extractTime } from '@utils/schedules/formatTimestamp';
 
 export interface ErrorResponse {
   message: string;

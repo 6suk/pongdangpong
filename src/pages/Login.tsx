@@ -23,7 +23,7 @@ export const Login = () => {
     e.preventDefault();
     const { loginId, password } = inputValues;
     await login(loginId, password);
-    inputReset(true);
+    inputReset();
   };
 
   return (
@@ -67,7 +67,7 @@ export const Login = () => {
           </div>
 
           <div style={{ width: '70%', margin: '0 auto', fontSize: '16px' }}>
-            <Button type="submit" size="full">
+            <Button size="full" type="submit">
               로그인
             </Button>
           </div>

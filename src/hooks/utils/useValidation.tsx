@@ -9,6 +9,7 @@ export interface ValidationProps {
 
 export const useValidation = () => {
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
+  const [isSubmit, setIsSubmit] = useState<boolean>(false);
 
   /**
    * 에러 확인
@@ -31,6 +32,7 @@ export const useValidation = () => {
     });
 
     setValidationErrors(errors);
+    setIsSubmit(Object.keys(errors).length !== 0);
     return Object.values(errors).every(error => error === false);
   };
 
@@ -51,5 +53,5 @@ export const useValidation = () => {
     }));
   };
 
-  return { checkForErrors, validationErrors, updateValidationError };
+  return { checkForErrors, validationErrors, updateValidationError, isSubmit };
 };

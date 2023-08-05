@@ -19,7 +19,7 @@ import { FormButtonGroup, FormGridContainer } from '@styles/center/ticketFormSty
 import { FormContentWrap, SC, TopTitleWrap } from '@styles/styles';
 
 import { extractBasePath } from '@utils/extractBasePath';
-import { combineDateTime, combineDateTimeToISO, extractDate, extractTime } from '@utils/formatTimestamp';
+import { combineDateTime, extractDate, extractTime } from '@utils/formatTimestamp';
 
 import { SchedulesFormProps } from './PrivateLessonForm';
 
@@ -37,11 +37,10 @@ export const CounselingForm = ({ isEditMode = false }: SchedulesFormProps) => {
   const dispatch = useDispatch();
   const { request } = useRequests();
   const { pathname } = useLocation();
-  const { validationErrors, checkForErrors, updateValidationError } = useValidation();
+  const { validationErrors, checkForErrors, updateValidationError, isSubmit } = useValidation();
   const { isErrorModalOpen, errorModal, handleAxiosError, closeErrorModal } = useErrorModal();
   const [inputValues, onChange, inputReset] = useInput(CounselingInitInput);
   const USER = useSelector((state: RootState) => state.findUsers.USER);
-  const [isSubmit, setIsSubmit] = useState(false);
 
   /** 수정 시 전달받을 데이터 (edit) */
   const editInitializeData = (data: Schedules_detail_counseling) => {
@@ -63,9 +62,6 @@ export const CounselingForm = ({ isEditMode = false }: SchedulesFormProps) => {
       startTime: extractTime(startAt),
       endTime: extractTime(endAt),
     });
-
-    console.log(extractDate(startAt));
-    console.log(inputValues.date);
   };
   const { data } = useEditMode(isEditMode, pathname, editInitializeData);
 
@@ -94,7 +90,6 @@ export const CounselingForm = ({ isEditMode = false }: SchedulesFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmit(true);
 
     const isValid = checkForErrorAddId();
     if (!isValid) return;

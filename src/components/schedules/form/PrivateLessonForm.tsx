@@ -48,9 +48,8 @@ export const PrivateLessonForm = ({ isEditMode = false }: SchedulesFormProps) =>
   const dispatch = useDispatch();
   const { request } = useRequests();
   const { pathname } = useLocation();
-  const [isSubmit, setIsSubmit] = useState(false);
   const [inputValues, onChange, inputReset] = useInput(PrivateLessonInitInput);
-  const { validationErrors, checkForErrors, updateValidationError } = useValidation();
+  const { validationErrors, checkForErrors, updateValidationError, isSubmit } = useValidation();
   const { USER, MEMBER } = useSelector((state: RootState) => state.findUsers);
   const { isErrorModalOpen, errorModal, handleAxiosError, handleModalNotice, closeErrorModal } = useErrorModal();
 
@@ -113,7 +112,6 @@ export const PrivateLessonForm = ({ isEditMode = false }: SchedulesFormProps) =>
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmit(true);
 
     const isValid = checkForErrorAddId();
     if (!isValid) return;

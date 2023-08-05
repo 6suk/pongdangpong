@@ -5,6 +5,7 @@ import { useLocation, useSearchParams } from 'react-router-dom';
 
 import { styled } from 'styled-components';
 
+import { Schedules_list } from '@apis/schedulesAPIs';
 import calendarIcon from '@assets/icons/schedules/calendar.svg';
 
 import { Button } from '@components/common/Button';
@@ -18,6 +19,7 @@ import { SC } from '@styles/styles';
 import theme from '@styles/theme';
 
 import { filterAndSortSchedulesByDate } from '@utils/filterAndSortSchedulesByDate';
+import { formatDate } from '@utils/formatTimestamp';
 import { getLastDateOfMonth } from '@utils/getDate';
 
 import { getEventCountbyDate } from '@utils/getEventCountbyDate';
@@ -28,7 +30,7 @@ import { SchedulesFormModal } from '../form/SchedulesFormModal';
 export const SchedulesHome = () => {
   const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
-  const { data, isError } = useSwrData(location.search ? location.pathname + location.search : '');
+  const { data, isError } = useSwrData<Schedules_list>(location.search ? location.pathname + location.search : '');
   const eventCount = useCallback(getEventCountbyDate, [data?.counselingSchedules]);
   const [searchParams, setSearchParams] = useSearchParams();
   const {
@@ -46,7 +48,10 @@ export const SchedulesHome = () => {
   }, [data, dispatch]);
 
   const filterData = useCallback(() => {
-    return filterAndSortSchedulesByDate(data.counselingSchedules, data.privateSchedules, selectedDate);
+    if (data?.counselingSchedules && data?.privateSchedules) {
+      return filterAndSortSchedulesByDate(selectedDate, data.counselingSchedules, data.privateSchedules);
+    }
+    return [];
   }, [selectedDate, data]);
 
   // 일정 상세 데이터
@@ -77,7 +82,7 @@ export const SchedulesHome = () => {
           <div>
             <div className="search-box">
               <div className="date-box">
-                <label>{`${new Date(selectedDate).getFullYear()}년 ${new Date(selectedDate).getMonth() + 1}월`}</label>
+                <label>{formatDate(selectedDate)}</label>
                 <DateStyle type="date" onChange={handleChangeDate} />
               </div>
               <SC.Select__ id="" name="" value={'강사이름1'}>

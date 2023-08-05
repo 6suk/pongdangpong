@@ -1,5 +1,3 @@
-import { type } from 'os';
-
 import { ticket_defaultTermUnit, ticket_lessonType } from './ticketsAPIs';
 
 export interface Schedules_list_user {

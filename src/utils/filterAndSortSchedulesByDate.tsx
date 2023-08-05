@@ -1,13 +1,17 @@
 import { Schedules_list_counseling, Schedules_list_private } from '@apis/schedulesAPIs';
 
 export const filterAndSortSchedulesByDate = (
-  counselingSchedules: Array<Schedules_list_counseling>,
-  privateSchedules: Array<Schedules_list_private>,
-  selectedDate: string
+  selectedDate: string,
+  counselingSchedules?: Array<Schedules_list_counseling>,
+  privateSchedules?: Array<Schedules_list_private>
 ) => {
   const allSchedules = [
-    ...counselingSchedules.map(schedule => ({ type: 'counseling', schedule })),
-    ...privateSchedules.map(schedule => ({ type: 'private-lesson', schedule })),
+    ...(counselingSchedules || [])
+      .filter(schedule => !schedule.isCanceled)
+      .map(schedule => ({ type: 'counseling', schedule })),
+    ...(privateSchedules || [])
+      .filter(schedule => !schedule.isCanceled)
+      .map(schedule => ({ type: 'private-lesson', schedule })),
   ];
 
   return allSchedules

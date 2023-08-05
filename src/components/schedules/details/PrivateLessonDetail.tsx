@@ -14,11 +14,13 @@ import theme from '@styles/theme';
 import { formatDate, formatTimeRange, formatTimestamp } from '@utils/formatTimestamp';
 
 import { MemberCardItem } from './MemberCardItem';
+import { SchedulesCancelModal } from './SchedulesCancelModal';
 
 export const PrivateLessonDetail = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { data, isLoading } = useSwrData(pathname);
+  const [isOpenCancelModal, setIsOpenCancelModal] = useState(false);
   const { createdAt, createdBy, startAt, endAt, attendanceHistories, tutor, issuedTicket, memo } =
     (data as Schedules_detail_private) || {};
   const membersCount = attendanceHistories?.length || '0';
@@ -86,7 +88,13 @@ export const PrivateLessonDetail = () => {
                 >
                   변경
                 </DetailButton>
-                <DetailButton onClick={() => {}}>취소</DetailButton>
+                <DetailButton
+                  onClick={() => {
+                    setIsOpenCancelModal(true);
+                  }}
+                >
+                  취소
+                </DetailButton>
               </div>
             </SchedulesInfoBar>
           </div>
@@ -101,9 +109,14 @@ export const PrivateLessonDetail = () => {
             </TicketWrap>
           </div>
         </SchedulesDetailWrap>
+
+        {/* 메모 더보기 모달 */}
         {isMemoModalOpen && (
           <NoticeModal innerNotice={{ title: '메모', content: memo }} setIsOpen={setIsMemoModalOpen} />
         )}
+
+        {/* 상담 취소 컨펌 및 진행 모달 */}
+        {isOpenCancelModal && <SchedulesCancelModal setIsOpen={setIsOpenCancelModal} type="counselling" />}
       </>
     )
   );

@@ -16,11 +16,13 @@ import theme from '@styles/theme';
 import { formatDate, formatTimeRange, formatTimestamp } from '@utils/formatTimestamp';
 
 import { CounselingRecordFormModal } from './CounselingRecordFormModal';
+import { SchedulesCancelModal } from './SchedulesCancelModal';
 
 export const CounselingDetail = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { data, isLoading } = useSwrData(pathname);
+  const [isOpenCancelModal, setIsOpenCancelModal] = useState(false);
   const { createdAt, createdBy, startAt, endAt, memo, counselor, client, counselingRecord } =
     (data as Schedules_detail_counseling) || {};
   const [isRecordOpen, setIsRecordOpen] = useState(false);
@@ -67,7 +69,13 @@ export const CounselingDetail = () => {
                 >
                   변경
                 </DetailButton>
-                <DetailButton onClick={() => {}}>취소</DetailButton>
+                <DetailButton
+                  onClick={() => {
+                    setIsOpenCancelModal(true);
+                  }}
+                >
+                  취소
+                </DetailButton>
               </div>
             </SchedulesInfoBar>
           </div>
@@ -147,6 +155,9 @@ export const CounselingDetail = () => {
 
         {/* 상담기록 Notice 모달 */}
         {isErrorModalOpen && <NoticeModal innerNotice={errorModal} setIsOpen={closeErrorModal} />}
+
+        {/* 상담 취소 컨펌 및 진행 모달 */}
+        {isOpenCancelModal && <SchedulesCancelModal setIsOpen={setIsOpenCancelModal} type="counselling" />}
       </>
     )
   );

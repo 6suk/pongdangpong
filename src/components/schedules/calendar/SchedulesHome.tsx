@@ -8,10 +8,12 @@ import { styled } from 'styled-components';
 import { Schedules_list } from '@apis/schedulesAPIs';
 import calendarIcon from '@assets/icons/schedules/calendar.svg';
 
+import { SelectField } from '@components/center/ticket/form/SelectField';
 import { Button } from '@components/common/Button';
 
 import { useSwrData } from '@hooks/apis/useSwrData';
 
+import useInput from '@hooks/utils/useInput';
 import { setEventCount, setSelectedDate, setSortSchedules } from '@stores/selectedDateSlice';
 import { AppDispatch, RootState } from '@stores/store';
 
@@ -27,12 +29,18 @@ import { getEventCountbyDate } from '@utils/getEventCountbyDate';
 import { Calendar } from './Calendar';
 import { SchedulesFormModal } from '../form/SchedulesFormModal';
 
+const initInput = {
+  tutor: '',
+  calendarUnit: 'month',
+};
+
 export const SchedulesHome = () => {
   const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
   const { data, isError } = useSwrData<Schedules_list>(location.search ? location.pathname + location.search : '');
   const eventCount = useCallback(getEventCountbyDate, [data?.counselingSchedules]);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [inputValues, onChange, inputReset] = useInput(initInput);
   const {
     checkDate: selectedDate,
     lastNextDates: { last, next },
@@ -85,14 +93,27 @@ export const SchedulesHome = () => {
                 <label>{formatDate(selectedDate)}</label>
                 <DateStyle type="date" onChange={handleChangeDate} />
               </div>
-              <SC.Select__ id="" name="" value={'강사이름1'}>
-                <option value="강사이름1">강사이름1</option>
-                <option value="강사이름2">강사이름2</option>
-              </SC.Select__>
-              <SC.Select__ id="" name="" value={'강사이름1'}>
-                <option value="강사이름1">강사이름1</option>
-                <option value="강사이름2">강사이름2</option>
-              </SC.Select__>
+              <SelectField
+                name="tutor"
+                placeholder="강사 선택"
+                value={inputValues.tutor}
+                options={[
+                  { label: '강사이름1', value: 0 },
+                  { label: '강사이름2', value: 1 },
+                  { label: '강사이름3', value: 2 },
+                ]}
+                onChange={onChange}
+              />
+              <SelectField
+                name="calendarUnit"
+                value={inputValues.calendarUnit}
+                options={[
+                  { label: '월', value: 'month' },
+                  { label: '주', value: 'week' },
+                  { label: '일', value: 'day' },
+                ]}
+                onChange={onChange}
+              />
             </div>
           </div>
           <Button
@@ -137,6 +158,7 @@ const SchedulesContainer = styled.div`
     .date-box {
       height: 100%;
       width: 100%;
+      min-width: 245px;
       label {
         width: 100%;
         font-size: ${theme.font.body};

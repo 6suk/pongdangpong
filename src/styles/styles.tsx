@@ -50,6 +50,11 @@ const Select = styled.select`
   background-size: 12px;
   padding: 0.625rem 40px 0.625rem 0.625rem;
 
+  &#tutor,
+  &#calendarUnit {
+    width: auto;
+  }
+
   /* & .opion-title {
     color: blue;
   } */
@@ -226,12 +231,12 @@ export const ContentWrap = styled.div`
   margin-top: 3rem;
 `;
 
-export const FormContentWrap = styled.div<{ isSubHeader?: boolean }>`
+export const FormContentWrap = styled.div<{ $isSubHeader?: boolean }>`
   display: flex;
   flex-direction: column;
   max-width: 1024px;
   width: 100%;
-  margin-top: ${props => (props.isSubHeader === false ? '2rem' : '3rem')};
+  margin-top: ${props => (props.$isSubHeader === false ? '2rem' : '3rem')};
   padding-inline: 2rem;
   gap: 1rem;
 

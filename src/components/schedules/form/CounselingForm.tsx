@@ -152,7 +152,7 @@ export const CounselingForm = ({ isEditMode = false }: SchedulesFormProps) => {
 
   return (
     <>
-      <FormContentWrap isSubHeader={false}>
+      <FormContentWrap $isSubHeader={false}>
         <TopTitleWrap>
           <h3>상담 일정 {!isEditMode ? `생성` : `수정`}</h3>
           <p>상담 일정을 {!isEditMode ? `생성` : `수정`}합니다.</p>

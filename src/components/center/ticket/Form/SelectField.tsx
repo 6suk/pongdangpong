@@ -3,7 +3,7 @@ import { ChangeEvent, FC } from 'react';
 import { SC } from '@styles/styles';
 
 type SelectProps = {
-  className?: 'required';
+  className?: 'required' | string;
   name: string;
   value: string | number;
   onChange?: (e: ChangeEvent<HTMLSelectElement>) => void;

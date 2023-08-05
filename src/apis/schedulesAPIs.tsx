@@ -161,6 +161,10 @@ export interface UsersSearchType {
 
 export type UserType = 'ADMIN' | 'STAFF';
 
+export interface BookableTicketsRequest {
+  availableTickets: AvailableTicketsType[];
+}
+
 export interface AvailableTicketsType {
   id: number;
   title: string;

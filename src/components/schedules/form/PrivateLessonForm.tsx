@@ -171,7 +171,7 @@ export const PrivateLessonForm = ({ isEditMode = false }: SchedulesFormProps) =>
 
   return (
     <>
-      <FormContentWrap isSubHeader={false}>
+      <FormContentWrap $isSubHeader={false}>
         <TopTitleWrap>
           <h3>개인 수업 일정 {!isEditMode ? `생성` : `수정`}</h3>
           <p>개인 수업 일정을 {!isEditMode ? `생성` : `수정`}합니다.</p>

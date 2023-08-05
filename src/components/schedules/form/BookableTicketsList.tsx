@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import {
   AvailableTicketsOwnerType,
   AvailableTicketsType,
+  BookableTicketsRequest,
   PrivateLessonFormInputsType,
   PrivateLessonInitInput,
 } from '@apis/schedulesAPIs';
@@ -37,10 +38,10 @@ export const BookableTicketsList = ({
     MEMBER: { id: memberId },
   } = useSelector((state: RootState) => state.findUsers);
   const url = memberId && tutorId ? `/members/${memberId}/bookable-tickets?tutorId=${tutorId}` : null;
-  const { data, isLoading } = useSwrData(url);
+  const { data, isLoading } = useSwrData<BookableTicketsRequest>(url);
   const availableTickets = data?.availableTickets;
   const isData = availableTickets !== undefined && availableTickets.length > 0;
-  const [optionData, setOptionData] = useState([]);
+  const [optionData, setOptionData] = useState<{ value: number; label: string }[]>([]);
   const [ownerList, setOwnerList] = useState<AvailableTicketsOwnerType[]>();
 
   useEffect(() => {
@@ -64,7 +65,7 @@ export const BookableTicketsList = ({
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     onChange(e);
     const selectedValue = e.target.value;
-    const selectedOwners = availableTickets.find(
+    const selectedOwners = availableTickets?.find(
       (ticket: AvailableTicketsType) => ticket.id === parseInt(selectedValue)
     )?.owners;
 

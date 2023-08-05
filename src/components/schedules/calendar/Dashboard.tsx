@@ -49,7 +49,7 @@ export const Dashboard = ({ propsData }: DashboardProps) => {
   // 총 일정, 취소 일정, 취소율
   const canceledSchedules = filterDataResult.canceledCount;
   const totalSchedules = sortSchedules.length + canceledSchedules;
-  const cancellationRate = totalSchedules > 0 ? (canceledSchedules / totalSchedules) * 100 : 0;
+  const cancellationRate = totalSchedules > 0 ? Math.floor((canceledSchedules / totalSchedules) * 100) : 0;
 
   return (
     <>

@@ -36,7 +36,7 @@ export const formatDate = (timestamp: string): string => {
 export const formatTimeRange = (startAt: string, endAt: string): string => {
   const { hour: startHour, minute: startMinute } = parseDate(startAt);
   const { hour: endHour, minute: endMinute } = parseDate(endAt);
-  return `${startHour}:${startMinute} ~ ${endHour}:${endMinute}`;
+  return `${startHour}:${startMinute} - ${endHour}:${endMinute}`;
 };
 
 /**

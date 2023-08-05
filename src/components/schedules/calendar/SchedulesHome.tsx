@@ -1,12 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useSearchParams } from 'react-router-dom';
 
-import { styled } from 'styled-components';
-
-import { Schedules_list } from '@apis/schedulesAPIs';
-import calendarIcon from '@assets/icons/schedules/calendar.svg';
+import { Schedules_list, Schedules_list_counseling, Schedules_list_private } from '@apis/schedulesAPIs';
 
 import { SelectField } from '@components/center/ticket/form/SelectField';
 import { Button } from '@components/common/Button';
@@ -14,19 +11,16 @@ import { Button } from '@components/common/Button';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
 import useInput from '@hooks/utils/useInput';
-import { setEventCount, setSelectedDate, setSortSchedules } from '@stores/selectedDateSlice';
+import { setSelectedDate } from '@stores/selectedDateSlice';
 import { AppDispatch, RootState } from '@stores/store';
 
-import { SC } from '@styles/styles';
-import theme from '@styles/theme';
+import { CalendarContainer, DateStyle, SchedulesContainer, SchedulesTop } from '@styles/SchedulesStyle';
 
-import { filterAndSortSchedulesByDate } from '@utils/filterAndSortSchedulesByDate';
 import { formatDate } from '@utils/formatTimestamp';
 import { getLastDateOfMonth } from '@utils/getDate';
 
-import { getEventCountbyDate } from '@utils/getEventCountbyDate';
-
 import { Calendar } from './Calendar';
+import { Dashboard } from './Dashboard';
 import { SchedulesFormModal } from '../form/SchedulesFormModal';
 
 const initInput = {
@@ -34,43 +28,30 @@ const initInput = {
   calendarUnit: 'month',
 };
 
+export interface SchedulesPropsType {
+  counselingSchedules: Schedules_list_counseling[];
+  privateSchedules: Schedules_list_private[];
+}
+
 export const SchedulesHome = () => {
   const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
-  const { data, isError } = useSwrData<Schedules_list>(location.search ? location.pathname + location.search : '');
-  const eventCount = useCallback(getEventCountbyDate, [data?.counselingSchedules]);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [inputValues, onChange, inputReset] = useInput(initInput);
+  const [inputValues, onChange] = useInput(initInput);
+  const { data } = useSwrData<Schedules_list>(location.search ? location.pathname + location.search : '');
   const {
     checkDate: selectedDate,
     lastNextDates: { last, next },
   } = useSelector((state: RootState) => state.calendar);
   const [isOpen, setIsOpen] = useState(false);
-
-  // 일정 데이터 (카운트)
-  useEffect(() => {
+  const propsData = useMemo<SchedulesPropsType | undefined>(() => {
     if (data?.counselingSchedules && data?.privateSchedules) {
-      const newCounts = eventCount([...data.counselingSchedules, ...data.privateSchedules]);
-      dispatch(setEventCount(Object.values(newCounts)));
+      const { counselingSchedules, privateSchedules } = data;
+      return { counselingSchedules, privateSchedules };
     }
-  }, [data, dispatch]);
+  }, [data]);
 
-  const filterData = useCallback(() => {
-    if (data?.counselingSchedules && data?.privateSchedules) {
-      return filterAndSortSchedulesByDate(selectedDate, data.counselingSchedules, data.privateSchedules);
-    }
-    return [];
-  }, [selectedDate, data]);
-
-  // 일정 상세 데이터
-  useEffect(() => {
-    if (data?.counselingSchedules && data?.privateSchedules) {
-      const combinedAndSortedSchedules = filterData();
-      dispatch(setSortSchedules(combinedAndSortedSchedules));
-    }
-  }, [selectedDate, data]);
-
-  // 달력 검색
+  // 초기 진입 시 셀렉트될 날짜
   useEffect(() => {
     const { formattedFirstDate, formattedLastDate } = getLastDateOfMonth(selectedDate);
     setSearchParams({
@@ -79,6 +60,7 @@ export const SchedulesHome = () => {
     });
   }, [last, next, setSearchParams]);
 
+  /** 달력 검색 날짜 저장 */
   const handleChangeDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setSelectedDate(e.target.value));
   };
@@ -86,7 +68,7 @@ export const SchedulesHome = () => {
   return (
     <>
       <SchedulesContainer>
-        <Top>
+        <SchedulesTop>
           <div>
             <div className="search-box">
               <div className="date-box">
@@ -123,78 +105,18 @@ export const SchedulesHome = () => {
           >
             + 일정 추가
           </Button>
-        </Top>
-        <Calendar />
+        </SchedulesTop>
+        <CalendarContainer>
+          {/* 데이터를 받아온 후 렌더링 */}
+          {propsData && (
+            <>
+              <Calendar propsData={propsData} />
+              <Dashboard propsData={propsData} />
+            </>
+          )}
+        </CalendarContainer>
       </SchedulesContainer>
       {isOpen && <SchedulesFormModal setIsOpen={setIsOpen} />}
     </>
   );
 };
-
-export const Top = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding-bottom: 1rem;
-  align-items: center;
-  align-items: flex-end;
-`;
-
-const SchedulesContainer = styled.div`
-  width: 100%;
-
-  .hidden-date-input {
-    opacity: 0;
-    position: absolute;
-    width: 0;
-    height: 0;
-  }
-
-  .search-box {
-    display: flex;
-    align-items: flex-end;
-    gap: 1rem;
-
-    .date-box {
-      height: 100%;
-      width: 100%;
-      min-width: 245px;
-      label {
-        width: 100%;
-        font-size: ${theme.font.body};
-        font-weight: 600;
-        white-space: nowrap;
-        margin-left: 0.4rem;
-      }
-
-      height: 43px;
-      display: flex;
-      align-items: center;
-      padding-inline: 0.625rem;
-      padding-block: 0.2rem;
-      border: 1px solid ${theme.colors.inputBorder};
-      border-radius: 6px;
-    }
-  }
-`;
-
-const DateStyle = styled.input`
-  width: 100px;
-
-  &::-webkit-calendar-picker-indicator {
-    color: rgba(0, 0, 0, 0);
-    opacity: 1;
-    display: block;
-    background: url(${calendarIcon}) no-repeat center; // 대체할 아이콘
-    width: 100%;
-    cursor: pointer;
-  }
-
-  &::before {
-    content: attr(data-placeholder);
-    width: 100%;
-  }
-  &:focus {
-    outline: none;
-  }
-`;

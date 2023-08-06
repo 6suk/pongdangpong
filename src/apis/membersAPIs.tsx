@@ -1,4 +1,5 @@
 import { RequestBody } from './apiInterfaces';
+import { MemberSearchType, UsersSearchType } from './schedulesAPIs';
 
 /**
  * [members-C] 회원 등록
@@ -25,6 +26,8 @@ export const members_create: RequestBody<Members_request> = {
   },
 };
 
+export type SexType = 'MALE' | 'FEMALE';
+
 /**
  * [members-C] 회원 등록 - `Request Body`
  */
@@ -33,7 +36,7 @@ export interface Members_request {
   /**2023-07-22 형식 */
   birthDate: string;
   phone: string;
-  sex: 'MALE' | 'FEMALE';
+  sex: SexType;
   job: string;
   acqusitionFunnel: string;
   acquisitionFunnel: string;
@@ -43,4 +46,42 @@ export interface Members_request {
       agree: boolean;
     },
   ];
+}
+
+/** 회원 리스트 */
+export interface MemberListResponse {
+  meta: MemberListMetaType;
+  datas: MemberListDatasType[];
+  message: string;
+}
+
+export interface MemberListDatasType {
+  id: number;
+  name: string;
+  phone: string;
+  sex: SexType;
+  birthDate: string; // date
+  createdAt: string; // date-time
+  updatedAt: string; // date-time
+  visitedAt: string; // date-time
+}
+
+export interface MemberListMetaType {
+  totalCount: number;
+  size: number;
+  count: number;
+  page: number;
+  hasMore: true;
+}
+
+type ResourcesType = 'USER' | 'MEMBER';
+
+export interface MemberSearchResponse {
+  searchParam: {
+    query: string;
+    resources: ResourcesType[];
+  };
+  members?: MemberSearchType[];
+  users?: UsersSearchType[];
+  message?: 'string';
 }

@@ -8,14 +8,14 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 //   tickets: {id: number, content: string, path: string }[]
 // }
 export interface MenuState {
-  [key: string]: { id: string; content: string; path: string }[];
+  [key: string]: TicketMenuItem[];
 }
 
 export interface TicketMenuItem {
   id: number;
   content: string;
   path: string;
-  hide: boolean;
+  hide?: boolean;
 }
 
 const initialState: MenuState = {

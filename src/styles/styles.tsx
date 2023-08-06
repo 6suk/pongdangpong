@@ -152,6 +152,13 @@ const InputField = styled.input`
     border: 1px solid rgba(${theme.colors.ErrorRGB}, 0.7);
     transition: all 0.3s;
   }
+
+  // number화살표 없애기
+  &[type='number']::-webkit-outer-spin-button,
+  &[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 `;
 
 type TextareaFieldProps = {

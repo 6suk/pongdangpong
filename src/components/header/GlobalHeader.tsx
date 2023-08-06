@@ -1,31 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { styled } from 'styled-components';
 
-import { PropsState } from '@/app/App';
-import { me_info, Me_info_response } from '@apis/meApis';
+import { MeType } from '@apis/authAPIs';
 import { Notifications } from '@assets/icons/indexIcons';
 import { useAuth } from '@hooks/apis/useAuth';
-import { useSwrData } from '@hooks/apis/useSwrData';
+import { RootState } from '@stores/store';
 import theme from '@styles/theme';
 
-export const GlobalHeader: React.FC<PropsState> = props => {
-  const { isLogin } = props;
-
-  const { url } = me_info;
-  const { data } = useSwrData(url);
-
+export const GlobalHeader = () => {
+  const data = useSelector((state: RootState) => state.tokens.user) as MeType;
   const { logout } = useAuth();
-
   const navigate = useNavigate();
-
   const handleLogOutClick = () => {
     logout();
   };
-
-  const { name = '' } = data ?? ({} as Me_info_response);
 
   const globalMenu = [
     { id: 'Home', content: '홈', path: '/' },
@@ -62,9 +54,10 @@ export const GlobalHeader: React.FC<PropsState> = props => {
 
         <S.nav theme={theme}>
           <S.menu>
-            {isLogin &&
+            {data &&
               globalMenu.map(({ id, content, path, initPath }) => {
                 return (
+                  // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
                   <li key={id} className={checkActive(path)} onClick={activeTarget(initPath ? initPath : path)}>
                     {content}
                   </li>
@@ -74,19 +67,19 @@ export const GlobalHeader: React.FC<PropsState> = props => {
 
           <ul>
             <li className="user">
-              {isLogin ? (
+              {data ? (
                 <>
                   <div className="pic">
                     <img alt="프로필 사진" src="/imgs/profile.png" />
                   </div>
-                  <span className="userName">{name} 님</span>
+                  <span className="userName">{data.name} 님</span>
                   <button style={{ cursor: 'pointer' }} type="button" onClick={handleLogOutClick}>
                     로그아웃
                   </button>
                   <Notifications style={{ cursor: 'pointer' }} />
                 </>
               ) : (
-                <div>비로그인 상태</div>
+                <div></div>
               )}
             </li>
           </ul>

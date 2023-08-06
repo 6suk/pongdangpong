@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { CounselingInitInput, CounselingRequest, Schedules_detail_counseling } from '@apis/schedulesAPIs';
-import { InputField } from '@components/center/ticket/form/InputField';
+import { InputField } from '@components/common/InputField';
 import { Button } from '@components/common/Button';
 import { MemberOrUserSearchButton } from '@components/common/FindUserButton';
 import { NoticeModal } from '@components/common/NoticeModal';

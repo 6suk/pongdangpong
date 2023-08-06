@@ -5,6 +5,7 @@ import { styled } from 'styled-components';
 import { mutate } from 'swr';
 
 import { Button } from '@components/common/Button';
+import { InputField } from '@components/common/InputField';
 import { Modal } from '@components/common/Modal';
 
 import { useRequests } from '@hooks/apis/useRequests';
@@ -12,8 +13,6 @@ import { useSwrData } from '@hooks/apis/useSwrData';
 import useInput from '@hooks/utils/useInput';
 
 import theme from '@styles/theme';
-
-import { InputField } from '../ticket/form/InputField';
 
 interface StaffEditPropsType {
   setIsOpen: Dispatch<SetStateAction<boolean>>;

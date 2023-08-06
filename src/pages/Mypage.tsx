@@ -1,69 +1,69 @@
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { styled } from 'styled-components';
 
-import { MemberIcon, BackIcon } from '@assets/icons/indexIcons';
-import { useSwrData } from '@hooks/apis/useSwrData';
+import { MeType } from '@apis/authAPIs';
+import { BackIcon, MemberIcon } from '@assets/icons/indexIcons';
+import { RootState } from '@stores/store';
 import theme from '@styles/theme';
 
 export const Mypage = () => {
-  const { data, isLoading } = useSwrData(`me`);
-  const { id, type, loginId, name, phone, pwdChangeRequired, center } = data ?? {};
+  const data = useSelector((state: RootState) => state.tokens.user) as MeType;
+  const { id, type, loginId, name, phone, pwdChangeRequired, center } = data;
   const navigate = useNavigate();
 
   return (
-    !isLoading && (
-      <>
-        <MyInfoWrap>
-          <div>
-            <div className="header">
-              <div className="title">
-                <h3>내 정보</h3>
-              </div>
-              <BackButton onClick={() => navigate(-1)}>
-                <BackIcon />
-                <p>뒤로가기</p>
-              </BackButton>
+    <>
+      <MyInfoWrap>
+        <div>
+          <div className="header">
+            <div className="title">
+              <h3>내 정보</h3>
             </div>
-            <MyInfoBar>
-              <div className="infos">
-                <div className="name-and-role">
-                  <p className="icon-box">
-                    <MemberIcon /> {name}
-                  </p>
-                  <div className="role-box">
-                    {type === 'ADMIN' && <span className="tag">관리자</span>}
-                    <p className="center-name">{center.name}</p>
-                  </div>
+            <BackButton onClick={() => navigate(-1)}>
+              <BackIcon />
+              <p>뒤로가기</p>
+            </BackButton>
+          </div>
+          <MyInfoBar>
+            <div className="infos">
+              <div className="name-and-role">
+                <p className="icon-box">
+                  <MemberIcon /> {name}
+                </p>
+                <div className="role-box">
+                  {type === 'ADMIN' && <span className="tag">관리자</span>}
+                  <p className="center-name">{center.name}</p>
                 </div>
               </div>
-              <p className="center-code">
-                센터코드 <span className="data">{center.code}</span>
-              </p>
-            </MyInfoBar>
-          </div>
-          <div>
-            <MyInfoBox>
-              <div className="table">
-                <div className="table-row">
-                  <p className="title">이름</p> <p className="data">{name || '-'}</p>
-                </div>
-                <div className="table-row">
-                  <p className="title">휴대폰 번호</p> <p className="data">{phone || '-'}</p>
-                </div>
-                <div className="table-row">
-                  <p className="title">아이디</p> <p className="data">{loginId || '-'}</p>
-                </div>
-                <div className="table-row">
-                  <p className="title">비밀번호</p> <p className="data">{pwdChangeRequired || '*******'}</p>
-                </div>
+            </div>
+            <p className="center-code">
+              센터코드 <span className="data">{center.code}</span>
+            </p>
+          </MyInfoBar>
+        </div>
+        <div>
+          <MyInfoBox>
+            <div className="table">
+              <div className="table-row">
+                <p className="title">이름</p> <p className="data">{name || '-'}</p>
               </div>
-            </MyInfoBox>
-          </div>
-          <div></div>
-        </MyInfoWrap>
-      </>
-    )
+              <div className="table-row">
+                <p className="title">휴대폰 번호</p> <p className="data">{phone || '-'}</p>
+              </div>
+              <div className="table-row">
+                <p className="title">아이디</p> <p className="data">{loginId || '-'}</p>
+              </div>
+              <div className="table-row">
+                <p className="title">비밀번호</p> <p className="data">{pwdChangeRequired || '*******'}</p>
+              </div>
+            </div>
+          </MyInfoBox>
+        </div>
+        <div></div>
+      </MyInfoWrap>
+    </>
   );
 };
 

@@ -1,5 +1,3 @@
-import path from 'path';
-
 import { useEffect, useState } from 'react';
 
 import { useSelector } from 'react-redux';
@@ -7,17 +5,15 @@ import { Link, useLocation } from 'react-router-dom';
 
 import { styled } from 'styled-components';
 
-import { PropsState } from '@/app/App';
 import { TicketMenuItem } from '@stores/menuSlice';
 
+import { RootState } from '@stores/store';
 import theme from '@styles/theme';
 
-export const SubHeader: React.FC<PropsState> = props => {
-  const { isLogin } = props;
-
+export const SubHeader = () => {
   const [headerActive, headerActiveSet] = useState('');
-
-  const menuState = useSelector((state: any) => state.menu);
+  const menuState = useSelector((state: RootState) => state.menu);
+  const isLogin = useSelector((state: RootState) => state.tokens.isLogin);
 
   const pathName = useLocation().pathname;
   const pathSlice = pathName.split('/');

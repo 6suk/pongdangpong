@@ -2,13 +2,14 @@ import { useNavigate } from 'react-router-dom';
 
 import { styled } from 'styled-components';
 
+import { MeCenterType } from '@apis/authAPIs';
 import { MemberIcon, BackIcon } from '@assets/icons/indexIcons';
 import { useSwrData } from '@hooks/apis/useSwrData';
 import theme from '@styles/theme';
 
 export const CenterInfo = () => {
   const { data, isLoading } = useSwrData(`me/center`);
-  const { id, name, centerCode, phone, contactLink } = data ?? {};
+  const { id, name, centerCode, phone, contactLink } = (data as MeCenterType) ?? {};
   const navigate = useNavigate();
 
   return (

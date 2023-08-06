@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-import { InputField } from '@components/center/ticket/form/InputField';
 import { Button } from '@components/common/Button';
+import { InputField } from '@components/common/InputField';
 import { Modal, ModalButton } from '@components/common/Modal';
 import { useRequests } from '@hooks/apis/useRequests';
 import useInput from '@hooks/utils/useInput';

@@ -12,7 +12,7 @@ import { TicketItem } from './TicketItem';
 
 export const TicketList = () => {
   const navigate = useNavigate();
-  const { data, isError, isLoading } = useSwrData(tickets_list.url);
+  const { data, isError, isLoading } = useSwrData<{ tickets: Ticket_response[] }>(tickets_list.url);
   const [searchParams, setSearchParams] = useSearchParams();
   const isActivePath = searchParams.get('isActive') === 'true';
   const [tickets, setTickets] = useState<Ticket_response[]>([]);
@@ -62,7 +62,7 @@ export const TicketList = () => {
 
   const ticketStatus = async (id: number) => {
     const ticket = tickets.find((ticket: Ticket_response) => ticket.id === id);
-    if (ticket.isActive) {
+    if (ticket?.isActive) {
       await deactivateTicket(id);
     } else {
       await activateTicket(id);
@@ -118,7 +118,7 @@ export const TicketList = () => {
             {Array.from({ length: displayedList.length }, (_, i) => displayedList[displayedList.length - 1 - i]).map(
               (ticket: Ticket_response) => {
                 return (
-                  <TicketItem key={ticket.id} ticket={ticket} ticketStatus={ticketStatus} deleteTicket={deleteTicket} />
+                  <TicketItem key={ticket.id} deleteTicket={deleteTicket} ticket={ticket} ticketStatus={ticketStatus} />
                 );
               }
             )}

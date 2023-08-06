@@ -9,7 +9,7 @@ import {
   PrivateLessonFormInputsType,
   PrivateLessonInitInput,
 } from '@apis/schedulesAPIs';
-import { SelectField } from '@components/center/ticket/form/SelectField';
+import { SelectField } from '@components/common/SelectField';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
 import { RootState } from '@stores/store';

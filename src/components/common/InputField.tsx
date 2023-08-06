@@ -19,6 +19,7 @@ type InputFieldProps = {
   isStartZero?: boolean;
   pattern?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  autoComplete?: string;
 };
 
 export const InputField: FC<InputFieldProps> = ({

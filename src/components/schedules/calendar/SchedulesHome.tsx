@@ -5,9 +5,9 @@ import { useSearchParams } from 'react-router-dom';
 
 import { Schedules_list_counseling, Schedules_list_private } from '@apis/schedulesAPIs';
 
-import { SelectField } from '@components/center/ticket/Form/SelectField';
 import { Button } from '@components/common/Button';
 
+import { SelectField } from '@components/common/SelectField';
 import useInput from '@hooks/utils/useInput';
 import { setSelectedDate } from '@stores/selectedDateSlice';
 import { AppDispatch, RootState } from '@stores/store';

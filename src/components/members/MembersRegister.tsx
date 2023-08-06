@@ -1,132 +1,120 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 
+import { InputField } from '@components/center/ticket/form/InputField';
 import { Button } from '@components/common/Button';
 import { Modal, ModalButton } from '@components/common/Modal';
 import { useRequests } from '@hooks/apis/useRequests';
+import useInput from '@hooks/utils/useInput';
+import { ValidationProps, useValidation } from '@hooks/utils/useValidation';
 import { FormButtonGroup, FormGridContainer } from '@styles/center/ticketFormStyle';
 import { Chips, FormContentWrap, SC, TopTitleWrap } from '@styles/styles';
+import theme from '@styles/theme';
 
-interface FormState {
+interface ErrorType {
+  available: boolean;
+  msg?: string;
+}
+
+interface MemberFormType {
   name: string;
   birthDate: number | string;
-  phone: number | string;
+  phone: string;
   sex: string;
-  job: number | string;
+  job: string;
   acqusitionFunnel: string;
   acquisitionFunnel: string;
   toss: [];
 }
 
-export const MembersResgier: React.FC = () => {
-  const [formState, setFormState] = useState<FormState>({
-    name: '',
-    birthDate: '',
-    phone: '',
-    sex: '',
-    job: '',
-    acqusitionFunnel: '',
-    acquisitionFunnel: '',
-    toss: [],
-  });
+export const memberForm: MemberFormType = {
+  name: '',
+  birthDate: '',
+  phone: '',
+  sex: '',
+  job: '',
+  acqusitionFunnel: '',
+  acquisitionFunnel: '',
+  toss: [],
+};
 
+const errorCheckInput: ValidationProps[] = [
+  { name: 'name', type: 'string' },
+  { name: 'birthDate', type: 'string' },
+  { name: 'phone', type: 'phone' },
+];
+
+export const MembersResgier = () => {
   const navigate = useNavigate();
   const { request } = useRequests();
-  const inputRef = useRef(null);
-  const BtnWrapRef = useRef(null);
-
+  const [inputValues, onChange] = useInput({ ...memberForm });
+  const { checkForErrors, updateValidationError, validationErrors, isSubmit } = useValidation();
   const [isOpen, setIsOpen] = useState(false);
-  const [chips, setChips] = useState('FEMAIL');
-  console.log(chips);
+  const [chips, setChips] = useState('FEMALE');
+  const isEditMode = false;
 
-  const inputData = useCallback(
-    ({ target }: React.ChangeEvent<HTMLInpuphoneement>) => {
-      switch (target.name) {
-        case 'phone':
-          target.value = target.value.replace(/[^0-9]/g, '').replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
-          break;
-        case 'birthDate':
-          target.value = target.value.replace(/(\d{4})(\d{2})(\d{2})/, '$1.$2.$3');
-          break;
-        case 'sex':
-          target.value = target.value.toUpperCase();
-          break;
-      }
-
-      setFormState({ ...formState, [target.name]: target.value });
-    },
-    [formState]
-  );
-
-  console.log(formState);
-
-  const submitData = useCallback(
-    async (e: MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault();
-
-      formState['phone'] = (formState['phone'] + '').replace(/-/g, '');
-      formState['birthDate'] = (formState['birthDate'] + '').replace(/\./g, '-');
-
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const isValid = validateFields();
+    if (isValid) {
       try {
         await request({
           url: 'members',
           method: 'post',
-          body: formState,
+          body: { ...inputValues, sex: chips },
         });
-        console.log('등록 완료');
-
         setIsOpen(true);
       } catch (error) {
         console.error(error);
-        // input 빨간색으로 어디부분 잘못되었는지 출력
       }
-    },
-    [formState]
-  );
+    }
+  };
 
-  const restInputData = () => {
-    setFormState({
-      name: '',
-      birthDate: '',
-      phone: '',
-      sex: '',
-      job: '',
-      acqusitionFunnel: '',
-      acquisitionFunnel: '',
-      toss: [],
-    });
+  const validateFields = () => {
+    return checkForErrors(errorCheckInput, inputValues);
   };
 
   useEffect(() => {
-    console.log(formState);
-  }, [formState]);
+    if (isSubmit) validateFields();
+  }, [inputValues, isSubmit]);
+
+  const handleSexChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setChips(value);
+    updateValidationError('sex', false);
+  };
 
   return (
     <>
       <S.modalContainer>
         {isOpen && (
-          <Modal setIsOpen={setIsOpen}>
-            <h2>등록완료</h2>
-            <p>님의 회원 정보가 생성되었습니다. 문진을 바로 시작하시겠어요? </p>
+          <Modal setIsOpen={() => setIsOpen(false)}>
+            <h3>등록완료</h3>
+            <p>
+              {inputValues.name}님의 회원 정보가 생성되었습니다. <br />
+              문진을 바로 시작하시겠어요?
+            </p>
             <img alt="" src="/imgs/Graphic_Member_registered.png" />
-            <ModalButton
-              $isPrimary={false}
-              onClick={() => {
-                setIsOpen(false);
-              }}
-            >
-              닫기
-            </ModalButton>
-            <ModalButton
-              $isPrimary={true}
-              onClick={() => {
-                navigate('/members');
-              }}
-            >
-              문진 시작
-            </ModalButton>
+            <div className="buttonWrapper">
+              <ModalButton
+                $isPrimary={false}
+                onClick={() => {
+                  navigate('/members');
+                }}
+              >
+                닫기
+              </ModalButton>
+              <ModalButton
+                $isPrimary={true}
+                onClick={() => {
+                  navigate('/members');
+                }}
+              >
+                문진 시작
+              </ModalButton>
+            </div>
           </Modal>
         )}
       </S.modalContainer>
@@ -136,132 +124,113 @@ export const MembersResgier: React.FC = () => {
           <h3>회원 등록</h3>
           <p>회원 정보를 등록합니다.</p>
         </TopTitleWrap>
-
-        <FormGridContainer>
-          <div>
-            <SC.Label>
-              이름 <span></span>
-            </SC.Label>
-            <SC.InputField
-              ref={inputRef}
-              maxLength={10}
-              name="name"
-              placeholder="이름을 입력하세요"
-              type="text"
-              onChange={e => {
-                inputData(e);
-              }}
-            />
-          </div>
-
-          <div>
-            <SC.Label>
-              성별<span></span>
-            </SC.Label>
-            <div ref={BtnWrapRef} className="button-wrap">
-              <Chips>
-                <label className={chips === 'FEMALE' ? 'on' : ''} htmlFor="female">
-                  여
-                </label>
-                <input
-                  id="female"
-                  name="sex"
-                  type="radio"
-                  value={'FEMALE'}
-                  onClick={e => {
-                    setChips('FEMALE');
-                    inputData(e);
-                  }}
-                />
-                <label className={chips === 'MALE' ? 'on' : ''} htmlFor="male">
-                  남
-                </label>
-                <input
-                  id="male"
-                  name="sex"
-                  type="radio"
-                  value={'MALE'}
-                  onClick={e => {
-                    setChips('MALE');
-                    inputData(e);
-                  }}
-                />
-              </Chips>
+        <form method="post" onSubmit={handleSubmit}>
+          <FormGridContainer>
+            <div>
+              <SC.Label>
+                이름 <span></span>
+              </SC.Label>
+              <InputField
+                className="required"
+                disabled={isEditMode}
+                error={validationErrors.name}
+                name="name"
+                placeholder="이름을 입력해 주세요."
+                type="text"
+                value={inputValues.name}
+                onChange={onChange}
+              />
             </div>
-          </div>
 
-          {/*  화면상 . 으로 구분, 데이터 보낼때 - 추가  */}
-          <div>
-            <SC.Label>
-              생년월일 <span></span>
-            </SC.Label>
-            <SC.InputField
-              ref={inputRef}
-              maxLength={10}
-              name="birthDate"
-              placeholder="0000.00.00"
-              type="text"
-              onChange={e => {
-                inputData(e);
-              }}
-            />
-          </div>
+            <div>
+              <SC.Label>
+                성별<span></span>
+              </SC.Label>
+              <div className="button-wrap">
+                <Chips>
+                  <label className={chips === 'FEMALE' ? 'on' : ''} htmlFor="female">
+                    여
+                  </label>
+                  <input id="female" name="sex" type="radio" value={'FEMALE'} onChange={handleSexChange} />
+                  <label className={chips === 'MALE' ? 'on' : ''} htmlFor="male">
+                    남
+                  </label>
+                  <input id="male" name="sex" type="radio" value={'MALE'} onChange={handleSexChange} />
+                </Chips>
+              </div>
+            </div>
 
-          <div>
-            <SC.Label>
-              휴대폰 번호 <span></span>
-            </SC.Label>
+            <div>
+              <SC.Label>
+                생년월일 <span></span>
+              </SC.Label>
+              <SC.InputField
+                className={!validationErrors.birthDate ? '' : 'error'}
+                name="birthDate"
+                type="date"
+                value={inputValues.birthDate}
+                onChange={onChange}
+              />
+            </div>
 
-            <SC.InputField
-              ref={inputRef}
-              maxLength={13}
-              name="phone"
-              placeholder="000-0000-0000"
-              type="phone"
-              onChange={e => {
-                inputData(e);
-              }}
-            />
-          </div>
+            <div>
+              <SC.Label>
+                휴대폰 번호 <span></span>
+              </SC.Label>
+              <InputField
+                className="required"
+                disabled={isEditMode}
+                error={validationErrors.phone}
+                isStartZero={false}
+                maxLength={13}
+                name="phone"
+                placeholder="000-0000-0000"
+                type="phone"
+                value={inputValues.phone}
+                onChange={onChange}
+              />
+              {validationErrors.phone && <ErrorMessage>올바른 형식의 핸드폰 번호를 입력해 주세요.</ErrorMessage>}
+            </div>
 
-          <div>
-            <SC.Label>직업</SC.Label>
-            <SC.Select name="job" onChange={e => inputData(e)}>
-              <option className="opion-title" defaultValue="">
-                선택해주세요
-              </option>
-              <option value="a">a</option>
-              <option value="b">b</option>
-              <option value="c">c</option>
-            </SC.Select>
-          </div>
+            <div>
+              <SC.Label>직업</SC.Label>
+              <SC.Select name="job" onChange={onChange}>
+                <option className="opion-title" defaultValue="">
+                  선택해주세요
+                </option>
+                <option value="사무직">사무직</option>
+                <option value="현장직">현장직</option>
+                <option value="학생">학생</option>
+                <option value="가사노동자">가사노동자</option>
+                <option value="무직">무직</option>
+              </SC.Select>
+            </div>
 
-          <div>
-            <SC.Label>방문경로</SC.Label>
-            <SC.Select name="visitRoute" onChange={e => inputData(e)}>
-              <option className="opion-title" defaultValue="">
-                선택해주세요
-              </option>
-              <option value="a">a</option>
-              <option value="b">b</option>
-              <option value="c">c</option>
-            </SC.Select>
-          </div>
-        </FormGridContainer>
-        <FormButtonGroup>
-          <Button isPri={false} size="full" onClick={() => navigate(-1)}>
-            돌아가기
-          </Button>
-          <Button
-            size="full"
-            onClick={e => {
-              submitData(e);
-              restInputData();
-            }}
-          >
-            완료
-          </Button>
-        </FormButtonGroup>
+            <div>
+              <SC.Label>방문경로</SC.Label>
+              <SC.Select name="visitRoute" onChange={onChange}>
+                <option className="opion-title" defaultValue="">
+                  선택해주세요
+                </option>
+                <option value="주변 추천">주변 추천</option>
+                <option value="오프라인 광고 (배너, 현수막, 지하철 옥외광고)">
+                  오프라인 광고 (배너, 현수막, 지하철 옥외광고)
+                </option>
+                <option value="SNS 광고 (페이스북, 인스타 광고)">SNS 광고 (페이스북, 인스타 광고)</option>
+                <option value="기타 온라인 광고">기타 온라인 광고</option>
+                <option value="네이버 지도">네이버 지도</option>
+              </SC.Select>
+            </div>
+          </FormGridContainer>
+          <FormButtonGroup>
+            <Button isPri={false} size="full" onClick={() => navigate(-1)}>
+              돌아가기
+            </Button>
+            <Button size="full" type="submit">
+              완료
+            </Button>
+          </FormButtonGroup>
+        </form>
       </FormContentWrap>
     </>
   );
@@ -307,6 +276,14 @@ const S = {
       .button-wrap {
         margin-bottom: 30px;
 
+        &.error button[type='button'] {
+          border: 1px solid ${({ theme }) => theme.colors.Error}; /* 에러 색상을 설정합니다 */
+        }
+
+        &.error input[type='radio'] {
+          border: 1px solid ${({ theme }) => theme.colors.Error}; /* 라디오 버튼의 에러 색상을 설정합니다 */
+        }
+
         button[type='button'] {
           width: 70px;
           height: 36px;
@@ -339,3 +316,9 @@ const S = {
     }
   `,
 };
+
+const ErrorMessage = styled.p`
+  margin-top: 0.5rem;
+  font-size: ${theme.font.sm} !important;
+  color: ${theme.colors.Error} !important;
+`;

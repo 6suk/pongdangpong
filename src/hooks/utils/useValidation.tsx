@@ -4,7 +4,7 @@ import { ValidationErrors } from '@components/center/ticket/TicketForm';
 
 export interface ValidationProps {
   name: string;
-  type: 'number' | 'string';
+  type: 'number' | 'string' | 'phone';
 }
 
 export const useValidation = () => {
@@ -26,6 +26,9 @@ export const useValidation = () => {
           break;
         case 'string':
           if (isStringEmpty(inputValues[name])) errors[name] = true;
+          break;
+        case 'phone':
+          if (isStringEmpty(inputValues[name]) || inputValues[name].length < 12) errors[name] = true;
           break;
         // ... 기타 타입 처리
       }

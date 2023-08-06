@@ -254,12 +254,17 @@ export const Chips = styled.div`
 
   button {
   }
+
   label {
     padding-inline: 1.6rem;
     padding-block: 0.5rem;
     border-radius: 6px;
     font-size: ${theme.font.sub};
     border: 1px solid ${theme.colors.inputBorder};
+
+    &.error {
+      border: 1px solid ${theme.colors.Error};
+    }
 
     &.on {
       color: ${theme.colors.White};

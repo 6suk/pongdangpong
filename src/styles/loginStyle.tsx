@@ -2,15 +2,70 @@ import styled from 'styled-components';
 
 import theme from '@styles/theme';
 
-export const Container = styled.div`
-  text-align: center;
+export const ErrorAndFindWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  align-content: center;
+  margin-top: 1rem;
+  margin-inline: 0.2rem;
+
+  .errorMsg {
+    margin: 0;
+    font-size: ${theme.font.sub} !important;
+    color: ${theme.colors.Error} !important;
+  }
+`;
+
+export const LoginFormStyle = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+`;
+
+export const InfoButtons = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  font-size: ${theme.font.sub};
+  color: ${theme.colors.DarkGray};
+  align-items: center;
+
+  box-sizing: border-box;
+
+  &.center {
+    justify-content: center;
+    margin-top: 1rem;
+  }
+
+  .notice {
+    color: ${theme.colors.DarkGray};
+    font-size: ${theme.font.sub};
+    margin: 0;
+  }
+
+  a {
+    transition: all 0.4s;
+
+    &:hover {
+      font-weight: 600;
+    }
+  }
+
+  .line {
+    display: block;
+    border-left: 1px solid ${theme.colors.gray[500]};
+    height: 12px;
+  }
+`;
+
+export const LoginWrap = styled.div`
   display: flex;
   flex-direction: column;
   max-width: 480px;
   width: 100%;
-  margin: 0 auto;
-  padding: 20px;
   background-color: #fff;
+  gap: 2.5rem;
+  margin-top: 4rem;
 
   p {
     margin-top: 2rem;
@@ -20,41 +75,35 @@ export const Container = styled.div`
   }
 `;
 
-export const LoginSelect = styled.div`
-  text-align: left;
-`;
-
-export const LoginType = styled.button<{ isSelected: boolean }>`
-  text-align: left;
-  font-size: 18px;
-  color: ${props => (props.isSelected ? theme.colors.pri[600] : theme.colors.gray[500])};
-  border-bottom: 2px solid ${props => (props.isSelected ? theme.colors.pri[600] : theme.colors.gray[500])};
-  cursor: pointer;
-  margin: 0 10px;
-
-  &:focus {
-    outline: none;
-  }
-`;
-
-export const LoginForm = styled.form`
-  text-align: left;
-  display: inline-block;
-  margin-left: 10px;
-  margin-bottom: 2rem;
-`;
-
-export const Links = styled.div`
-  text-align: left;
+export const LoginTop = styled.div`
   display: flex;
-  margin-top: 2rem;
-  margin-bottom: 4rem;
-  color: ${theme.colors.gray[200]};
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  align-items: flex-end;
 
-  a {
-    font-size: 14px;
-    text-decoration: none;
-    margin-right: 5px;
-    margin-left: 5px;
+  .login-active {
+    display: flex;
+
+    a,
+    button {
+      font-size: ${theme.font.subBody};
+      color: ${theme.colors.gray[500]};
+      padding: 12px;
+      border-bottom: 2px solid ${theme.colors.gray[600]};
+    }
+
+    .on {
+      font-weight: 600;
+      color: ${theme.colors.pri[500]};
+      border-bottom: 2px solid ${theme.colors.pri[300]};
+    }
   }
+`;
+
+export const LoginInputWrap = styled.div`
+  flex-direction: column;
+  width: 100%;
+  display: flex;
+  gap: 1rem;
 `;

@@ -27,7 +27,7 @@ function App() {
           <Routes>
             <Route element={<Layout />}>
               <Route element={<PublicRoute isLogin={isLogin} />}>
-                <Route element={<Login />} path="login" />
+                <Route element={<Login />} path="login/*" />
               </Route>
               <Route element={<PrivateRoute isLogin={isLogin} />}>
                 <Route element={<Home />} path="/" />

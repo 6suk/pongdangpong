@@ -23,7 +23,7 @@ const useInput = <T extends Record<string, unknown>>(initialState: T) => {
     }
 
     // Number 유효성 검사
-    if (typeof initialState[name] === 'number') {
+    if (typeof initialState[name] === 'number' || type === 'number') {
       if (isNaN(Number(value))) {
         if (!isNaN(parseInt(value))) value = parseInt(value).toString();
         else value = '';

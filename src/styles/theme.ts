@@ -48,6 +48,7 @@ const colors = {
   'Gray-50': '#1d1d1d',
 
   Black: '#141212',
+  DarkGray: '#4b5563',
   Dim: '40, 40, 40',
   White: '#ffffff',
   Error: '#df291d',

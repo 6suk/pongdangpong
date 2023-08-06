@@ -1,8 +1,11 @@
+import { useDispatch } from 'react-redux';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 
 import { Button } from '@components/common/Button';
 import { useAuth } from '@hooks/apis/useAuth';
+import { useRequests } from '@hooks/apis/useRequests';
 import useInput from '@hooks/utils/useInput';
+import { setUser } from '@stores/tokenSilce';
 import { ErrorAndFindWrap, InfoButtons, LoginFormStyle, LoginTop, LoginWrap } from '@styles/loginStyle';
 
 export interface loginFormType {
@@ -22,13 +25,29 @@ export const LoginLayout = () => {
   const isAdmin = pathname === '/login' ? true : false;
   const [inputValues, onChange, inputReset] = useInput({ ...initForm });
   const { login, authError } = useAuth();
+  const { request, isLoading } = useRequests();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await login(isAdmin, { ...inputValues });
+      await setUserInfo();
     } catch (error) {
       inputReset({ ...inputValues, password: '' });
+    }
+  };
+
+  /** 로그인 성공 시 me 정보 저장 */
+  const setUserInfo = async () => {
+    try {
+      const response = await request({
+        url: 'me',
+        method: 'get',
+      });
+      dispatch(setUser(response.data));
+    } catch (error) {
+      console.log(error);
     }
   };
 

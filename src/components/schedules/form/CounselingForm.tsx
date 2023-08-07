@@ -117,7 +117,7 @@ export const CounselingForm = ({ isEditMode = false }: SchedulesFormProps) => {
   };
 
   useEffect(() => {
-    inputReset({ ...inputValues, date: selectedDate });
+    if (!isEditMode) inputReset({ ...inputValues, date: selectedDate });
 
     return () => {
       dispatch(clearAll());

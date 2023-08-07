@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { CounselingInitInput, CounselingRequest, Schedules_detail_counseling } from '@apis/schedulesAPIs';
-import { InputField } from '@components/common/InputField';
 import { Button } from '@components/common/Button';
 import { MemberOrUserSearchButton } from '@components/common/FindUserButton';
+import { InputField } from '@components/common/InputField';
 import { NoticeModal } from '@components/common/NoticeModal';
 import { useRequests } from '@hooks/apis/useRequests';
 import { useEditMode } from '@hooks/utils/useEditMode';
@@ -41,6 +41,7 @@ export const CounselingForm = ({ isEditMode = false }: SchedulesFormProps) => {
   const { isErrorModalOpen, errorModal, handleAxiosError, closeErrorModal } = useErrorModal();
   const [inputValues, onChange, inputReset] = useInput(CounselingInitInput);
   const USER = useSelector((state: RootState) => state.findUsers.USER);
+  const selectedDate = useSelector((state: RootState) => state.calendar.checkDate);
 
   /** 수정 시 전달받을 데이터 (edit) */
   const editInitializeData = (data: Schedules_detail_counseling) => {
@@ -116,6 +117,8 @@ export const CounselingForm = ({ isEditMode = false }: SchedulesFormProps) => {
   };
 
   useEffect(() => {
+    inputReset({ ...inputValues, date: selectedDate });
+
     return () => {
       dispatch(clearAll());
     };

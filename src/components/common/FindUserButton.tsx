@@ -42,7 +42,7 @@ export const MemberOrUserSearchButton = ({ initiateSearch, error, type }: Member
         {displayNames[type]} 선택 <span></span>
       </SC.Label>
       <div className="button-container">
-        <SelectButton className={error ? 'error' : ''} disabled={false} name={type} onClick={onClick}>
+        <SelectButton className={error ? 'error' : ''} disabled={false} name={type} type="button" onClick={onClick}>
           선택하기 +
         </SelectButton>
         {id && (

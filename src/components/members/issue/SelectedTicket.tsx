@@ -32,6 +32,7 @@ export const SelectedTicket = () => {
             {data &&
               data.tickets
                 .filter((v: Ticket_response) => v.isActive === true)
+                .reverse()
                 .map((ticket: Ticket_response) => {
                   return <TicketItem key={ticket.id} ticket={ticket} />;
                 })}

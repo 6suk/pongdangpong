@@ -15,8 +15,8 @@ function App() {
   const Home = lazy(() => import('@/pages/Home'));
   const Center = lazy(() => import('@/pages/Center'));
   const Mypage = lazy(() => import('@/pages/Mypage'));
+  const Members = lazy(() => import('@/pages/Members'));
   const Sample = lazy(() => import('@/pages/Sample'));
-  const Members = lazy(() => import('@components/members/Members'));
 
   const isLogin = useSelector((state: RootState) => state.tokens.isLogin);
 

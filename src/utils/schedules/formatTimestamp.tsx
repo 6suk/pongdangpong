@@ -20,6 +20,15 @@ export const formatTimestamp = (timestamp: string): string => {
 };
 
 /**
+ * 2023-08-03T23:03:05 > 2023.08.03
+ * @param timestamp
+ */
+export const formatTimestampDot = (timestamp: string): string => {
+  const { year, month, day } = parseDate(timestamp);
+  return `${year}.${month}.${day}`;
+};
+
+/**
  * 2023-08-03T23:03:05 > 2023년 08월 03일 (목)
  * @param timestamp
  */
@@ -79,8 +88,8 @@ interface DateDetails {
   date: number;
   month: number;
   year: number;
-  currentMonth: boolean;
-  dayOfWeek: number;
+  currentMonth?: boolean;
+  dayOfWeek?: number;
 }
 
 /**

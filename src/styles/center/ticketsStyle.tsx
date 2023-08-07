@@ -126,6 +126,14 @@ export const TS = {
     border-radius: 10px;
     overflow: hidden;
 
+    &.select-ticket {
+      cursor: pointer;
+      transition: all 0.4s;
+      &:hover {
+        background-color: ${theme.colors.gray[900]};
+      }
+    }
+
     * {
       color: ${props => !props.$isActive && `${theme.colors.gray[500]} !important`};
     }
@@ -182,7 +190,10 @@ export const TS = {
         text-overflow: ellipsis;
         width: 100%;
       }
-
+      .tagBox {
+        display: flex;
+        gap: 0.5rem;
+      }
       .tag {
         font-size: ${theme.font.sm};
         padding-block: 0.2rem;
@@ -191,6 +202,12 @@ export const TS = {
         background-color: ${theme.colors.pri[900]};
         color: ${theme.colors.pri[500]};
         width: fit-content;
+      }
+      .cancel {
+        span {
+          color: ${theme.colors.Error} !important;
+          font-size: ${theme.font.sub};
+        }
       }
     }
 
@@ -228,6 +245,12 @@ export const TS = {
       width: 100px;
       color: ${theme.colors.gray[500]};
     }
+
+    &.member {
+      dt {
+        width: 80px;
+      }
+    }
   `,
 
   TicketRight: styled.div`
@@ -253,6 +276,13 @@ export const TS = {
     button:hover {
       background-color: ${theme.colors.pri[800]};
       font-weight: 600;
+    }
+
+    button:disabled {
+      &:hover {
+        background-color: ${theme.colors.gray[700]} !important;
+        font-weight: 300;
+      }
     }
   `,
 };

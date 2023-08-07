@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { styled } from 'styled-components';
 
@@ -22,6 +22,7 @@ export const StaffsDetail = () => {
   const [isActive, setIsActive] = useState(active);
   const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     !isLoading && (
@@ -100,7 +101,8 @@ export const StaffsDetail = () => {
                 {members.length > 0 ? (
                   members.map((v: { id: number; name: string; phone: string; sex: string; visitedAt: string }) => {
                     return (
-                      <div key={v.id} className="table-row">
+                      // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+                      <div key={v.id} className="table-row" onClick={() => navigate(`/members/${v.id}`)}>
                         <p className="icon-box">
                           <MemberIcon /> {v.name}
                         </p>
@@ -171,8 +173,8 @@ export const StaffsDetail = () => {
             id={id}
             name={name}
             setActive={setIsActive}
-            setIsOpen={setIsResignModalOpen}
             setIsConfirmModalOpen={setIsConfirmModalOpen}
+            setIsOpen={setIsResignModalOpen}
           />
         )}
         {isConfirmModalOpen && <StaffsConfirmModal name={name} setIsConfirmModalOpen={setIsConfirmModalOpen} />}

@@ -40,7 +40,7 @@ export const useValidation = () => {
   };
 
   const isEmpty = (arg: string | number) => {
-    if (arg !== 0 && arg !== undefined && arg !== '' && arg !== null) return false;
+    if (arg !== 0 && arg !== undefined && arg !== '' && arg !== null && arg !== '0') return false;
     return true;
   };
 

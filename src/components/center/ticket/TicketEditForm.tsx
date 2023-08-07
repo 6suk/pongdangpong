@@ -21,7 +21,7 @@ export const TicketEditForm = () => {
   const onSubmit = async (data: TicketFormDataType) => {
     const { url, method } = tickets_put;
     try {
-      await request({ url, method, path: `/${156484567878}`, body: data });
+      await request({ url, method, path: `/${id}`, body: data });
       navigate('/center/tickets');
     } catch (error) {
       handleAxiosError(error, `티켓 수정 오류`);

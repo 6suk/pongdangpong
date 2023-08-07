@@ -36,6 +36,11 @@ const errorCheckInput: ValidationProps[] = [
   { name: 'duration', type: 'number' },
 ];
 
+const errorCheckEditInput: ValidationProps[] = [
+  { name: 'defaultTerm', type: 'number' },
+  { name: 'defaultCount', type: 'number' },
+];
+
 export const TicketFormComponent: React.FC<TicketFormProps> = ({
   initialData = tickets_create.body,
   onSubmit,
@@ -83,16 +88,18 @@ export const TicketFormComponent: React.FC<TicketFormProps> = ({
 
   // 유효성 검사
   const checkForErrorAddToggle = () => {
+    const errorArr = isEditMode ? errorCheckEditInput : errorCheckInput;
+
     if (toggles.countToggle) {
-      const filteredInput = errorCheckInput.filter(item => item.name !== 'defaultCount');
+      const filteredInput = errorArr.filter(item => item.name !== 'defaultCount');
       return checkForErrors(filteredInput, inputValues);
     }
     if (toggles.termToggle) {
-      const filteredInput = errorCheckInput.filter(item => item.name !== 'defaultTerm');
+      const filteredInput = errorArr.filter(item => item.name !== 'defaultTerm');
       return checkForErrors(filteredInput, inputValues);
     }
 
-    return checkForErrors(errorCheckInput, inputValues);
+    return checkForErrors(errorArr, inputValues);
   };
 
   const toggleHandler = (e: React.MouseEvent<HTMLButtonElement>) => {

@@ -94,7 +94,12 @@ export const MemberDetail = () => {
                 </p>
               </li>
               <li className="btn-wrap">
-                <Editicon style={{ cursor: 'pointer' }} onClick={() => {}} />
+                <Editicon
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    navigate(`/members/${id}/edit`);
+                  }}
+                />
               </li>
             </S.list>
           </div>

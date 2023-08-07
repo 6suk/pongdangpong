@@ -6,7 +6,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
 import { MeType } from '@apis/authAPIs';
-import { Notifications } from '@assets/icons/indexIcons';
+import { Logo, Notifications } from '@assets/icons/indexIcons';
 import { useAuth } from '@hooks/apis/useAuth';
 import { RootState } from '@stores/store';
 import theme from '@styles/theme';
@@ -48,7 +48,7 @@ export const GlobalHeader = () => {
       <div className="container">
         <h1 className="logo">
           <Link to={'/'}>
-            <img alt="로고" src="/imgs/logo.png" />
+            <Logo />
           </Link>
         </h1>
 
@@ -73,10 +73,10 @@ export const GlobalHeader = () => {
                     <img alt="프로필 사진" src="/imgs/profile.png" />
                   </div>
                   <span className="userName">{data.name} 님</span>
-                  <button style={{ cursor: 'pointer' }} type="button" onClick={handleLogOutClick}>
+                  <button type="button" onClick={handleLogOutClick}>
                     로그아웃
                   </button>
-                  <Notifications style={{ cursor: 'pointer' }} />
+                  <Notifications style={{ cursor: 'pointer', width: '20px' }} />
                 </>
               ) : (
                 <div></div>
@@ -94,7 +94,7 @@ const S = {
     width: 100%;
     height: 80px;
     background-color: #fff;
-    border-bottom: 2px solid #e7e7e7;
+    border-bottom: 1px solid #e7e7e7;
     position: sticky;
     left: 0;
     top: 0;
@@ -108,6 +108,13 @@ const S = {
       display: flex;
       align-items: center;
       justify-content: space-between;
+    }
+
+    .logo {
+      svg {
+        height: 25px;
+        width: auto;
+      }
     }
   `,
   nav: styled.nav`
@@ -134,17 +141,18 @@ const S = {
       }
 
       button {
-        padding: 6px 20px;
+        padding: 6px 12px;
         background-color: ${({ theme }) => theme.colors['Gray-800']};
         color: ${({ theme }) => theme.colors['Pri-400']};
         border-radius: 6px;
         margin-right: 40px;
         position: relative;
         transition: all 0.4s;
+        font-size: ${theme.font.sub};
 
         &:hover {
-          background-color: ${({ theme }) => theme.colors['Pri-400']};
-          color: ${({ theme }) => theme.colors['Gray-800']};
+          background-color: ${theme.colors.gray[700]};
+          font-weight: 600;
         }
 
         &::after {

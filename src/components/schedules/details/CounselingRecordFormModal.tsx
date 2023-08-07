@@ -96,6 +96,7 @@ export const CounselingRecordFormModal = ({ setIsOpen, data, handleModalNotice }
 
         <div className="buttonWrapper">
           <Button
+            disabled={!counselingRecord?.content}
             isPri={false}
             size="full"
             onClick={() => {

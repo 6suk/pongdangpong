@@ -42,6 +42,7 @@ export const MemberAddTicket = () => {
         ...inputValues,
         privateTutorId,
         memberIds: [parseInt(id)],
+        serviceCount: count,
       };
 
       try {
@@ -80,109 +81,107 @@ export const MemberAddTicket = () => {
           <h3>{data.title} 부여</h3>
           <p>{name} 회원님에게 수강권을 부여합니다.</p>
         </TopTitleWrap>
-        <form method="post" onSubmit={handleSubmit}>
-          <FormGridContainer className="rows-three">
+        <FormGridContainer className="rows-three">
+          <div>
+            <InputField
+              disabled={true}
+              label="수강권명"
+              name="title"
+              placeholder="수강권명"
+              type="text"
+              value={data.title}
+            />
+          </div>
+          <div>
             <div>
-              <InputField
-                disabled={true}
-                label="수강권명"
-                name="title"
-                placeholder="수강권명"
-                type="text"
-                value={data.title}
-              />
-            </div>
-            <div>
-              <div>
-                <SC.Label>
-                  유효기간 <span></span>
-                </SC.Label>
-                <div className="time-inputs">
-                  <SC.InputField
-                    className={validationErrors.startAt ? 'error' : ''}
-                    name="startAt"
-                    type="date"
-                    value={inputValues.startAt}
-                    onChange={onChange}
-                  />
-                  ~
-                  <SC.InputField
-                    className={validationErrors.endAt ? 'error' : ''}
-                    name="endAt"
-                    type="date"
-                    value={inputValues.endAt}
-                    onChange={onChange}
-                  />
-                </div>
+              <SC.Label>
+                유효기간 <span></span>
+              </SC.Label>
+              <div className="time-inputs">
+                <SC.InputField
+                  className={validationErrors.startAt ? 'error' : ''}
+                  name="startAt"
+                  type="date"
+                  value={inputValues.startAt}
+                  onChange={onChange}
+                />
+                ~
+                <SC.InputField
+                  className={validationErrors.endAt ? 'error' : ''}
+                  name="endAt"
+                  type="date"
+                  value={inputValues.endAt}
+                  onChange={onChange}
+                />
               </div>
             </div>
-            <div>
-              <InputField
-                disabled={true}
-                label="수강권 기간"
-                name="duration"
-                placeholder="0"
-                type="text"
-                unit={data.defaultTerm ? TermUnitEnum[data.defaultTermUnit || 'DAY'] : ''}
-                value={data.defaultTerm || '소진시까지'}
-              />
-            </div>
-            <div>
-              <InputField
-                disabled={true}
-                label="기본횟수"
-                name="defaultCount"
-                type="text"
-                unit="회"
-                value={data.defaultCount || '무제한'}
-              />
-            </div>
-            <div>
-              <SC.Label htmlFor="maxServiceCount">
-                서비스 횟수<LabelNotice>최대 가능 횟수 {data.maxServiceCount}회</LabelNotice>
-              </SC.Label>
-              <InputCountStyle>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (count > 0) setCount((prev: number) => prev - 1);
-                  }}
-                >
-                  -
-                </button>
-                <Unit>
-                  <SC.InputField
-                    readOnly
-                    id="maxServiceCount"
-                    name="maxServiceCount"
-                    style={{ textAlign: 'center' }}
-                    value={count + ' 회'}
-                    onChange={onChange}
-                  />
-                </Unit>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (count < (data.maxServiceCount || 0)) setCount((prev: number) => prev + 1);
-                  }}
-                >
-                  +
-                </button>
-              </InputCountStyle>
-            </div>
-            <div>
-              <MemberOrUserSearchButton error={validationErrors.privateTutorId} type="USER" />
-            </div>
-          </FormGridContainer>
-          <FormButtonGroup>
-            <Button isPri={false} size="full" onClick={() => navigate(-1)}>
-              돌아가기
-            </Button>
-            <Button size="full" type="submit">
-              완료
-            </Button>
-          </FormButtonGroup>
-        </form>
+          </div>
+          <div>
+            <InputField
+              disabled={true}
+              label="수강권 기간"
+              name="duration"
+              placeholder="0"
+              type="text"
+              unit={data.defaultTerm ? TermUnitEnum[data.defaultTermUnit || 'DAY'] : ''}
+              value={data.defaultTerm || '소진시까지'}
+            />
+          </div>
+          <div>
+            <InputField
+              disabled={true}
+              label="기본횟수"
+              name="defaultCount"
+              type="text"
+              unit="회"
+              value={data.defaultCount || '무제한'}
+            />
+          </div>
+          <div>
+            <SC.Label htmlFor="maxServiceCount">
+              서비스 횟수<LabelNotice>최대 가능 횟수 {data.maxServiceCount}회</LabelNotice>
+            </SC.Label>
+            <InputCountStyle>
+              <button
+                type="button"
+                onClick={() => {
+                  if (count > 0) setCount((prev: number) => prev - 1);
+                }}
+              >
+                -
+              </button>
+              <Unit>
+                <SC.InputField
+                  readOnly
+                  id="maxServiceCount"
+                  name="maxServiceCount"
+                  style={{ textAlign: 'center' }}
+                  value={count + ' 회'}
+                  onChange={onChange}
+                />
+              </Unit>
+              <button
+                type="button"
+                onClick={() => {
+                  if (count < (data.maxServiceCount || 0)) setCount((prev: number) => prev + 1);
+                }}
+              >
+                +
+              </button>
+            </InputCountStyle>
+          </div>
+          <div>
+            <MemberOrUserSearchButton error={validationErrors.privateTutorId} type="USER" />
+          </div>
+        </FormGridContainer>
+        <FormButtonGroup>
+          <Button isPri={false} size="full" onClick={() => navigate(-1)}>
+            돌아가기
+          </Button>
+          <Button size="full" type="button" onClick={handleSubmit}>
+            완료
+          </Button>
+        </FormButtonGroup>
       </FormContentWrap>
     )
   );

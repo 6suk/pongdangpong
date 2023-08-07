@@ -6,6 +6,7 @@ import { ThemeProvider } from 'styled-components';
 
 import { Layout, PrivateRoute, PublicRoute } from '@/index';
 import { Schedules } from '@/pages/Schedules';
+import { Loading } from '@components/common/Loading';
 import { RootState } from '@stores/store';
 
 import theme from '@styles/theme';
@@ -16,14 +17,14 @@ function App() {
   const Center = lazy(() => import('@/pages/Center'));
   const Mypage = lazy(() => import('@/pages/Mypage'));
   const Members = lazy(() => import('@/pages/Members'));
-  const Sample = lazy(() => import('@/pages/Sample'));
+  const Sample = lazy(() => import('@/pages/backup/Sample'));
 
   const isLogin = useSelector((state: RootState) => state.tokens.isLogin);
 
   return (
     <>
       <ThemeProvider theme={theme}>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Loading />}>
           <Routes>
             <Route element={<Layout />}>
               <Route element={<PublicRoute isLogin={isLogin} />}>

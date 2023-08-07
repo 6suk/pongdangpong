@@ -52,7 +52,6 @@ const ButtonStyle = styled.button<ButtonStyleProps>`
 
       &:disabled {
         background-color: ${colors.gray[800]};
-        cursor: not-allowed;
         color : ${colors.gray[500]}
       }
     `;

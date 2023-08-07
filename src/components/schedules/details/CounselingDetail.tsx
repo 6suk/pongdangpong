@@ -124,21 +124,23 @@ export const CounselingDetail = () => {
                 <SC.TextareaField readOnly style={{ height: '100%' }} value={memo || '-'} />
               </div>
             </CounselingInfoWrap>
-            <CounselingInfoWrap>
-              <div style={{ height: '100%' }}>
-                <div className="header sub">
-                  <div className="title">
-                    <h3>상담 기록</h3>
+            {!isLoading && (
+              <CounselingInfoWrap>
+                <div style={{ height: '100%' }}>
+                  <div className="header sub">
+                    <div className="title">
+                      <h3>상담 기록</h3>
+                    </div>
                   </div>
+                  <SC.TextareaField
+                    readOnly
+                    disabled={counselingRecord?.content ? false : true}
+                    style={{ height: '100%' }}
+                    value={counselingRecord?.content || '상담 기록을 작성해 주세요.'}
+                  />
                 </div>
-                <SC.TextareaField
-                  readOnly
-                  disabled={counselingRecord?.content ? false : true}
-                  style={{ height: '100%' }}
-                  value={counselingRecord?.content || '상담 기록을 작성해 주세요.'}
-                />
-              </div>
-            </CounselingInfoWrap>
+              </CounselingInfoWrap>
+            )}
           </TicketWrap>
         </SchedulesDetailWrap>
 

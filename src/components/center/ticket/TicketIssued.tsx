@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { styled } from 'styled-components';
 
-import { Ticket_issued_list_datas } from '@apis/ticketsAPIs';
+import { Ticket_issued_list, Ticket_issued_list_datas, Ticket_response } from '@apis/ticketsAPIs';
 import { BackIcon, MemberIcon } from '@assets/icons/indexIcons';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
@@ -15,8 +15,8 @@ import { IssuedTicketModal } from './IssuedTicketModal';
 export const TicketIssued = () => {
   const { id } = useParams();
   const location = useLocation();
-  const { data } = useSwrData(location.pathname.replace('/center/', '')); // 수강권 부여 리스트
-  const { data: ticketData, isLoading } = useSwrData(`tickets/${id}`); // 해당 수강권 정보
+  const { data } = useSwrData<Ticket_issued_list>(location.pathname.replace('/center/', '')); // 수강권 부여 리스트
+  const { data: ticketData, isLoading } = useSwrData<Ticket_response>(`tickets/${id}`); // 해당 수강권 정보
   const [issuedId, setIssuedId] = useState<number>(0);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -31,7 +31,7 @@ export const TicketIssued = () => {
       <TicketContainer>
         <Top>
           <div className="issued-title">
-            <h3>{!isLoading && ticketData.title}</h3>
+            <h3>{ticketData && ticketData.title}</h3>
             <p>(총 {totalCount}건)</p>
           </div>
           <BackButton onClick={() => navigate(-1)}>

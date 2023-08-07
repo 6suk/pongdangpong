@@ -108,13 +108,8 @@ export const MemberOrUserSearchModal = ({ type, setIsOpen }: MemberOrUserSearchM
                 <h2>{type === 'USER' ? '담당 강사' : '회원'} 선택</h2>
                 {/* <p>일정을 진행할 {type === 'USER' ? '강사' : '회원'}를 선택해 주세요.</p> */}
               </div>
-              <Searchbar>
-                <form
-                  onSubmit={e => {
-                    e.preventDefault();
-                    handleQuerySearch();
-                  }}
-                >
+              <Searchbar onSubmit={handleQuerySearch}>
+                <form>
                   <SC.InputField
                     id="search"
                     name="search"

@@ -5,6 +5,7 @@ import { styled } from 'styled-components';
 import { LessonTypeEnum, TermUnitEnum, Ticket_issued_detail_res } from '@apis/ticketsAPIs';
 import { MemberIcon } from '@assets/icons/indexIcons';
 import { Button } from '@components/common/Button';
+import { Loading } from '@components/common/Loading';
 import { Modal } from '@components/common/Modal';
 import { useSwrData } from '@hooks/apis/useSwrData';
 import theme from '@styles/theme';
@@ -15,29 +16,33 @@ interface IssuedTicketDetailProps {
 }
 
 export const IssuedTicketModal = ({ setIsOpen, issuedId }: IssuedTicketDetailProps) => {
-  const { data, isLoading } = useSwrData(`issued-tickets/${issuedId}`);
+  const { data, isLoading } = useSwrData<Ticket_issued_detail_res>(`issued-tickets/${issuedId}`);
   const handleClose = useCallback(() => setIsOpen(false), [setIsOpen]);
 
   if (isLoading && !data) {
-    return <div>Loading...</div>;
+    return <Loading />;
   } else {
     return (
       <>
         <Modal maxWidth="36rem" setIsOpen={setIsOpen}>
-          <ModalInfoTop>
-            <h3 className="modal-info-title">{data.title}</h3>
-            <p className="modal-tag">{LessonTypeEnum[data.lessonType as keyof typeof LessonTypeEnum]}</p>
-          </ModalInfoTop>
-          <InformationList data={data} />
+          {data && (
+            <>
+              <ModalInfoTop>
+                <h3 className="modal-info-title">{data.title}</h3>
+                <p className="modal-tag">{LessonTypeEnum[data.lessonType as keyof typeof LessonTypeEnum]}</p>
+              </ModalInfoTop>
+              <InformationList data={data} />
 
-          <div className="buttonWrapper">
-            <Button isPri={false} size="full" onClick={handleClose}>
-              닫기
-            </Button>
-            <Button size="full" onClick={handleClose}>
-              편집
-            </Button>
-          </div>
+              <div className="buttonWrapper">
+                <Button isPri={false} size="full" onClick={handleClose}>
+                  닫기
+                </Button>
+                <Button size="full" onClick={handleClose}>
+                  편집
+                </Button>
+              </div>
+            </>
+          )}
         </Modal>
       </>
     );

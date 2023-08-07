@@ -52,6 +52,7 @@ export const PrivateLessonForm = ({ isEditMode = false }: SchedulesFormProps) =>
   const [inputValues, onChange, inputReset] = useInput(PrivateLessonInitInput);
   const { validationErrors, checkForErrors, updateValidationError, isSubmit } = useValidation();
   const { USER, MEMBER } = useSelector((state: RootState) => state.findUsers);
+  const selectedDate = useSelector((state: RootState) => state.calendar.checkDate);
   const { isErrorModalOpen, errorModal, handleAxiosError, handleModalNotice, closeErrorModal } = useErrorModal();
 
   /** 수정 시 전달받을 데이터 (edit) */
@@ -165,6 +166,8 @@ export const PrivateLessonForm = ({ isEditMode = false }: SchedulesFormProps) =>
   };
 
   useEffect(() => {
+    if (!isEditMode) inputReset({ ...inputValues, date: selectedDate });
+
     return () => {
       dispatch(clearAll());
     };

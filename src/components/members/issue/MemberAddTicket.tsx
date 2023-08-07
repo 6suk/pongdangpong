@@ -42,6 +42,7 @@ export const MemberAddTicket = () => {
         ...inputValues,
         privateTutorId,
         memberIds: [parseInt(id)],
+        serviceCount: count,
       };
 
       try {

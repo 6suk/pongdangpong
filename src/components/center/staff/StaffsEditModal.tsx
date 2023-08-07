@@ -85,7 +85,7 @@ export const StaffsEditModal = ({ setIsOpen, id }: StaffEditPropsType) => {
 
   return (
     !isLoading && (
-      <Modal maxWidth="32rem" setIsOpen={setIsOpen}>
+      <Modal closeOnClick={false} maxWidth="32rem" setIsOpen={setIsOpen}>
         <h3>직원 수정</h3>
         <form onSubmit={handleSubmit}>
           <ModalInInput>

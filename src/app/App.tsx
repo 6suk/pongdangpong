@@ -6,6 +6,7 @@ import { ThemeProvider } from 'styled-components';
 
 import { Layout, PrivateRoute, PublicRoute } from '@/index';
 import { Schedules } from '@/pages/Schedules';
+import { Loading } from '@components/common/Loading';
 import { RootState } from '@stores/store';
 
 import theme from '@styles/theme';
@@ -23,7 +24,7 @@ function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Loading />}>
           <Routes>
             <Route element={<Layout />}>
               <Route element={<PublicRoute isLogin={isLogin} />}>

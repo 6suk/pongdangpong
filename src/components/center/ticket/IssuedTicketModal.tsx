@@ -5,6 +5,7 @@ import { styled } from 'styled-components';
 import { LessonTypeEnum, TermUnitEnum, Ticket_issued_detail_res } from '@apis/ticketsAPIs';
 import { MemberIcon } from '@assets/icons/indexIcons';
 import { Button } from '@components/common/Button';
+import { Loading } from '@components/common/Loading';
 import { Modal } from '@components/common/Modal';
 import { useSwrData } from '@hooks/apis/useSwrData';
 import theme from '@styles/theme';
@@ -19,7 +20,7 @@ export const IssuedTicketModal = ({ setIsOpen, issuedId }: IssuedTicketDetailPro
   const handleClose = useCallback(() => setIsOpen(false), [setIsOpen]);
 
   if (isLoading && !data) {
-    return <div>Loading...</div>;
+    return <Loading />;
   } else {
     return (
       <>

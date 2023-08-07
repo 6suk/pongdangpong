@@ -134,6 +134,17 @@ export interface Schedules_list {
   privateSchedules: Schedules_list_private[];
 }
 
+/** 통합 검색 */
+export interface SearchResponseType {
+  searchParam: {
+    query: string;
+    resources: ['USER' | 'MEMBER'];
+  };
+  members: MemberSearchType[];
+  users: UsersSearchType[];
+  message: string;
+}
+
 /** 회원 통합 검색 */
 export interface MemberSearchType {
   id: number;

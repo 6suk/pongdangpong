@@ -15,10 +15,15 @@ import {
 
 import { formatDate, formatTimeRange } from '@utils/schedules/formatTimestamp';
 
-export const Dashboard = () => {
+import { SchedulesProps } from './SchedulesHome';
+
+export const Dashboard = ({ tutorId }: SchedulesProps) => {
   const selectedDate = useSelector((state: RootState) => state.calendar.checkDate);
   const navigate = useNavigate();
-  const { sortedSchedules, totalSchedules, cancellationRate, canceledCount } = useFilterAndSortSchedules(selectedDate);
+  const { sortedSchedules, totalSchedules, cancellationRate, canceledCount } = useFilterAndSortSchedules(
+    selectedDate,
+    tutorId
+  );
 
   return (
     <>

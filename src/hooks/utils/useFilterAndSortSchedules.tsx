@@ -18,7 +18,10 @@ export interface FilterAndSortSchedulesReturnType {
  * @param selectedDate
  * @returns
  */
-export const useFilterAndSortSchedules = (selectedDate: string): FilterAndSortSchedulesReturnType => {
+export const useFilterAndSortSchedules = (
+  selectedDate: string,
+  filterId: number = 0
+): FilterAndSortSchedulesReturnType => {
   const { data } = useSwrData<Schedules_list>(`schedules?from=${selectedDate}&to=${selectedDate}`);
 
   const result = useMemo(() => {
@@ -30,9 +33,17 @@ export const useFilterAndSortSchedules = (selectedDate: string): FilterAndSortSc
         cancellationRate: 0,
       };
 
+    const counselingSchedules = filterId
+      ? data.counselingSchedules.filter(schedule => schedule.counselor.id === filterId)
+      : data.counselingSchedules;
+
+    const privateSchedules = filterId
+      ? data.privateSchedules.filter(schedule => schedule.tutor.id === filterId)
+      : data.privateSchedules;
+
     const allSchedules = [
-      ...data.counselingSchedules.map(schedule => ({ type: 'counseling', schedule })),
-      ...data.privateSchedules.map(schedule => ({ type: 'private-lesson', schedule })),
+      ...counselingSchedules.map(schedule => ({ type: 'counseling', schedule })),
+      ...privateSchedules.map(schedule => ({ type: 'private-lesson', schedule })),
     ];
 
     const sortedSchedules = allSchedules
@@ -44,7 +55,7 @@ export const useFilterAndSortSchedules = (selectedDate: string): FilterAndSortSc
     const cancellationRate = totalSchedules > 0 ? Math.floor((canceledCount / totalSchedules) * 100) : 0;
 
     return { sortedSchedules, canceledCount, totalSchedules, cancellationRate };
-  }, [data]);
+  }, [data, filterId]);
 
   return result;
 };

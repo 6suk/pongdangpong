@@ -11,6 +11,8 @@ import { StyleDayEvent, StyleDayNumber, StyledCalendar, StyledDay, StyledDayName
 import { formatDateString } from '@utils/schedules/formatTimestamp';
 import { DayType, generateCalendar } from '@utils/schedules/generateCalendar';
 
+import { SchedulesProps } from './SchedulesHome';
+
 interface DayComponentProps {
   dayObj: DayType;
   selectedDate: string;
@@ -27,13 +29,13 @@ export interface CalendarEventType {
 
 export const DAYOFWEEK_ENUM = ['일', '월', '화', '수', '목', '금', '토'];
 
-export const Calendar = () => {
+export const Calendar = ({ tutorId }: SchedulesProps) => {
   const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
   const selectedDate = useSelector((state: RootState) => state.calendar.checkDate);
   const pathWithSearch = location.search ? location.pathname + location.search : null;
   const calendar = useMemo(() => generateCalendar(selectedDate), [selectedDate]);
-  const { getEventCount } = useEventCount(pathWithSearch);
+  const { getEventCount } = useEventCount(pathWithSearch, tutorId);
 
   /** 선택한 날짜 저장 */
   const handleClickDate = (day: DayType) => {

@@ -12,14 +12,23 @@ import { getEventCountbyDate } from '@utils/schedules/getEventCountbyDate';
  * @param pathWithSearch
  * @returns
  */
-export const useEventCount = (pathWithSearch: string | null) => {
+export const useEventCount = (pathWithSearch: string | null, tutorId: number = 0) => {
   const { data } = useSwrData<Schedules_list>(pathWithSearch);
   const [events, setEvents] = useState<{ [key: string]: CalendarEventType }>({});
 
   const allSchedules = useMemo(() => {
     if (!data) return [];
-    return [...data.counselingSchedules, ...data.privateSchedules];
-  }, [data]);
+
+    const counselingSchedules = tutorId
+      ? data.counselingSchedules.filter(schedule => schedule.counselor.id === tutorId)
+      : data.counselingSchedules;
+
+    const privateSchedules = tutorId
+      ? data.privateSchedules.filter(schedule => schedule.tutor.id === tutorId)
+      : data.privateSchedules;
+
+    return [...counselingSchedules, ...privateSchedules];
+  }, [data, tutorId]);
 
   const getEventCount = useCallback(
     (dayObj: DayType): number => {
@@ -30,7 +39,10 @@ export const useEventCount = (pathWithSearch: string | null) => {
   );
 
   useEffect(() => {
-    if (allSchedules.length === 0) return;
+    if (allSchedules.length === 0) {
+      setEvents({});
+      return;
+    }
 
     const newCounts = getEventCountbyDate(allSchedules);
     setEvents(newCounts);

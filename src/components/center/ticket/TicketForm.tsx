@@ -1,8 +1,7 @@
 import { tickets_create } from '@apis/ticketsAPIs';
 
+import { TicketFormComponent, TicketFormDataType } from '@components/center/ticket/TicketFormComponent';
 import { useRequests } from '@hooks/apis/useRequests';
-
-import { TicketFormComponent, TicketFormDataType } from './form/TicketFormComponent';
 
 export interface ValidationErrors {
   [key: string]: boolean;

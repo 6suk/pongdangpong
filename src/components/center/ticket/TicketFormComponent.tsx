@@ -43,7 +43,7 @@ export const TicketFormComponent: React.FC<TicketFormProps> = ({
 }) => {
   const navigate = useNavigate();
   const [inputValues, onChange, inputReset] = useInput({ ...initialData });
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(initialData.maxServiceCount);
   const [toggles, setToggles] = useState<{ [key: string]: boolean }>({ termToggle: true, countToggle: true });
   const { checkForErrors, updateValidationError, validationErrors } = useValidation();
   const [isSubmit, setIsSubmit] = useState(false);
@@ -62,7 +62,7 @@ export const TicketFormComponent: React.FC<TicketFormProps> = ({
           defaultCount: inputValues.defaultCount,
           defaultTerm: inputValues.defaultTerm,
           defaultTermUnit: inputValues.defaultTermUnit,
-          maxServiceCount: inputValues.maxServiceCount,
+          maxServiceCount: count,
         } as Ticket_put_body;
       } else {
         valuesCopy = { ...inputValues } as Tickets_request;
@@ -78,7 +78,7 @@ export const TicketFormComponent: React.FC<TicketFormProps> = ({
 
       try {
         onSubmit(valuesCopy);
-        navigate('/center/tickets');
+        // navigate('/center/tickets');
       } catch (error) {
         console.log(error);
       }
@@ -89,7 +89,6 @@ export const TicketFormComponent: React.FC<TicketFormProps> = ({
   const checkForErrorAddToggle = () => {
     if (toggles.countToggle) {
       const filteredInput = errorCheckInput.filter(item => item.name !== 'defaultCount');
-      console.log(filteredInput);
       return checkForErrors(filteredInput, inputValues);
     }
     if (toggles.termToggle) {
@@ -119,7 +118,7 @@ export const TicketFormComponent: React.FC<TicketFormProps> = ({
       termToggle: isEditMode ? !initialData.defaultTerm : false,
       countToggle: isEditMode ? !initialData.defaultCount : false,
     });
-    setCount(0);
+    setCount(initialData.maxServiceCount);
   }, [initialData, inputReset, setToggles, isEditMode]);
 
   useEffect(() => {
@@ -249,7 +248,6 @@ export const TicketFormComponent: React.FC<TicketFormProps> = ({
                   name="maxServiceCount"
                   style={{ textAlign: 'center' }}
                   value={count + ' 회'}
-                  onChange={onChange}
                 />
               </Unit>
               <button

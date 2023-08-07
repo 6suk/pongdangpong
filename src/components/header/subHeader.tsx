@@ -52,7 +52,7 @@ const S = {
     width: 100%;
     height: 64px;
     background-color: #fff;
-    border-bottom: 2px solid #e7e7e7;
+    border-bottom: 1px solid #e7e7e7;
     position: fixed;
     left: 0;
     top: -22%;

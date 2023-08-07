@@ -1,12 +1,19 @@
 import { Route, Routes } from 'react-router-dom';
 
-import { MemberList } from '@components/members/MemberList';
+import { MemberDetail } from '@components/members/detail/MemberDetail';
+import { MemberAddTicket } from '@components/members/issue/MemberAddTicket';
+import { SelectedTicket } from '@components/members/issue/SelectedTicket';
+import { MemberList } from '@components/members/list/MemberList';
+import { MembersResgier } from '@components/members/MembersRegister';
 
 export const Members = () => {
   return (
     <Routes>
       <Route index element={<MemberList />} path="" />
-      <Route index element={<MemberList />} path="detail/:id" />
+      <Route element={<MembersResgier />} path="new" />
+      <Route element={<MemberDetail />} path=":id" />
+      <Route element={<SelectedTicket />} path=":id/tickets" />
+      <Route element={<MemberAddTicket />} path=":id/tickets/:ticketId/issue" />
     </Routes>
   );
 };

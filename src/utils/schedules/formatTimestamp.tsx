@@ -88,8 +88,8 @@ interface DateDetails {
   date: number;
   month: number;
   year: number;
-  currentMonth: boolean;
-  dayOfWeek: number;
+  currentMonth?: boolean;
+  dayOfWeek?: number;
 }
 
 /**

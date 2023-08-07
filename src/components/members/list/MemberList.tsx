@@ -132,7 +132,7 @@ export const MemberList = () => {
               )}
               <Button
                 onClick={() => {
-                  navigate('register');
+                  navigate('new');
                 }}
               >
                 + 회원 등록

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { MembersAddTicekt } from '@components/members/MembersAddTicekt';
 import { styled } from 'styled-components';
 
 import { mutate } from 'swr';
@@ -8,9 +9,8 @@ import { mutate } from 'swr';
 import { ArrowIcon, MemberIcon, SearchIcon } from '@assets/icons/indexIcons';
 import { StaffsLIstWrap } from '@components/center/staff/StaffsList';
 import { Button } from '@components/common/Button';
-import { MembersDetailComponent } from '@components/members//MembersDetail';
-import { MembersAddTicekt } from '@components/members/MembersAddTicekt';
-import { MembersAlbum } from '@components/members/MembersAlbum';
+import { MembersAlbum } from '@components/members/backup/MembersAlbum';
+import { MembersDetailComponent } from '@components/members/backup/MembersDetail';
 import { MembersResgier } from '@components/members/MembersRegister';
 import { useSwrData } from '@hooks/apis/useSwrData';
 

@@ -10,7 +10,7 @@ import { StaffsLIstWrap } from '@components/center/staff/StaffsList';
 import { BackButton } from '@components/center/ticket/TicketIssued';
 import { Button } from '@components/common/Button';
 import { Modal, ModalButton } from '@components/common/Modal';
-import { TicketItem } from '@components/members/ticket/TicketItem';
+import { TicketItem } from '@components/members/backup/TicketItem';
 
 import { useRequests } from '@hooks/apis/useRequests';
 import { useSwrData } from '@hooks/apis/useSwrData';

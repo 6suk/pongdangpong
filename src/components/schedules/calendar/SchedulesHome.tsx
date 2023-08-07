@@ -1,19 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
-import { Schedules_list_counseling, Schedules_list_private } from '@apis/schedulesAPIs';
+import { Schedules_list_counseling, Schedules_list_private, SearchResponseType } from '@apis/schedulesAPIs';
 
 import { Button } from '@components/common/Button';
 
 import { SelectField } from '@components/common/SelectField';
+import { useSwrData } from '@hooks/apis/useSwrData';
 import useInput from '@hooks/utils/useInput';
 import { setSelectedDate } from '@stores/selectedDateSlice';
 import { AppDispatch, RootState } from '@stores/store';
 
 import { CalendarContainer, DateStyle, SchedulesContainer, SchedulesTop } from '@styles/SchedulesStyle';
 
+import { mapActiveStaffToLabelValue } from '@utils/mapActiveStaffToOption';
 import { formatDate } from '@utils/schedules/formatTimestamp';
 import { getLastDateOfMonth } from '@utils/schedules/getDate';
 
@@ -31,6 +33,10 @@ export interface SchedulesPropsType {
   privateSchedules: Schedules_list_private[];
 }
 
+export interface SchedulesProps {
+  tutorId: number;
+}
+
 export const SchedulesHome = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -38,6 +44,10 @@ export const SchedulesHome = () => {
   const [isOpen, setIsOpen] = useState(false);
   const selectedDate = useSelector((state: RootState) => state.calendar.checkDate);
   const lastNextDates = useSelector((state: RootState) => state.calendar.lastNextDates);
+  const { data } = useSwrData<SearchResponseType>(`search?resource=USER`);
+  const staffOption = useMemo(() => {
+    return mapActiveStaffToLabelValue(data?.users);
+  }, [data]);
 
   // 초기 진입 시 셀렉트될 날짜
   useEffect(() => {
@@ -66,13 +76,8 @@ export const SchedulesHome = () => {
               </div>
               <SelectField
                 name="tutor"
-                placeholder="강사 선택"
+                options={[{ label: '전체', value: 0 }, ...staffOption]}
                 value={inputValues.tutor}
-                options={[
-                  { label: '강사이름1', value: 0 },
-                  { label: '강사이름2', value: 1 },
-                  { label: '강사이름3', value: 2 },
-                ]}
                 onChange={onChange}
               />
               <SelectField
@@ -97,8 +102,8 @@ export const SchedulesHome = () => {
         </SchedulesTop>
         {/* 캘린더 & 대시보드 */}
         <CalendarContainer>
-          <Calendar />
-          <Dashboard />
+          <Calendar tutorId={parseInt(inputValues.tutor)} />
+          <Dashboard tutorId={parseInt(inputValues.tutor)} />
         </CalendarContainer>
         {/* 캘린더 & 대시보드 */}
       </SchedulesContainer>

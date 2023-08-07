@@ -43,7 +43,7 @@ export const TicketFormComponent: React.FC<TicketFormProps> = ({
 }) => {
   const navigate = useNavigate();
   const [inputValues, onChange, inputReset] = useInput({ ...initialData });
-  const [count, setCount] = useState(initialData.maxServiceCount);
+  const [count, setCount] = useState(initialData.maxServiceCount || 0);
   const [toggles, setToggles] = useState<{ [key: string]: boolean }>({ termToggle: true, countToggle: true });
   const { checkForErrors, updateValidationError, validationErrors } = useValidation();
   const [isSubmit, setIsSubmit] = useState(false);
@@ -65,7 +65,7 @@ export const TicketFormComponent: React.FC<TicketFormProps> = ({
           maxServiceCount: count,
         } as Ticket_put_body;
       } else {
-        valuesCopy = { ...inputValues } as Tickets_request;
+        valuesCopy = { ...inputValues, maxServiceCount: count } as Tickets_request;
       }
 
       const { termToggle, countToggle } = toggles;
@@ -74,14 +74,10 @@ export const TicketFormComponent: React.FC<TicketFormProps> = ({
         delete valuesCopy.defaultTermUnit;
       } else if (countToggle) {
         delete valuesCopy.defaultCount;
+        delete valuesCopy.maxServiceCount;
       }
-
-      try {
-        onSubmit(valuesCopy);
-        // navigate('/center/tickets');
-      } catch (error) {
-        console.log(error);
-      }
+      // 서버 전송
+      onSubmit(valuesCopy);
     }
   };
 
@@ -118,7 +114,7 @@ export const TicketFormComponent: React.FC<TicketFormProps> = ({
       termToggle: isEditMode ? !initialData.defaultTerm : false,
       countToggle: isEditMode ? !initialData.defaultCount : false,
     });
-    setCount(initialData.maxServiceCount);
+    setCount(initialData.maxServiceCount || 0);
   }, [initialData, inputReset, setToggles, isEditMode]);
 
   useEffect(() => {
@@ -126,150 +122,152 @@ export const TicketFormComponent: React.FC<TicketFormProps> = ({
   }, [inputValues, isSubmit]);
 
   return (
-    <FormContentWrap>
-      <TopTitleWrap>
-        <h3>{isEditMode ? '수강권 정보 설정' : '수강권 생성'}</h3>
-        <p>{isEditMode ? '센터의 수강권을 수정하세요' : '센터의 수강권을 생성하세요'}</p>
-      </TopTitleWrap>
-      <form method="post" onSubmit={handleSubmit}>
-        <FormGridContainer>
-          <div>
-            <SelectField
-              className="required"
-              disabled={isEditMode}
-              label="수업 유형"
-              name="lessonType"
-              options={[{ value: 'SINGLE', label: LessonTypeEnum['SINGLE'] }]}
-              value={inputValues.lessonType}
-              onChange={onChange}
-            />
-          </div>
-          <div>
-            <InputField
-              className="required"
-              disabled={isEditMode}
-              error={validationErrors.title}
-              label="수강권명"
-              name="title"
-              placeholder="수강권명"
-              type="text"
-              value={inputValues.title}
-              onChange={onChange}
-            />
-          </div>
-          <div>
-            <SC.Label className="required" htmlFor="defaultTerm">
-              수강권 기간
-            </SC.Label>
-            <div className="row-input">
-              <InputField
-                disabled={toggles.termToggle}
-                error={validationErrors.defaultTerm}
-                name="defaultTerm"
-                placeholder="0"
-                type="text"
-                value={inputValues.defaultTerm}
-                onChange={onChange}
-              />
+    <>
+      <FormContentWrap>
+        <TopTitleWrap>
+          <h3>{isEditMode ? '수강권 정보 설정' : '수강권 생성'}</h3>
+          <p>{isEditMode ? '센터의 수강권을 수정하세요' : '센터의 수강권을 생성하세요'}</p>
+        </TopTitleWrap>
+        <form method="post" onSubmit={handleSubmit}>
+          <FormGridContainer>
+            <div>
               <SelectField
-                disabled={toggles.termToggle}
-                name="defaultTermUnit"
-                value={inputValues.defaultTermUnit || 'DAY'}
-                options={[
-                  { value: 'DAY', label: TermUnitEnum['DAY'] },
-                  { value: 'WEEK', label: TermUnitEnum['WEEK'] },
-                  { value: 'MONTH', label: TermUnitEnum['MONTH'] },
-                  { value: 'YEAR', label: TermUnitEnum['YEAR'] },
-                ]}
+                className="required"
+                disabled={isEditMode}
+                label="수업 유형"
+                name="lessonType"
+                options={[{ value: 'SINGLE', label: LessonTypeEnum['SINGLE'] }]}
+                value={inputValues.lessonType}
                 onChange={onChange}
               />
             </div>
-            <FormToggleWrap>
-              <p>소진시까지</p>
-              <button className="toggle-box" name="termToggle" type="button" onClick={toggleHandler}>
-                <div className={`toggle-container ${toggles.termToggle ? 'toggle--checked' : null}`} />
-                <div className={`toggle-circle ${toggles.termToggle ? 'toggle--checked' : null}`} />
-              </button>
-            </FormToggleWrap>
-          </div>
-          <div>
-            <InputField
-              className="required"
-              disabled={isEditMode}
-              error={validationErrors.duration}
-              label="시간"
-              name="duration"
-              placeholder="0"
-              type="text"
-              unit="분"
-              value={inputValues.duration}
-              onChange={onChange}
-            />
-          </div>
-          <div>
-            <InputField
-              className="required"
-              disabled={toggles.countToggle}
-              error={validationErrors.defaultCount}
-              label="기본횟수"
-              name="defaultCount"
-              placeholder="0"
-              type="text"
-              unit="회"
-              value={inputValues.defaultCount}
-              onChange={onChange}
-            />
-            <FormToggleWrap>
-              <p>무제한</p>
-              <button className="toggle-box" name="countToggle" type="button" onClick={toggleHandler}>
-                <div className={`toggle-container ${toggles.countToggle ? 'toggle--checked' : null}`} />
-                <div className={`toggle-circle ${toggles.countToggle ? 'toggle--checked' : null}`} />
-              </button>
-            </FormToggleWrap>
-          </div>
-          <div>
-            <SC.Label htmlFor="maxServiceCount">
-              서비스 횟수<LabelNotice>서비스로 부여되는 횟수를 제한하여 설정할 수 있습니다.</LabelNotice>
-            </SC.Label>
-            <InputCountStyle>
-              <button
-                type="button"
-                onClick={() => {
-                  if (count > 0 && !toggles.countToggle) setCount(prev => prev - 1);
-                }}
-              >
-                -
-              </button>
-              <Unit>
-                <SC.InputField
-                  readOnly
-                  disabled={toggles.countToggle}
-                  id="maxServiceCount"
-                  name="maxServiceCount"
-                  style={{ textAlign: 'center' }}
-                  value={count + ' 회'}
+            <div>
+              <InputField
+                className="required"
+                disabled={isEditMode}
+                error={validationErrors.title}
+                label="수강권명"
+                name="title"
+                placeholder="수강권명"
+                type="text"
+                value={inputValues.title}
+                onChange={onChange}
+              />
+            </div>
+            <div>
+              <SC.Label className="required" htmlFor="defaultTerm">
+                수강권 기간
+              </SC.Label>
+              <div className="row-input">
+                <InputField
+                  disabled={toggles.termToggle}
+                  error={validationErrors.defaultTerm}
+                  name="defaultTerm"
+                  placeholder="0"
+                  type="text"
+                  value={inputValues.defaultTerm}
+                  onChange={onChange}
                 />
-              </Unit>
-              <button
-                type="button"
-                onClick={() => {
-                  if (!toggles.countToggle) setCount(prev => prev + 1);
-                }}
-              >
-                +
-              </button>
-            </InputCountStyle>
-          </div>
-        </FormGridContainer>
-        <FormButtonGroup>
-          <Button isPri={false} size="full" onClick={() => navigate(-1)}>
-            돌아가기
-          </Button>
-          <Button size="full" type="submit">
-            완료
-          </Button>
-        </FormButtonGroup>
-      </form>
-    </FormContentWrap>
+                <SelectField
+                  disabled={toggles.termToggle}
+                  name="defaultTermUnit"
+                  value={inputValues.defaultTermUnit || 'DAY'}
+                  options={[
+                    { value: 'DAY', label: TermUnitEnum['DAY'] },
+                    { value: 'WEEK', label: TermUnitEnum['WEEK'] },
+                    { value: 'MONTH', label: TermUnitEnum['MONTH'] },
+                    { value: 'YEAR', label: TermUnitEnum['YEAR'] },
+                  ]}
+                  onChange={onChange}
+                />
+              </div>
+              <FormToggleWrap>
+                <p>소진시까지</p>
+                <button className="toggle-box" name="termToggle" type="button" onClick={toggleHandler}>
+                  <div className={`toggle-container ${toggles.termToggle ? 'toggle--checked' : null}`} />
+                  <div className={`toggle-circle ${toggles.termToggle ? 'toggle--checked' : null}`} />
+                </button>
+              </FormToggleWrap>
+            </div>
+            <div>
+              <InputField
+                className="required"
+                disabled={isEditMode}
+                error={validationErrors.duration}
+                label="시간"
+                name="duration"
+                placeholder="0"
+                type="text"
+                unit="분"
+                value={inputValues.duration}
+                onChange={onChange}
+              />
+            </div>
+            <div>
+              <InputField
+                className="required"
+                disabled={toggles.countToggle}
+                error={validationErrors.defaultCount}
+                label="기본횟수"
+                name="defaultCount"
+                placeholder="0"
+                type="text"
+                unit="회"
+                value={inputValues.defaultCount}
+                onChange={onChange}
+              />
+              <FormToggleWrap>
+                <p>무제한</p>
+                <button className="toggle-box" name="countToggle" type="button" onClick={toggleHandler}>
+                  <div className={`toggle-container ${toggles.countToggle ? 'toggle--checked' : null}`} />
+                  <div className={`toggle-circle ${toggles.countToggle ? 'toggle--checked' : null}`} />
+                </button>
+              </FormToggleWrap>
+            </div>
+            <div>
+              <SC.Label htmlFor="maxServiceCount">
+                서비스 횟수<LabelNotice>서비스로 부여되는 횟수를 제한하여 설정할 수 있습니다.</LabelNotice>
+              </SC.Label>
+              <InputCountStyle>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (count > 0 && !toggles.countToggle) setCount(prev => prev - 1);
+                  }}
+                >
+                  -
+                </button>
+                <Unit>
+                  <SC.InputField
+                    readOnly
+                    disabled={toggles.countToggle}
+                    id="maxServiceCount"
+                    name="maxServiceCount"
+                    style={{ textAlign: 'center' }}
+                    value={count + ' 회'}
+                  />
+                </Unit>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!toggles.countToggle) setCount(prev => prev + 1);
+                  }}
+                >
+                  +
+                </button>
+              </InputCountStyle>
+            </div>
+          </FormGridContainer>
+          <FormButtonGroup>
+            <Button isPri={false} size="full" onClick={() => navigate(-1)}>
+              돌아가기
+            </Button>
+            <Button size="full" type="submit">
+              완료
+            </Button>
+          </FormButtonGroup>
+        </form>
+      </FormContentWrap>
+    </>
   );
 };

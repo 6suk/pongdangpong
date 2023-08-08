@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -15,9 +15,10 @@ import { ValidationProps, useValidation } from '@hooks/utils/useValidation';
 import { clearAll, setFindUser } from '@stores/findUsersSlice';
 import { setSelectedDate } from '@stores/selectedDateSlice';
 import { RootState } from '@stores/store';
-import { FormButtonGroup, FormGridContainer } from '@styles/center/ticketFormStyle';
-import { FormContentWrap, SC, TopTitleWrap } from '@styles/styles';
 
+import { FormButtonGroup, FormGridContainer } from '@styles/common/FormStyle';
+import { SC } from '@styles/common/inputsStyles';
+import { FormContentWrap, TopTitleWrap } from '@styles/common/wrapStyle';
 import { extractBasePath } from '@utils/extractBasePath';
 import { combineDateTime, extractDate, extractTime } from '@utils/schedules/formatTimestamp';
 

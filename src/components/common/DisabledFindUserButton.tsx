@@ -1,7 +1,8 @@
 import { useSelector } from 'react-redux';
 
 import { RootState } from '@stores/store';
-import { NameButton, SC } from '@styles/styles';
+import { NameButton } from '@styles/common/FormStyle';
+import { SC } from '@styles/common/inputsStyles';
 
 interface DisabledFindUserButtonProps {
   type: 'MEMBER' | 'USER';

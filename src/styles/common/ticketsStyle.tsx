@@ -23,12 +23,6 @@ export const TicketContainer = styled.div`
     }
   }
 `;
-export const CenterContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  max-width: 1024px;
-  width: 100%;
-`;
 
 /** ...인 수강권이 없습니다 */
 export const NoneDisplay = styled.div`

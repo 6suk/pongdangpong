@@ -1,8 +1,9 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { Modal, ModalButton } from '@components/common/Modal';
+import { Modal } from '@components/common/Modal';
 import { useRequests } from '@hooks/apis/useRequests';
 import { useSwrData } from '@hooks/apis/useSwrData';
+import { ModalButton } from '@styles/modal/modalStyle';
 
 interface StaffsResignModalProps {
   setActive: Dispatch<SetStateAction<boolean>>;
@@ -54,7 +55,7 @@ export const StaffsResignModal: React.FC<StaffsResignModalProps> = ({
         </h3>
         <p>퇴사 후, {name}님의 정보는 조회만 가능합니다.</p>
         <div className="buttonWrapper">
-          <ModalButton onClick={onConfirm} $isPrimary>
+          <ModalButton $isPrimary onClick={onConfirm}>
             예
           </ModalButton>
           <ModalButton

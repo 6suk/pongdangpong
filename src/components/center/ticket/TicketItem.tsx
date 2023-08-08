@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom';
 
 import { LessonTypeEnum, TermUnitEnum, Ticket_response } from '@apis/ticketsAPIs';
 import { TicketIcon } from '@assets/icons/indexIcons';
-import { Modal, ModalButton } from '@components/common/Modal';
-import { TS } from '@styles/center/ticketsStyle';
+import { Modal } from '@components/common/Modal';
+import { TS } from '@styles/common/ticketsStyle';
+import { ModalButton } from '@styles/modal/modalStyle';
 
 interface TicketItemProps {
   ticket: Ticket_response;
@@ -140,12 +141,12 @@ export const TicketItem = ({ ticket, ticketStatus, deleteTicket }: TicketItemPro
           </p>
           <div className="buttonWrapper">
             <ModalButton
+              $isPrimary
               onClick={() => {
                 ticketStatus(id);
                 navigate(`?isActive=false`);
                 setIsModalOpen(false);
               }}
-              $isPrimary
             >
               확인
             </ModalButton>
@@ -159,7 +160,7 @@ export const TicketItem = ({ ticket, ticketStatus, deleteTicket }: TicketItemPro
           <h3>수강권 삭제</h3>
           <p>수강권을 삭제하시겠습니까?</p>
           <div className="buttonWrapper">
-            <ModalButton onClick={() => handleDelete(id)} $isPrimary>
+            <ModalButton $isPrimary onClick={() => handleDelete(id)}>
               확인
             </ModalButton>
             <ModalButton onClick={() => setIsDeleteModalOpen(false)}>취소</ModalButton>

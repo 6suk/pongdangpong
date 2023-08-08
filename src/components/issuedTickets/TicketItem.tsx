@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { LessonTypeEnum, TermUnitEnum, Ticket_response } from '@apis/ticketsAPIs';
 import { TicketIcon } from '@assets/icons/indexIcons';
-import { TS } from '@styles/center/ticketsStyle';
+import { TS } from '@styles/common/ticketsStyle';
 
 interface TicketItemProps {
   ticket: Ticket_response;

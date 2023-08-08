@@ -2,7 +2,7 @@ import { useOutletContext } from 'react-router-dom';
 
 import { InputField } from '@components/common/InputField';
 
-import { LoginInputWrap } from '@styles/loginStyle';
+import { LoginInputWrap } from '@styles/pages/loginStyle';
 
 import { loginFormType } from './LoginLayout';
 

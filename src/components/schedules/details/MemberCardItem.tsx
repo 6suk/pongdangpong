@@ -1,6 +1,6 @@
 import { AttendanceHistoriesType, SchedulesIssuedTicketType, StatusEnum } from '@apis/schedulesAPIs';
 import { MemberIcon } from '@assets/icons/indexIcons';
-import { PrivateLessonCardItem, SchedulesTypeInfo } from '@styles/SchedulesStyle';
+import { PrivateLessonCardItem, SchedulesTypeInfo } from '@styles/pages/SchedulesStyle';
 
 import { StatusButton } from './StatusButton';
 

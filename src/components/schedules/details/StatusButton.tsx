@@ -7,10 +7,11 @@ import styled from 'styled-components';
 import { mutate } from 'swr';
 
 import { StatusType } from '@apis/schedulesAPIs';
-import { Modal, ModalButton } from '@components/common/Modal';
+import { Modal } from '@components/common/Modal';
 import { NoticeModal } from '@components/common/NoticeModal';
 import { useRequests } from '@hooks/apis/useRequests';
 import { useErrorModal } from '@hooks/utils/useErrorModal';
+import { ModalButton } from '@styles/modal/modalStyle';
 import theme from '@styles/theme';
 
 export const StatusButton = ({ status, buttonType, children, attendanceHistoryId }: StatusButtonProps) => {

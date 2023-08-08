@@ -1,6 +1,6 @@
 import { ChangeEvent, FC } from 'react';
 
-import { SC } from '@styles/styles';
+import { SC } from '@styles/common/inputsStyles';
 
 type SelectProps = {
   className?: 'required' | string;

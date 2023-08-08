@@ -4,7 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { clearAll, clearType } from '@stores/findUsersSlice';
 import { RootState } from '@stores/store';
-import { NameButton, SC, SelectButton } from '@styles/styles';
+
+import { NameButton, SelectButton } from '@styles/common/FormStyle';
+import { SC } from '@styles/common/inputsStyles';
 
 import { MemberOrUserSearchModal } from './FindUserListModal';
 

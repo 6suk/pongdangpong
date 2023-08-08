@@ -1,20 +1,18 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-
-import { styled } from 'styled-components';
 
 import { MemberListResponse, MemberSearchResponse } from '@apis/membersAPIs';
 import { ArrowIcon, CloseIcon, SearchIcon } from '@assets/icons/indexIcons';
-import { StaffsLIstWrap } from '@components/center/staff/StaffsList';
 import { Button } from '@components/common/Button';
 import { MemberListDefault } from '@components/members/list/MemberListDefault';
 import { MemberListSearch } from '@components/members/list/MemberListSearch';
 import { useSwrData } from '@hooks/apis/useSwrData';
 import useInput from '@hooks/utils/useInput';
 import { usePagination } from '@hooks/utils/usePagination';
-import { Pagination } from '@styles/paginaionStyle';
-import { SC } from '@styles/styles';
-import theme from '@styles/theme';
+import { SC } from '@styles/common/inputsStyles';
+import { Pagination } from '@styles/common/paginaionStyle';
+import { BasicContainer, ListWrap } from '@styles/common/wrapStyle';
+import { MemberTopTitle, MemberWrap } from '@styles/pages/memberStyle';
 
 export interface SetQueryType {
   page?: number;
@@ -81,14 +79,14 @@ export const MemberList = () => {
 
   return (
     <>
-      <Container>
+      <BasicContainer>
         <>
-          <S.wrap>
-            <TopTitle>
+          <MemberWrap>
+            <MemberTopTitle>
               <h3>
                 {isSearch ? `검색 결과` : '전체 회원'} <span className="highlight">{totalCount}</span>
               </h3>
-            </TopTitle>
+            </MemberTopTitle>
             <div className="top-left">
               <form className="search-bar" onSubmit={handleSearchSubmit}>
                 <SC.InputField
@@ -138,9 +136,9 @@ export const MemberList = () => {
                 + 회원 등록
               </Button>
             </div>
-          </S.wrap>
+          </MemberWrap>
 
-          <StaffsLIstWrap>
+          <ListWrap>
             <div className="table">
               <div className="table-row title">
                 <p>이름</p>
@@ -219,175 +217,9 @@ export const MemberList = () => {
               )}
               {/* 페이지 네이션 */}
             </div>
-          </StaffsLIstWrap>
+          </ListWrap>
         </>
-      </Container>
+      </BasicContainer>
     </>
   );
-};
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  max-width: 1024px;
-  width: 100%;
-`;
-
-const DetailButton = styled.button`
-  font-size: 14px;
-  padding-inline: 0.4rem;
-  padding-block: 0.3rem;
-  background-color: ${theme.colors.pri[900]};
-  color: ${theme.colors.pri[600]};
-  border-radius: 6px;
-  transition: all 0.4s;
-
-  &:hover {
-    font-weight: 600;
-    background-color: ${theme.colors.pri[800]};
-  }
-`;
-
-const TopTitle = styled.div`
-  display: flex;
-  flex-direction: row;
-  padding-block: 1rem;
-  align-items: center;
-  margin-inline: 1rem;
-
-  h3 {
-    font-weight: bold;
-    size: ${theme.font.title};
-
-    .highlight {
-      color: ${theme.colors.pri[500]};
-    }
-  }
-`;
-
-const S = {
-  list: styled.ul`
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    padding: 6px 10px;
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    font-size: ${theme.font.sub};
-
-    & > li {
-      display: flex;
-      align-items: center;
-
-      & > .pic {
-        margin-right: 10px;
-      }
-
-      & > p {
-        & > span {
-          color: gray;
-          margin-right: 10px;
-        }
-      }
-
-      & > p:nth-of-type(1) {
-        width: 140px;
-      }
-      & > p:nth-of-type(2) {
-        width: 180px;
-      }
-      & > p:nth-of-type(3) {
-        width: 170px;
-      }
-      & > p:nth-of-type(4) {
-        width: 80px;
-      }
-      & > p:nth-of-type(5) {
-        width: 200px;
-      }
-    }
-  `,
-  wrap: styled.div`
-    display: flex;
-    align-items: center;
-    margin-bottom: 24px;
-    margin-inline: 1rem;
-    justify-content: space-between;
-
-    button {
-      margin-left: auto;
-    }
-
-    .top-left {
-      display: flex;
-      gap: 1rem;
-      select {
-        width: auto;
-      }
-
-      input[type='text'] {
-        width: 100%;
-      }
-    }
-
-    .search-bar {
-      position: relative;
-      display: flex;
-      align-items: center;
-
-      .search-submit {
-        position: absolute;
-        right: 0;
-        margin-right: 1rem;
-        transition: all 0.4s;
-
-        &:hover {
-          opacity: 0.5;
-        }
-
-        svg {
-          width: 17px;
-          fill: ${theme.colors.gray[400]};
-        }
-      }
-    }
-  `,
-
-  pageNation: styled.div`
-    display: flex;
-    justify-content: center;
-    font-size: ${theme.font.sub};
-    margin-top: 2rem;
-
-    & > button[type='button'].pageBtn {
-      width: 33px;
-      aspect-ratio: 1/1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: transparent;
-      border: 1px solid ${theme.colors.inputBorder};
-      color: ${theme.colors.gray[600]};
-      &.on {
-        background-color: ${theme.colors.pri[900]};
-        color: ${theme.colors.pri[500]};
-      }
-
-      &:first-child {
-        border-radius: 6px 0px 0px 6px;
-      }
-      &:last-child {
-        border-radius: 0px 6px 6px 0px;
-      }
-      &:not(:last-child) {
-        border-right: 0;
-      }
-
-      svg {
-        width: 8px;
-        fill: ${theme.colors.gray[600]};
-      }
-    }
-  `,
 };

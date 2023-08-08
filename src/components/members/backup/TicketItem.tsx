@@ -1,9 +1,8 @@
-import { useState, memo } from 'react';
+import { memo, useState } from 'react';
 
-import { LessonTypeEnum, TermUnitEnum, Ticket_response } from '@apis/ticketsAPIs';
+import { LessonTypeEnum, Ticket_response } from '@apis/ticketsAPIs';
 import { TicketIcon } from '@assets/icons/indexIcons';
-import { IssuedTicketModal } from '@components/center/ticket/IssuedTicketModal';
-import { TS } from '@styles/center/ticketsStyle';
+import { TS } from '@styles/common/ticketsStyle';
 
 interface TicketItemProps {
   ticket: Ticket_response;
@@ -109,7 +108,7 @@ const TicketItemMemo = ({
           </button>
         </TS.TicketRight>
       </TS.Ticket>
-      {isOpen && <IssuedTicketModal issuedId={id} setIsOpen={setIsOpen} />}
+      {/* {isOpen && <IssuedTicketDetailModal issuedId={id} setIsOpen={setIsOpen} />} */}
     </>
   );
 };

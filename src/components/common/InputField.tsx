@@ -1,8 +1,7 @@
 import { ChangeEvent, FC } from 'react';
 
-import { styled } from 'styled-components';
-
-import { SC } from '@styles/styles';
+import { Unit } from '@styles/common/FormStyle';
+import { SC } from '@styles/common/inputsStyles';
 
 type InputFieldProps = {
   className?: 'required';
@@ -64,16 +63,3 @@ export const InputField: FC<InputFieldProps> = ({
     </div>
   );
 };
-
-export const Unit = styled.div`
-  position: relative;
-
-  .unit {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    font-size: 14px;
-    padding-block: 0.625rem;
-    padding-inline: 1rem;
-  }
-`;

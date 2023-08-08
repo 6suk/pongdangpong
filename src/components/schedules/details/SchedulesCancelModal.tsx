@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Modal, ModalButton } from '@components/common/Modal';
+import { Modal } from '@components/common/Modal';
 import { NoticeModal } from '@components/common/NoticeModal';
 import { useRequests } from '@hooks/apis/useRequests';
+import { ModalButton } from '@styles/modal/modalStyle';
 
 interface SchedulesCancelModalProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;

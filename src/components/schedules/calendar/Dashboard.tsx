@@ -11,7 +11,7 @@ import {
   DashboardWrap,
   SchedulesTypeInfo,
   SchedulesTypeInfoText,
-} from '@styles/SchedulesStyle';
+} from '@styles/pages/SchedulesStyle';
 
 import { formatDate, formatTimeRange } from '@utils/schedules/formatTimestamp';
 

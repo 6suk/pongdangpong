@@ -1,5 +1,4 @@
 import { Suspense, lazy } from 'react';
-import { useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 
 import { ThemeProvider } from 'styled-components';
@@ -7,7 +6,6 @@ import { ThemeProvider } from 'styled-components';
 import { Layout, PrivateRoute, PublicRoute } from '@/index';
 import { Schedules } from '@/pages/Schedules';
 import { Loading } from '@components/common/Loading';
-import { RootState } from '@stores/store';
 
 import theme from '@styles/theme';
 
@@ -17,9 +15,6 @@ function App() {
   const Center = lazy(() => import('@/pages/Center'));
   const Mypage = lazy(() => import('@/pages/Mypage'));
   const Members = lazy(() => import('@/pages/Members'));
-  const Sample = lazy(() => import('@/pages/backup/Sample'));
-
-  const isLogin = useSelector((state: RootState) => state.tokens.isLogin);
 
   return (
     <>
@@ -27,13 +22,12 @@ function App() {
         <Suspense fallback={<Loading />}>
           <Routes>
             <Route element={<Layout />}>
-              <Route element={<PublicRoute isLogin={isLogin} />}>
+              <Route element={<PublicRoute />}>
                 <Route element={<Login />} path="login/*" />
               </Route>
-              <Route element={<PrivateRoute isLogin={isLogin} />}>
+              <Route element={<PrivateRoute />}>
                 <Route element={<Home />} path="/" />
                 <Route element={<Members />} path="members/*" />
-                <Route element={<Sample />} path="sample/*" />
                 <Route element={<Mypage />} path="mypage" />
                 <Route element={<Center />} path="center/*" />
                 <Route element={<Schedules />} path="schedules/*" />
@@ -44,11 +38,6 @@ function App() {
       </ThemeProvider>
     </>
   );
-}
-
-export interface PropsState {
-  isLogin: boolean;
-  info?: string;
 }
 
 export default App;

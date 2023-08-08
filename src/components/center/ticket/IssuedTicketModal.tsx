@@ -1,5 +1,7 @@
 import { Dispatch, SetStateAction, useCallback, memo } from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
 import { styled } from 'styled-components';
 
 import { LessonTypeEnum, TermUnitEnum, Ticket_issued_detail_res } from '@apis/ticketsAPIs';
@@ -13,11 +15,13 @@ import theme from '@styles/theme';
 interface IssuedTicketDetailProps {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   issuedId: number;
+  memberId: number;
 }
 
-export const IssuedTicketModal = ({ setIsOpen, issuedId }: IssuedTicketDetailProps) => {
+export const IssuedTicketModal = ({ setIsOpen, issuedId, memberId }: IssuedTicketDetailProps) => {
   const { data, isLoading } = useSwrData<Ticket_issued_detail_res>(`issued-tickets/${issuedId}`);
   const handleClose = useCallback(() => setIsOpen(false), [setIsOpen]);
+  const navigate = useNavigate();
 
   if (isLoading && !data) {
     return <Loading />;
@@ -37,7 +41,7 @@ export const IssuedTicketModal = ({ setIsOpen, issuedId }: IssuedTicketDetailPro
                 <Button isPri={false} size="full" onClick={handleClose}>
                   닫기
                 </Button>
-                <Button size="full" onClick={handleClose}>
+                <Button size="full" onClick={() => navigate(`/members/${memberId}/tickets/${issuedId}/edit`)}>
                   편집
                 </Button>
               </div>

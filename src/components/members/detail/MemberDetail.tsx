@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useState, Dispatch } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import { styled } from 'styled-components';
@@ -9,7 +8,6 @@ import { BackIcon, Editicon, TicketIcon } from '@assets/icons/indexIcons';
 import { BackButton } from '@components/center/ticket/TicketIssued';
 import { Button } from '@components/common/Button';
 import { useSwrData } from '@hooks/apis/useSwrData';
-import { setFindMember, setFindUser } from '@stores/findUsersSlice';
 import { NoneDisplay, TicketContainer, TicketWrap, Top } from '@styles/center/ticketsStyle';
 import { SchedulesDetailWrap } from '@styles/SchedulesStyle';
 import theme from '@styles/theme';
@@ -19,13 +17,12 @@ import { TicketItem } from './TicketItem';
 
 export const MemberDetail = () => {
   const navigate = useNavigate();
-  const { id } = useParams();
-  const { data } = useSwrData<MemberDetailResponse>(`members/${id}`);
-  const { data: ticketData } = useSwrData<MemberTicketResponse>(`members/${id}/issued-tickets`);
+  const { memberId } = useParams();
+  const { data } = useSwrData<MemberDetailResponse>(`members/${memberId}`);
+  const { data: ticketData } = useSwrData<MemberTicketResponse>(`members/${memberId}/issued-tickets`);
   const [searchParams, setSearchParams] = useSearchParams();
   const isActivePath = searchParams.get('isActive') === 'true';
   const [tickets, setTickets] = useState<MemberIssuedTicketType[]>([]);
-  const dispatch = useDispatch();
 
   const activeList = useMemo(
     () => tickets?.filter((v: MemberIssuedTicketType) => v.isSuspended !== true && v.isCanceled !== true) || [],
@@ -97,7 +94,7 @@ export const MemberDetail = () => {
                 <Editicon
                   style={{ cursor: 'pointer' }}
                   onClick={() => {
-                    navigate(`/members/${id}/edit`);
+                    navigate(`/members/${memberId}/edit`);
                   }}
                 />
               </li>
@@ -115,7 +112,6 @@ export const MemberDetail = () => {
               </div>
               <Button
                 onClick={() => {
-                  dispatch(setFindMember({ name: data.name, id: data.id }));
                   navigate('tickets');
                 }}
               >

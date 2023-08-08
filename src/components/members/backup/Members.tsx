@@ -11,7 +11,7 @@ import { StaffsLIstWrap } from '@components/center/staff/StaffsList';
 import { Button } from '@components/common/Button';
 import { MembersAlbum } from '@components/members/backup/MembersAlbum';
 import { MembersDetailComponent } from '@components/members/backup/MembersDetail';
-import { MembersResgier } from '@components/members/MembersRegister';
+import { MembersForm } from '@components/members/MembersForm';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
 import { SC } from '@styles/styles';
@@ -102,7 +102,7 @@ const Members = () => {
 
   return (
     <>
-      {currentPathname === 'register' && <MembersResgier />}
+      {currentPathname === 'register' && <MembersForm />}
       {currentPathname === 'detail' && (
         <MembersDetailComponent id={userIdRef.current} staffsDatas={staffsDatas} tickets={ticketData?.tickets} />
       )}

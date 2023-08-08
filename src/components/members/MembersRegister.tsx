@@ -208,7 +208,7 @@ export const MembersResgier = () => {
 
             <div>
               <SC.Label>방문경로</SC.Label>
-              <SC.Select name="visitRoute" onChange={onChange}>
+              <SC.Select name="acquisitionFunnel" onChange={onChange}>
                 <option className="opion-title" defaultValue="">
                   선택해주세요
                 </option>

@@ -51,6 +51,8 @@ export const MemberEdit = () => {
   const [chips, setChips] = useState('FEMALE');
   const isEditMode = false;
 
+  console.log(data);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const isValid = validateFields();
@@ -164,7 +166,7 @@ export const MemberEdit = () => {
 
             <div>
               <SC.Label>직업</SC.Label>
-              <SC.Select name="job" onChange={onChange}>
+              <SC.Select name="job" value={inputValues.job} onChange={onChange}>
                 <option className="opion-title" defaultValue="">
                   선택해주세요
                 </option>
@@ -178,7 +180,7 @@ export const MemberEdit = () => {
 
             <div>
               <SC.Label>방문경로</SC.Label>
-              <SC.Select name="visitRoute" onChange={onChange}>
+              <SC.Select name="acquisitionFunnel" value={inputValues.acquisitionFunnel} onChange={onChange}>
                 <option className="opion-title" defaultValue="">
                   선택해주세요
                 </option>

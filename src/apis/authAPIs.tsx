@@ -65,3 +65,16 @@ export interface MeCenterType {
   phone: string;
   contactLink: string;
 }
+
+export interface MeSummaryType {
+  center: {
+    staffCount: number;
+    memberCount: number;
+    myMemberCount: number;
+  };
+  mySchedule: {
+    counselingCount: number;
+    lessonCount: number;
+  };
+  message: string;
+}

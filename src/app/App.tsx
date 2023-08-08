@@ -31,7 +31,7 @@ function App() {
                 <Route element={<Login />} path="login/*" />
               </Route>
               <Route element={<PrivateRoute isLogin={isLogin} />}>
-                <Route element={<Home />} path="/" />
+                <Route element={<Home />} path="home/*" />
                 <Route element={<Members />} path="members/*" />
                 <Route element={<Sample />} path="sample/*" />
                 <Route element={<Mypage />} path="mypage" />

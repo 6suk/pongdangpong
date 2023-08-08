@@ -11,8 +11,6 @@ import theme from '@styles/theme';
 export const CenterInfo = () => {
   const { data, isLoading } = useSwrData(`me/center`);
   const { id, name, centerCode, phone, contactLink } = (data as MeCenterType) ?? {};
-  const { staffCount, myMemberCount } = center ?? {};
-  const { lessonCount, counselingCount } = mySchedule ?? {};
   const navigate = useNavigate();
 
   return (

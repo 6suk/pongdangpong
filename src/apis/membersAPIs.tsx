@@ -139,7 +139,6 @@ export interface MemberIssuedTicketType {
 }
 
 /** 수강권 부여 Form */
-
 export interface MemberAddTicketRequest {
   memberIds: number[];
   serviceCount: number;
@@ -148,14 +147,18 @@ export interface MemberAddTicketRequest {
   endAt: string; //date
 }
 
-export interface MemberAddTicketFormType {
+export interface MemberTicketAddFormType {
   serviceCount: number;
   startAt: string; //date
   endAt: string; //date
 }
 
-export const MemberAddTicketInitForm: MemberAddTicketFormType = {
-  serviceCount: 0,
-  startAt: formatDateString(getCurrentDate()),
-  endAt: formatDateString(getCurrentDate()),
-};
+/** 수강권 부여 Edit Form */
+export interface MemberEditTicketRequest {
+  tutorId: number;
+  endAt: string; //date
+}
+
+export interface MemberTicketEditFormType {
+  endAt: string; //date
+}

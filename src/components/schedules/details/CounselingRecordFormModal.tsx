@@ -8,7 +8,7 @@ import { Modal } from '@components/common/Modal';
 import { useRequests } from '@hooks/apis/useRequests';
 import useInput from '@hooks/utils/useInput';
 import { useValidation } from '@hooks/utils/useValidation';
-import { SC } from '@styles/styles';
+import { SC } from '@styles/common/inputsStyles';
 
 const initCounselingRecordContent = {
   counselingRecordContent: '',

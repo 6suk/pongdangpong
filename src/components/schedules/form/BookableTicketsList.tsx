@@ -13,10 +13,8 @@ import { SelectField } from '@components/common/SelectField';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
 import { RootState } from '@stores/store';
-
-import { LabelNotice } from '@styles/center/ticketFormStyle';
-
-import { NameButton, SC } from '@styles/styles';
+import { LabelNotice, NameButton } from '@styles/common/FormStyle';
+import { SC } from '@styles/common/inputsStyles';
 
 interface BookableTicketsListProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;

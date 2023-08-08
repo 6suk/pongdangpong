@@ -1,24 +1,23 @@
-import { useState, useEffect } from 'react';
-import { isElementOfType } from 'react-dom/test-utils';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 
 import { mutate } from 'swr';
 
 import { MemberIssuedTicketType } from '@apis/membersAPIs';
 import { LessonTypeEnum } from '@apis/ticketsAPIs';
 import { TicketIcon } from '@assets/icons/indexIcons';
-import { IssuedTicketModal } from '@components/center/ticket/IssuedTicketModal';
 import { NoticeModal } from '@components/common/NoticeModal';
+import { IssuedTicketDetailModal } from '@components/issuedTickets/IssuedTicketDetailModal';
 import { useRequests } from '@hooks/apis/useRequests';
 import { useErrorModal } from '@hooks/utils/useErrorModal';
-import { TS } from '@styles/center/ticketsStyle';
+import { TS } from '@styles/common/ticketsStyle';
 import { extractDate, formatTimestampDot } from '@utils/schedules/formatTimestamp';
 
 interface TicketItemProps {
   ticket: MemberIssuedTicketType;
 }
 export const TicketItem = ({ ticket }: TicketItemProps) => {
-  const navigate = useNavigate();
+  const { memberId } = useParams();
   const { pathname } = useLocation();
   const {
     id,
@@ -35,9 +34,9 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
   } = ticket;
   const { isErrorModalOpen, errorModal, handleModalNotice, closeErrorModal } = useErrorModal();
   const [isMoreViewOpen, setIsMoreViewOpen] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
   const { request } = useRequests();
   const mutatePath = pathname.replace('/', '');
-  const [isCompleted, setIsCompleted] = useState(false);
 
   const ticketAction = async (url: string, title: string, content: string) => {
     try {
@@ -167,7 +166,9 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
         </TS.TicketRight>
       </TS.Ticket>
 
-      {isMoreViewOpen && <IssuedTicketModal issuedId={id} setIsOpen={setIsMoreViewOpen} />}
+      {isMoreViewOpen && memberId && (
+        <IssuedTicketDetailModal issuedId={id} memberId={parseInt(memberId)} setIsOpen={setIsMoreViewOpen} />
+      )}
       {isErrorModalOpen && <NoticeModal innerNotice={errorModal} setIsOpen={closeErrorModal} />}
     </>
   );

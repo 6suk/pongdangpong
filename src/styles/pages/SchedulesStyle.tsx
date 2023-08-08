@@ -2,7 +2,7 @@ import { styled } from 'styled-components';
 
 import calendarIcon from '@assets/icons/schedules/calendar.svg';
 
-import theme from './theme';
+import theme from '../theme';
 
 /** 홈 스타일(대시보트 + 캘린더) */
 export const CalendarContainer = styled.div`
@@ -345,74 +345,6 @@ export const StyledDayName = styled(StyledDay)`
 `;
 
 /** 디테일 페이지 스타일링 */
-
-export const SchedulesDetailWrap = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-  max-width: 1024px;
-
-  .memo {
-    font-size: 16px;
-    margin-inline: 1rem;
-    padding: 1rem;
-    border-radius: 6px;
-    border: 1px solid ${theme.colors.gray[800]};
-    min-height: 100px;
-  }
-
-  .header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-    margin-inline: 1rem;
-    justify-content: space-between;
-
-    &.sub {
-      margin-inline: 0.5rem;
-      h3 {
-        /* font-size: ${theme.font.body}; */
-      }
-    }
-
-    .title {
-      display: flex;
-      align-items: center;
-    }
-
-    h3 {
-      font-size: ${theme.font.subTitle};
-      font-weight: 800;
-
-      &.number {
-        color: ${theme.colors.pri[500]};
-        margin-left: 0.5rem;
-      }
-    }
-
-    .createdAt {
-      font-size: ${theme.font.sm};
-      color: ${theme.colors.gray[500]};
-      font-weight: 300;
-      margin-left: 1rem;
-      letter-spacing: 0.5px;
-    }
-    .btns {
-      display: flex;
-      gap: 1rem;
-      button {
-        font-size: 14px;
-        transition: all 0.4s;
-
-        &:hover {
-          opacity: 0.7;
-        }
-      }
-    }
-  }
-`;
-
 export const SchedulesInfoBar = styled.div`
   display: flex;
   align-items: center;

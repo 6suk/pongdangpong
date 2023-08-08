@@ -14,6 +14,6 @@ export { ReactComponent as DumbbellIcon } from '@assets/icons/schedules/dumbbell
 export { ReactComponent as UserColorIcon } from '@assets/icons/schedules/userIcon.svg';
 export { ReactComponent as SearchIcon } from '@assets/icons/search.svg';
 export { ReactComponent as ArrowIcon } from '@assets/icons/arrow.svg';
-export { ReactComponent as closeIcon } from '@assets/icons/x.svg';
+export { ReactComponent as XIcon } from '@assets/icons/x.svg';
 export { ReactComponent as CloseIcon } from '@assets/icons/closeIcon.svg';
 export { ReactComponent as Logo } from '@assets/icons/Logo.svg';

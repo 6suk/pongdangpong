@@ -1,9 +1,8 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
-import { styled } from 'styled-components';
-
 import { mutate } from 'swr';
 
+import { StaffDetailResponseType } from '@apis/staffsAPIs';
 import { Button } from '@components/common/Button';
 import { InputField } from '@components/common/InputField';
 import { Modal } from '@components/common/Modal';
@@ -11,8 +10,8 @@ import { Modal } from '@components/common/Modal';
 import { useRequests } from '@hooks/apis/useRequests';
 import { useSwrData } from '@hooks/apis/useSwrData';
 import useInput from '@hooks/utils/useInput';
-
-import theme from '@styles/theme';
+import { ErrorMessage } from '@styles/common/errorMessageStyle';
+import { ModalInInput } from '@styles/pages/staffFormStyle';
 
 interface StaffEditPropsType {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
@@ -20,7 +19,7 @@ interface StaffEditPropsType {
 }
 
 export const StaffsEditModal = ({ setIsOpen, id }: StaffEditPropsType) => {
-  const { data, isLoading } = useSwrData(`staffs/${id}`);
+  const { data, isLoading } = useSwrData<StaffDetailResponseType>(`staffs/${id}`);
   const { name, phone, loginId } = data ?? {};
   const [inputValues, onChange, inputReset] = useInput({
     name: name || '',
@@ -73,7 +72,7 @@ export const StaffsEditModal = ({ setIsOpen, id }: StaffEditPropsType) => {
 
   useEffect(() => {
     if (data) {
-      inputReset({ name, phone, loginId });
+      inputReset({ name: name || '', phone: phone || '', loginId: loginId || '' });
     }
   }, [data]);
 
@@ -121,25 +120,3 @@ export const StaffsEditModal = ({ setIsOpen, id }: StaffEditPropsType) => {
     )
   );
 };
-
-const ModalInInput = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  margin-block: 2rem;
-
-  label {
-    text-align: left;
-  }
-
-  p {
-    text-align: left;
-  }
-`;
-
-const ErrorMessage = styled.p`
-  margin-top: 0.5rem;
-  font-size: ${theme.font.sm} !important;
-  color: ${theme.colors.Error} !important;
-  margin-bottom: 0 !important;
-`;

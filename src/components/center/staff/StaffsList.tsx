@@ -1,24 +1,19 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
-import { styled } from 'styled-components';
-
-import { Staffs_list_dats_type } from '@apis/staffsAPIs';
+import { Staffs_list_dats_type, staffs_list_type } from '@apis/staffsAPIs';
 import { MemberIcon } from '@assets/icons/indexIcons';
+import { StaffsEditModal } from '@components/center/staff/StaffsEditModal';
 import { Button } from '@components/common/Button';
 import { useSwrData } from '@hooks/apis/useSwrData';
-import { CenterContainer } from '@styles/center/ticketsStyle';
-
-import theme from '@styles/theme';
-
-import { StaffsEditModal } from './StaffsEditModal';
-import { DetailButton } from '../ticket/TicketIssued';
+import { DetailButton } from '@styles/common/buttonStyle';
+import { BasicContainer, ListWrap } from '@styles/common/wrapStyle';
+import { StaffsTop } from '@styles/pages/staffListStyle';
 
 export const StaffsList = () => {
   const navigate = useNavigate();
-  const { data, isLoading } = useSwrData(`staffs${window.location.search}`);
+  const { data, isLoading } = useSwrData<staffs_list_type>(`staffs${window.location.search}`);
   const [searchParams, setSearchParams] = useSearchParams();
-  const { meta, datas: staffsDatas } = data ?? { meta: {}, datas: [] };
   const isActivePath = searchParams.get('sort') === 'createdAt,Desc';
   const [isOpen, setIsOpen] = useState(false);
   const [editId, setEditId] = useState(0);
@@ -34,7 +29,7 @@ export const StaffsList = () => {
 
   return (
     <>
-      <CenterContainer>
+      <BasicContainer>
         <StaffsTop>
           <div>
             <h3>
@@ -55,7 +50,7 @@ export const StaffsList = () => {
             </Button>
           </div>
         </StaffsTop>
-        <StaffsLIstWrap>
+        <ListWrap>
           <div className="table">
             <div className="table-row title">
               <p>직원명</p>
@@ -66,7 +61,7 @@ export const StaffsList = () => {
               <p></p>
             </div>
             {!isLoading &&
-              staffsDatas.map((v: Staffs_list_dats_type) => {
+              data?.datas.map((v: Staffs_list_dats_type) => {
                 const { id, name, phone, memberCount, rating, memo } = v;
                 return (
                   // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
@@ -100,117 +95,9 @@ export const StaffsList = () => {
                 );
               })}
           </div>
-        </StaffsLIstWrap>
-      </CenterContainer>
+        </ListWrap>
+      </BasicContainer>
       {isOpen && <StaffsEditModal id={editId} setIsOpen={setIsOpen} />}
     </>
   );
 };
-
-const StaffsTop = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding-block: 2rem;
-  align-items: center;
-  margin-inline: 1rem;
-
-  h3 {
-    font-weight: bold;
-    size: ${theme.font.title};
-
-    .highlight {
-      color: ${theme.colors.pri[500]};
-    }
-  }
-
-  .sort-and-btn {
-    display: flex;
-    gap: 1.5rem;
-    align-items: center;
-  }
-
-  .ticket-active {
-    display: flex;
-    gap: 0.5rem;
-
-    a {
-      font-size: ${theme.font.sub};
-      color: ${theme.colors.gray[500]};
-      /* padding: 12px; */
-      /* border-bottom: 2px solid ${theme.colors.gray[600]}; */
-    }
-
-    .on {
-      font-weight: 600;
-      color: ${theme.colors.pri[500]};
-      /* border-bottom: 2px solid ${theme.colors.pri[300]}; */
-    }
-  }
-`;
-
-export const StaffsLIstWrap = styled.div`
-  font-size: 16px;
-  margin-inline: 1rem;
-
-  .table {
-    display: grid;
-    width: 100%;
-    gap: 1rem;
-  }
-
-  .table-row {
-    display: grid;
-    grid-template-columns: 1fr 1.5fr 1fr 1fr 2fr 0.6fr;
-    align-items: center;
-    padding: 1rem;
-    border: 1px solid ${theme.colors.gray[800]};
-    text-align: left;
-    cursor: pointer;
-    border-radius: 6px;
-    font-size: 14px;
-
-    &.title > p {
-      font-weight: 600;
-    }
-
-    &.title {
-      /* border-top: 1px solid ${theme.colors.gray[800]}; */
-      border: none;
-      padding-block: 0;
-    }
-
-    .icon-box {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-weight: 600;
-
-      svg {
-        width: 26px;
-        height: auto;
-      }
-
-      span {
-        width: 80px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-    }
-
-    p {
-      transition: all 0.4s;
-    }
-
-    &:hover {
-      p {
-        opacity: 0.7;
-      }
-
-      &.title p {
-        opacity: 1;
-      }
-    }
-  }
-`;

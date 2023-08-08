@@ -7,15 +7,15 @@ import { styled } from 'styled-components';
 import { mutate } from 'swr';
 
 import { ArrowIcon, MemberIcon, SearchIcon } from '@assets/icons/indexIcons';
-import { StaffsLIstWrap } from '@components/center/staff/StaffsList';
 import { Button } from '@components/common/Button';
 import { MembersAlbum } from '@components/members/backup/MembersAlbum';
 import { MembersDetailComponent } from '@components/members/backup/MembersDetail';
-import { MembersResgier } from '@components/members/MembersRegister';
+import { MembersForm } from '@components/members/form/MembersForm';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
-import { SC } from '@styles/styles';
+import { SC } from '@styles/common/inputsStyles';
 
+import { ListWrap } from '@styles/common/wrapStyle';
 import theme from '@styles/theme';
 
 interface UserListProps {
@@ -102,7 +102,7 @@ const Members = () => {
 
   return (
     <>
-      {currentPathname === 'register' && <MembersResgier />}
+      {currentPathname === 'register' && <MembersForm />}
       {currentPathname === 'detail' && (
         <MembersDetailComponent id={userIdRef.current} staffsDatas={staffsDatas} tickets={ticketData?.tickets} />
       )}
@@ -166,7 +166,7 @@ const Members = () => {
               </div>
             </S.wrap>
 
-            <StaffsLIstWrap>
+            <ListWrap>
               <div className="table">
                 <div className="table-row title">
                   <p>이름</p>
@@ -217,7 +217,7 @@ const Members = () => {
                       );
                     })}
               </div>
-            </StaffsLIstWrap>
+            </ListWrap>
           </>
         )}
 

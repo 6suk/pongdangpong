@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import styled from 'styled-components';
-
 import { Button } from '@components/common/Button';
 import { InputField } from '@components/common/InputField';
-import { Modal, ModalButton } from '@components/common/Modal';
+import { Modal } from '@components/common/Modal';
 import { useRequests } from '@hooks/apis/useRequests';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
 import useInput from '@hooks/utils/useInput';
 import { ValidationProps, useValidation } from '@hooks/utils/useValidation';
-import { FormButtonGroup, FormGridContainer } from '@styles/center/ticketFormStyle';
-import { Chips, FormContentWrap, SC, TopTitleWrap } from '@styles/styles';
-import theme from '@styles/theme';
+import { ErrorMessage } from '@styles/common/errorMessageStyle';
+import { Chips, FormButtonGroup, FormGridContainer } from '@styles/common/FormStyle';
+import { SC } from '@styles/common/inputsStyles';
+import { FormContentWrap, TopTitleWrap } from '@styles/common/wrapStyle';
+import { ModalButton } from '@styles/modal/modalStyle';
 
 type MemberFormType = {
   [key: string]: string | number;
@@ -40,18 +40,16 @@ const errorCheckInput: ValidationProps[] = [
   { name: 'phone', type: 'phone' },
 ];
 
-export const MemberEdit = () => {
-  const { id } = useParams();
+export const MemberEditForm = () => {
+  const { memberId } = useParams();
   const navigate = useNavigate();
   const { request } = useRequests();
-  const { data } = useSwrData<MemberFormType>(`members/${id}`);
+  const { data } = useSwrData<MemberFormType>(`members/${memberId}`);
   const [inputValues, onChange, inputReset] = useInput<MemberFormType>(data || { ...memberForm });
   const { checkForErrors, updateValidationError, validationErrors, isSubmit } = useValidation();
   const [isOpen, setIsOpen] = useState(false);
   const [chips, setChips] = useState('FEMALE');
   const isEditMode = false;
-
-  console.log(data);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,7 +57,7 @@ export const MemberEdit = () => {
     if (isValid) {
       try {
         await request({
-          url: `members/${id}`,
+          url: `members/${memberId}`,
           method: 'put',
           body: { ...inputValues, sex: chips },
         });
@@ -221,9 +219,3 @@ export const MemberEdit = () => {
     </>
   );
 };
-
-const ErrorMessage = styled.p`
-  margin-top: 0.5rem;
-  font-size: ${theme.font.sm} !important;
-  color: ${theme.colors.Error} !important;
-`;

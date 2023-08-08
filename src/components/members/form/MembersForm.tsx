@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-
-import styled from 'styled-components';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { Button } from '@components/common/Button';
 import { InputField } from '@components/common/InputField';
-import { Modal, ModalButton } from '@components/common/Modal';
+import { Modal } from '@components/common/Modal';
 import { useRequests } from '@hooks/apis/useRequests';
 import useInput from '@hooks/utils/useInput';
-import { ValidationProps, useValidation } from '@hooks/utils/useValidation';
-import { FormButtonGroup, FormGridContainer } from '@styles/center/ticketFormStyle';
-import { Chips, FormContentWrap, SC, TopTitleWrap } from '@styles/styles';
-import theme from '@styles/theme';
+import { useValidation, ValidationProps } from '@hooks/utils/useValidation';
+import { ErrorMessage } from '@styles/common/errorMessageStyle';
+import { Chips, FormButtonGroup, FormGridContainer } from '@styles/common/FormStyle';
+import { SC } from '@styles/common/inputsStyles';
+import { FormContentWrap, TopTitleWrap } from '@styles/common/wrapStyle';
+import { MemberModalWrap, ModalButton } from '@styles/modal/modalStyle';
 
 interface ErrorType {
   available: boolean;
@@ -46,10 +46,11 @@ const errorCheckInput: ValidationProps[] = [
   { name: 'phone', type: 'phone' },
 ];
 
-export const MembersResgier = () => {
+export const MembersForm = () => {
   const navigate = useNavigate();
   const { request } = useRequests();
-  const [inputValues, onChange] = useInput({ ...memberForm });
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [inputValues, onChange, inputReset] = useInput({ ...memberForm });
   const { checkForErrors, updateValidationError, validationErrors, isSubmit } = useValidation();
   const [isOpen, setIsOpen] = useState(false);
   const [chips, setChips] = useState('FEMALE');
@@ -86,9 +87,21 @@ export const MembersResgier = () => {
     updateValidationError('sex', false);
   };
 
+  useEffect(() => {
+    if (searchParams.size > 0) {
+      const initName = searchParams.get('name');
+      const initPhone = searchParams.get('phone');
+      inputReset({
+        ...inputValues,
+        name: initName || '',
+        phone: initPhone || '',
+      });
+    }
+  }, [searchParams]);
+
   return (
     <>
-      <S.modalContainer>
+      <MemberModalWrap>
         {isOpen && (
           <Modal setIsOpen={() => setIsOpen(false)}>
             <h3>등록완료</h3>
@@ -117,7 +130,7 @@ export const MembersResgier = () => {
             </div>
           </Modal>
         )}
-      </S.modalContainer>
+      </MemberModalWrap>
 
       <FormContentWrap>
         <TopTitleWrap>
@@ -235,90 +248,3 @@ export const MembersResgier = () => {
     </>
   );
 };
-
-const S = {
-  modalContainer: styled.div`
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  `,
-
-  MembersEditContainer: styled.div`
-    width: 780px;
-    h2 {
-      text-align: center;
-      font-weight: 600;
-      font-size: ${({ theme: { font } }) => font['main']};
-    }
-    p {
-      margin-bottom: 62px;
-      text-align: center;
-    }
-  `,
-  wrap: styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-
-    span {
-      color: ${({ theme: { colors } }) => colors['Pri-400']};
-    }
-
-    .first-column {
-      width: 50%;
-      margin-right: 40px;
-      input {
-        margin-bottom: 26px;
-      }
-
-      .button-wrap {
-        margin-bottom: 30px;
-
-        &.error button[type='button'] {
-          border: 1px solid ${({ theme }) => theme.colors.Error}; /* 에러 색상을 설정합니다 */
-        }
-
-        &.error input[type='radio'] {
-          border: 1px solid ${({ theme }) => theme.colors.Error}; /* 라디오 버튼의 에러 색상을 설정합니다 */
-        }
-
-        button[type='button'] {
-          width: 70px;
-          height: 36px;
-          border: 1px solid #cfcfcf;
-          border-radius: 4px;
-          margin-right: 6px;
-
-          &.on {
-            border: none;
-            background-color: ${({ theme: { colors } }) => colors['Pri-400']};
-            color: #fff;
-          }
-        }
-      }
-    }
-    .second-column {
-      width: 50%;
-
-      select {
-        margin-bottom: 26px;
-      }
-    }
-  `,
-
-  BtnWrap: styled.div`
-    display: flex;
-
-    & > button:nth-of-type(1) {
-      margin-right: 40px;
-    }
-  `,
-};
-
-const ErrorMessage = styled.p`
-  margin-top: 0.5rem;
-  font-size: ${theme.font.sm} !important;
-  color: ${theme.colors.Error} !important;
-`;

@@ -1,22 +1,22 @@
-import React, { useState, useCallback, memo, useEffect, useMemo } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-import { MemberIcon, Editicon, closeIcon, BackIcon } from '@assets/icons/indexIcons';
-import { StaffDetailWrap } from '@components/center/staff/StaffsDetail';
-import { StaffsLIstWrap } from '@components/center/staff/StaffsList';
-import { BackButton } from '@components/center/ticket/TicketIssued';
+import { BackIcon, Editicon } from '@assets/icons/indexIcons';
 import { Button } from '@components/common/Button';
-import { Modal, ModalButton } from '@components/common/Modal';
+import { Modal } from '@components/common/Modal';
 import { TicketItem } from '@components/members/backup/TicketItem';
 
 import { useRequests } from '@hooks/apis/useRequests';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
-import { TicketContainer, TicketWrap, Top } from '@styles/center/ticketsStyle';
-import { SC } from '@styles/styles';
+import { BackButton } from '@styles/common/buttonStyle';
+import { SC } from '@styles/common/inputsStyles';
+import { TicketContainer, TicketWrap, Top } from '@styles/common/ticketsStyle';
+import { DetailWrap } from '@styles/common/wrapStyle';
+import { ModalButton } from '@styles/modal/modalStyle';
 import theme from '@styles/theme';
 
 interface UserListProps {
@@ -194,7 +194,7 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
           }
         </Modal>
       )}
-      <StaffDetailWrap>
+      <DetailWrap>
         <div>
           <div className="header">
             <div className="title">
@@ -383,7 +383,7 @@ const MembersDetail = ({ id, tickets, staffsDatas }) => {
             </TicketWrap>
           </TicketContainer>
         </div>
-      </StaffDetailWrap>
+      </DetailWrap>
     </>
   ) : (
     <h2 style={{ textAlign: 'center' }}>

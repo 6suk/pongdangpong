@@ -8,16 +8,15 @@ import { useSwrData } from '@hooks/apis/useSwrData';
 import { usePagination } from '@hooks/utils/usePagination';
 import { setFindMember, setFindUser } from '@stores/findUsersSlice';
 
-import { Pagination } from '@styles/paginaionStyle';
+import { SC } from '@styles/common/inputsStyles';
+import { Pagination } from '@styles/common/paginaionStyle';
 
-import { ModalSearchTop, Searchbar } from '@styles/SearchBarStyle';
+import { ModalSearchTop, Searchbar } from '@styles/common/SearchBarStyle';
 
-import { SC } from '@styles/styles';
-
+import { ModalList, ModalListTop } from '@styles/modal/modalStyle';
 import { formatPhoneNumber } from '@utils/formatPhoneNumber';
 
 import { MemberSearchType, UserType, UsersSearchType } from '../../apis/schedulesAPIs';
-import { ModalList } from '../schedules/backup/CreateSchedule';
 
 export interface MemberOrUserSearchModalProps {
   type: 'USER' | 'MEMBER';
@@ -126,16 +125,14 @@ export const MemberOrUserSearchModal = ({ type, setIsOpen }: MemberOrUserSearchM
               </Searchbar>
             </ModalSearchTop>
             <ul>
-              <ModalList>
-                <button className="table-title" type="button">
-                  <div className="left">
-                    <p>목록</p>
-                    <p></p>
-                    {type === 'USER' ? <p>이름/아이디</p> : <p>이름</p>}
-                  </div>
-                  <p>핸드폰 번호</p>
-                </button>
-              </ModalList>
+              <ModalListTop>
+                <div className="left">
+                  <p>목록</p>
+                  <p></p>
+                  {type === 'USER' ? <p>이름/아이디</p> : <p>이름</p>}
+                </div>
+                <p>핸드폰 번호</p>
+              </ModalListTop>
 
               {currentData.map((v: MemberSearchType | UsersSearchType) => {
                 const userType = isUsersSearchType(v) ? userTypeEnum[v.type] : '회원';

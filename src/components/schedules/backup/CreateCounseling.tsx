@@ -8,11 +8,13 @@ import { Button } from '@components/common/Button';
 import { Modal } from '@components/common/Modal';
 import { useRequests } from '@hooks/apis/useRequests';
 import { useSwrData } from '@hooks/apis/useSwrData';
-import { FormButtonGroup, FormGridContainer } from '@styles/center/ticketFormStyle';
-import { FormContentWrap, SC, TopTitleWrap } from '@styles/styles';
+import { FormButtonGroup, FormGridContainer } from '@styles/common/FormStyle';
+import { SC } from '@styles/common/inputsStyles';
+import { FormContentWrap, TopTitleWrap } from '@styles/common/wrapStyle';
+import { ModalList } from '@styles/modal/modalStyle';
 import theme from '@styles/theme';
 
-import { ModalList, NameButton } from './CreateSchedule';
+import { NameButton } from './CreateSchedule';
 
 type FormInputs = {
   userId: number;

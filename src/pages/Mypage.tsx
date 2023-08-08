@@ -6,6 +6,7 @@ import { styled } from 'styled-components';
 import { MeType } from '@apis/authAPIs';
 import { BackIcon, MemberIcon } from '@assets/icons/indexIcons';
 import { RootState } from '@stores/store';
+import { BackButton } from '@styles/common/buttonStyle';
 import theme from '@styles/theme';
 
 export const Mypage = () => {
@@ -188,20 +189,4 @@ export const MyInfoBox = styled.div`
     }
   }
 `;
-
-export const BackButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-inline: 1rem;
-
-  svg {
-    width: 6px;
-    fill: ${theme.colors.gray[500]};
-  }
-
-  font-size: ${theme.font.sub};
-  color: ${theme.colors.gray[500]};
-`;
-
 export default Mypage;

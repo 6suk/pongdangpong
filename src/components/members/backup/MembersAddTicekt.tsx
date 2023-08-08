@@ -7,12 +7,13 @@ import { styled } from 'styled-components';
 
 import { Button } from '@components/common/Button';
 import { MemberOrUserSearchButton } from '@components/common/FindUserButton';
-import { Modal, ModalButton } from '@components/common/Modal';
+import { Modal } from '@components/common/Modal';
 import { useRequests } from '@hooks/apis/useRequests';
 
 import { clearAll } from '@stores/findUsersSlice';
 import { RootState } from '@stores/store';
-import { SC } from '@styles/styles';
+import { SC } from '@styles/common/inputsStyles';
+import { ModalButton } from '@styles/modal/modalStyle';
 import theme from '@styles/theme';
 
 export const MembersAddTicekt = ({ id, members, tickets, staffsDatas }) => {

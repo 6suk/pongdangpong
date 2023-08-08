@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { LessonTypeEnum, TermUnitEnum, Ticket_response } from '@apis/ticketsAPIs';
 import { TicketIcon } from '@assets/icons/indexIcons';
-import { TS } from '@styles/center/ticketsStyle';
+import { TS } from '@styles/common/ticketsStyle';
 
 interface TicketItemProps {
   ticket: Ticket_response;
@@ -16,7 +16,7 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
 
   return (
     <>
-      <TS.Ticket $isActive={true} className="select-ticket" onClick={() => navigate(`${id}/issue`)}>
+      <TS.Ticket $isActive={true} className="select-ticket" onClick={() => navigate(`${id}/new`)}>
         <TS.TicketLeft className="ticket-left">
           <TS.LeftTitle>
             <div className="title">

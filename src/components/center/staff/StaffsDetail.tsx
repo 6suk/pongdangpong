@@ -1,25 +1,24 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { styled } from 'styled-components';
-
+import { StaffDetailResponseType } from '@apis/staffsAPIs';
 import { MemberIcon, UserIcon } from '@assets/icons/indexIcons';
+import { StaffsConfirmModal, StaffsResignModal } from '@components/center/staff/StaffResignModal';
+import { StaffsEditModal } from '@components/center/staff/StaffsEditModal';
+import { StaffRoleConfirmModal, StaffsRoleModal } from '@components/center/staff/StaffsRoleModal';
 import { useSwrData } from '@hooks/apis/useSwrData';
-import theme from '@styles/theme';
-
-import { StaffsResignModal, StaffsConfirmModal } from './StaffResignModal';
-import { StaffsEditModal } from './StaffsEditModal';
-import { StaffsRoleModal, StaffRoleConfirmModal } from './StaffsRoleModal';
-import { DetailButton } from '../ticket/TicketIssued';
+import { DetailButton } from '@styles/common/buttonStyle';
+import { DetailWrap } from '@styles/common/wrapStyle';
+import { StaffInfoBar, StaffListWrap } from '@styles/pages/staffDetailStyle';
 
 export const StaffsDetail = () => {
   const { id } = useParams();
-  const { data, isLoading } = useSwrData(`staffs/${id}`);
-  const { name, roles, phone, loginId, active, createdAt, members, prescriptionReviews, updatedAt, memo } = data ?? {};
+  const { data, isLoading } = useSwrData<StaffDetailResponseType>(`staffs/${id}`);
+  const { name, roles, phone, loginId, active, createdAt, members, updatedAt, memo } = data ?? {};
   const [isOpen, setIsOpen] = useState(false);
   const [isResignModalOpen, setIsResignModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
-  const [isActive, setIsActive] = useState(active);
+  const [isActive, setIsActive] = useState<boolean>(active || false);
   const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const navigate = useNavigate();
@@ -27,12 +26,12 @@ export const StaffsDetail = () => {
   return (
     !isLoading && (
       <>
-        <StaffDetailWrap>
+        <DetailWrap>
           <div>
             <div className="header">
               <div className="title">
                 <h3>직원 정보</h3>
-                <p className="createdAt">{createdAt.split('T')[0].replace(/-/g, '.')} 등록</p>
+                <p className="createdAt">{createdAt?.split('T')[0].replace(/-/g, '.')} 등록</p>
               </div>
               <div className="btns">
                 <button
@@ -61,7 +60,7 @@ export const StaffsDetail = () => {
                     <MemberIcon /> {name}
                   </p>
                   <p className="role-box">
-                    {roles.map((v: { id: number; name: string }) => {
+                    {roles?.map((v: { id: number; name: string }) => {
                       return (
                         <span key={v.id} className="tag">
                           {v.name}
@@ -87,10 +86,10 @@ export const StaffsDetail = () => {
             <div className="header">
               <div className="title">
                 <h3>개인 수업 회원</h3>
-                <h3 className="number">{members.length}</h3>
+                <h3 className="number">{members?.length}</h3>
               </div>
             </div>
-            <ListWrap>
+            <StaffListWrap>
               <div className="table">
                 <div className="table-row title">
                   <p>회원명</p>
@@ -98,7 +97,7 @@ export const StaffsDetail = () => {
                   <p></p>
                   <p>최근 방문일</p>
                 </div>
-                {members.length > 0 ? (
+                {members && members.length > 0 ? (
                   members.map((v: { id: number; name: string; phone: string; sex: string; visitedAt: string }) => {
                     return (
                       // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
@@ -119,7 +118,7 @@ export const StaffsDetail = () => {
                   </div>
                 )}
               </div>
-            </ListWrap>
+            </StaffListWrap>
           </div>
           {/* <div>
             <div className="header">
@@ -160,15 +159,17 @@ export const StaffsDetail = () => {
             <div className="header">
               <div className="title">
                 <h3>메모</h3>
-                <p className="createdAt">{updatedAt.split('T')[0].replace(/-/g, '.')} 업데이트</p>
+                <p className="createdAt">{updatedAt?.split('T')[0].replace(/-/g, '.')} 업데이트</p>
               </div>
             </div>
             <div className="memo">{memo}</div>
           </div>
-        </StaffDetailWrap>
+        </DetailWrap>
+        {/* 직원 수정 모달 */}
         {isOpen && id && <StaffsEditModal id={id} setIsOpen={setIsOpen} />}
 
-        {isResignModalOpen && id && (
+        {/* 직원 퇴사 처리 모달 - 안내 */}
+        {isResignModalOpen && id && name && (
           <StaffsResignModal
             id={id}
             name={name}
@@ -177,200 +178,16 @@ export const StaffsDetail = () => {
             setIsOpen={setIsResignModalOpen}
           />
         )}
-        {isConfirmModalOpen && <StaffsConfirmModal name={name} setIsConfirmModalOpen={setIsConfirmModalOpen} />}
+        {/* 직원 퇴사 처리 모달 - 완료 */}
+        {isConfirmModalOpen && name && <StaffsConfirmModal name={name} setIsConfirmModalOpen={setIsConfirmModalOpen} />}
 
+        {/* 역할 설정 모달 - 역할 선택 */}
         {isRoleModalOpen && id && (
           <StaffsRoleModal id={id} setIsOpen={setIsRoleModalOpen} setIsSaveModalOpen={setIsSaveModalOpen} />
         )}
+        {/* 역할 설정 모달 - 완료 */}
         {isSaveModalOpen && <StaffRoleConfirmModal setIsSaveModalOpen={setIsSaveModalOpen} />}
       </>
     )
   );
 };
-
-const ListWrap = styled.div`
-  font-size: 16px;
-  margin-inline: 1rem;
-
-  .empty {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    align-items: center;
-    color: ${theme.colors.gray[500]};
-
-    svg {
-      width: 60px;
-    }
-  }
-
-  .table {
-    display: grid;
-    width: 100%;
-    gap: 1rem;
-  }
-
-  .table-row {
-    display: grid;
-    grid-template-columns: 2fr 2fr 7fr 1fr;
-    align-items: center;
-    padding: 1rem;
-    border: 1px solid ${theme.colors.gray[800]};
-    text-align: left;
-    cursor: pointer;
-    border-radius: 6px;
-    font-size: 14px;
-
-    &.title {
-      border: none;
-      padding-block: 0;
-      color: ${theme.colors.gray[500]};
-    }
-
-    .icon-box {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-weight: 600;
-
-      svg {
-        width: 26px;
-        height: auto;
-      }
-    }
-
-    p {
-      transition: all 0.4s;
-    }
-  }
-`;
-
-export const StaffDetailWrap = styled.div`
-  width: 100%;
-  margin-top: 3rem;
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-  max-width: 1024px;
-
-  .memo {
-    font-size: 16px;
-    margin-inline: 1rem;
-    padding: 1rem;
-    border-radius: 6px;
-    border: 1px solid ${theme.colors.gray[800]};
-    min-height: 100px;
-  }
-
-  .header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-    margin-inline: 1rem;
-    justify-content: space-between;
-
-    .title {
-      display: flex;
-      align-items: center;
-    }
-
-    h3 {
-      font-size: ${theme.font.subTitle};
-      font-weight: 800;
-
-      &.number {
-        color: ${theme.colors.pri[500]};
-        margin-left: 0.5rem;
-      }
-    }
-
-    .createdAt {
-      font-size: ${theme.font.sm};
-      color: ${theme.colors.gray[500]};
-      font-weight: 300;
-      margin-left: 1rem;
-      letter-spacing: 0.5px;
-    }
-    .btns {
-      display: flex;
-      gap: 1rem;
-      button {
-        font-size: 14px;
-        transition: all 0.4s;
-
-        &:hover {
-          opacity: 0.7;
-        }
-      }
-    }
-  }
-`;
-
-const StaffInfoBar = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-  border: 1px solid ${theme.colors.gray[800]};
-  text-align: left;
-  border-radius: 6px;
-  font-size: 15px;
-  justify-content: space-between;
-
-  button {
-    width: 80px;
-  }
-
-  .infos {
-    display: flex;
-    gap: 3rem;
-    align-items: center;
-  }
-
-  .name-and-role {
-    display: flex;
-    gap: 1rem;
-
-    .role-box {
-      display: flex;
-      gap: 0.2rem;
-      align-items: center;
-
-      .tag {
-        font-size: ${theme.font.sm};
-        padding-inline: 0.5rem;
-        padding-block: 0.2rem;
-        background-color: ${theme.colors.pri[900]};
-        color: ${theme.colors.pri[500]};
-        border-radius: 6px;
-      }
-    }
-  }
-
-  &.title > p {
-    font-weight: 600;
-  }
-
-  &.title {
-    border: none;
-    padding-block: 0;
-  }
-
-  .icon-box {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-weight: 600;
-
-    svg {
-      width: 30px;
-    }
-  }
-
-  p {
-    transition: all 0.4s;
-  }
-
-  .inactive {
-    color: ${props => props.theme.colors.Error};
-  }
-`;

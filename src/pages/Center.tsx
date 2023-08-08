@@ -7,8 +7,8 @@ import { StaffsFormCompleted } from '@components/center/staff/StaffsFormComplete
 import { StaffsList } from '@components/center/staff/StaffsList';
 import { TicketEditForm } from '@components/center/ticket/TicketEditForm';
 import { TicketForm } from '@components/center/ticket/TicketForm';
-import { TicketIssued } from '@components/center/ticket/TicketIssued';
 import { TicketList } from '@components/center/ticket/TicketList';
+import { IssuedTicketList } from '@components/issuedTickets/IssuedTicketList';
 
 export const Center = () => {
   return (
@@ -17,7 +17,7 @@ export const Center = () => {
         <Route path="tickets">
           <Route index element={<TicketList />} path="" />
           <Route element={<TicketForm />} path="new" />
-          <Route element={<TicketIssued />} path=":id/issued-tickets" />
+          <Route element={<IssuedTicketList />} path=":id/issued-tickets" />
           <Route element={<TicketEditForm />} path=":id/edit" />
         </Route>
         <Route path="staffs">

@@ -5,6 +5,7 @@ import { styled } from 'styled-components';
 import { MeCenterType } from '@apis/authAPIs';
 import { MemberIcon, BackIcon } from '@assets/icons/indexIcons';
 import { useSwrData } from '@hooks/apis/useSwrData';
+import { BackButton } from '@styles/common/buttonStyle';
 import theme from '@styles/theme';
 
 export const CenterInfo = () => {
@@ -147,18 +148,4 @@ export const CenterInfoBox = styled.div`
       font-weight: 600;
     }
   }
-`;
-
-export const BackButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-
-  svg {
-    width: 6px;
-    fill: ${theme.colors.gray[500]};
-  }
-
-  font-size: ${theme.font.sub};
-  color: ${theme.colors.gray[500]};
 `;

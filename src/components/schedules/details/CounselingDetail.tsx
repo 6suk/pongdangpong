@@ -3,14 +3,15 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Schedules_detail_counseling } from '@apis/schedulesAPIs';
 import { BackIcon, MemberIcon } from '@assets/icons/indexIcons';
-import { BackButton, DetailButton } from '@components/center/ticket/TicketIssued';
 import { NoticeModal } from '@components/common/NoticeModal';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
 import { useErrorModal } from '@hooks/utils/useErrorModal';
-import { TicketWrap } from '@styles/center/ticketsStyle';
-import { CounselingCardItem, CounselingInfoWrap, SchedulesDetailWrap, SchedulesInfoBar } from '@styles/SchedulesStyle';
-import { SC } from '@styles/styles';
+import { BackButton, DetailButton } from '@styles/common/buttonStyle';
+import { SC } from '@styles/common/inputsStyles';
+import { TicketWrap } from '@styles/common/ticketsStyle';
+import { DetailWrap } from '@styles/common/wrapStyle';
+import { CounselingCardItem, CounselingInfoWrap, SchedulesInfoBar } from '@styles/pages/SchedulesStyle';
 import { formatDate, formatTimeRange, formatTimestamp } from '@utils/schedules/formatTimestamp';
 
 import { CounselingRecordFormModal } from './CounselingRecordFormModal';
@@ -29,7 +30,7 @@ export const CounselingDetail = () => {
   return (
     !isLoading && (
       <>
-        <SchedulesDetailWrap>
+        <DetailWrap>
           <div>
             <div className="header">
               <div className="title">
@@ -106,7 +107,7 @@ export const CounselingDetail = () => {
                       <button
                         type="button"
                         onClick={() => {
-                          navigate('/members/register');
+                          navigate(`/members/new?name=${client.name}&phone=${client.phone.replace('/-/g', '')}`);
                         }}
                       >
                         회원 정보 등록
@@ -142,7 +143,7 @@ export const CounselingDetail = () => {
               </CounselingInfoWrap>
             )}
           </TicketWrap>
-        </SchedulesDetailWrap>
+        </DetailWrap>
 
         {/* 상담기록 등록 모달 */}
         {isRecordOpen && (

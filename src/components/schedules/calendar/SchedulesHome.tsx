@@ -13,7 +13,7 @@ import useInput from '@hooks/utils/useInput';
 import { setSelectedDate } from '@stores/selectedDateSlice';
 import { AppDispatch, RootState } from '@stores/store';
 
-import { CalendarContainer, DateStyle, SchedulesContainer, SchedulesTop } from '@styles/SchedulesStyle';
+import { CalendarContainer, DateStyle, SchedulesContainer, SchedulesTop } from '@styles/pages/SchedulesStyle';
 
 import { mapActiveStaffToLabelValue } from '@utils/mapActiveStaffToOption';
 import { formatDate } from '@utils/schedules/formatTimestamp';

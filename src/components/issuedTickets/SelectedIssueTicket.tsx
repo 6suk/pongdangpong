@@ -1,23 +1,21 @@
 import { useNavigate } from 'react-router-dom';
 
-import { BackButton } from '@/pages/Mypage';
 import { Ticket_response } from '@apis/ticketsAPIs';
 import { BackIcon } from '@assets/icons/indexIcons';
+import { TicketItem } from '@components/issuedTickets/TicketItem';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
-import { TicketContainer, TicketWrap } from '@styles/center/ticketsStyle';
+import { BackButton } from '@styles/common/buttonStyle';
+import { TicketContainer, TicketWrap } from '@styles/common/ticketsStyle';
+import { DetailWrap } from '@styles/common/wrapStyle';
 
-import { SchedulesDetailWrap } from '@styles/SchedulesStyle';
-
-import { TicketItem } from './TicketItem';
-
-export const SelectedTicket = () => {
+export const SelectedIssueTicket = () => {
   const navigate = useNavigate();
   const { data } = useSwrData<{ tickets: Ticket_response[] }>(`tickets`);
 
   return (
     <>
-      <SchedulesDetailWrap style={{ gap: '1rem' }}>
+      <DetailWrap $marginTop="0" style={{ gap: '1rem' }}>
         <div className="header">
           <div className="title">
             <h3>수강권 부여 - 수강권 선택</h3>
@@ -38,7 +36,7 @@ export const SelectedTicket = () => {
                 })}
           </TicketWrap>
         </TicketContainer>
-      </SchedulesDetailWrap>
+      </DetailWrap>
     </>
   );
 };

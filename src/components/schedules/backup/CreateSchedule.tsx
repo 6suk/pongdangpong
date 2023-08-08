@@ -9,8 +9,10 @@ import { Button } from '@components/common/Button';
 import { Modal } from '@components/common/Modal';
 import { useRequests } from '@hooks/apis/useRequests';
 import { useSwrData } from '@hooks/apis/useSwrData';
-import { FormButtonGroup, FormGridContainer, LabelNotice } from '@styles/center/ticketFormStyle';
-import { FormContentWrap, SC, TopTitleWrap } from '@styles/styles';
+import { FormButtonGroup, FormGridContainer, LabelNotice } from '@styles/common/FormStyle';
+import { SC } from '@styles/common/inputsStyles';
+import { FormContentWrap, TopTitleWrap } from '@styles/common/wrapStyle';
+import { ModalList } from '@styles/modal/modalStyle';
 import theme from '@styles/theme';
 
 type FormInputs = {
@@ -438,66 +440,6 @@ export const CreateSchedule = () => {
     </FormContentWrap>
   );
 };
-
-export const ModalList = styled.li`
-  font-size: 14px;
-  padding-block: 1rem;
-  transition: all 0.4s;
-
-  &:hover {
-    opacity: 0.5;
-  }
-
-  .table-title:hover {
-    opacity: 1;
-  }
-
-  .table-title {
-    color: ${theme.colors.gray[600]};
-  }
-
-  button {
-    text-align: left;
-    width: 100%;
-    display: grid;
-    grid-template-columns: 3fr 2fr;
-  }
-
-  .left {
-    display: grid;
-    grid-template-columns: 0.2fr 0.5fr 2fr;
-    gap: 0.5rem;
-    text-align: left;
-  }
-
-  p {
-    font-size: 14px;
-    margin-bottom: 0;
-  }
-
-  svg {
-    width: 30px;
-  }
-
-  .tag {
-    height: min-content;
-    width: 53px;
-    text-align: center;
-    border-radius: 6px;
-    font-size: 12px;
-    padding-inline: 0.5rem;
-    padding-block: 0.2rem;
-    background-color: ${theme.colors.pri[900]};
-    color: ${theme.colors.pri[500]};
-  }
-  .info {
-    font-weight: 600;
-    span {
-      font-weight: 300;
-      color: ${theme.colors.gray[500]};
-    }
-  }
-`;
 
 export const NameButton = styled.button`
   font-size: 14px;

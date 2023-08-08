@@ -1,20 +1,21 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { styled } from 'styled-components';
 
 import { Ticket_issued_list, Ticket_issued_list_datas, Ticket_response } from '@apis/ticketsAPIs';
 import { BackIcon, MemberIcon } from '@assets/icons/indexIcons';
+import { IssuedTicketDetailModal } from '@components/issuedTickets/IssuedTicketDetailModal';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
-import { TicketContainer, Top } from '@styles/center/ticketsStyle';
+import { BackButton, DetailButton } from '@styles/common/buttonStyle';
+import { TicketContainer, Top } from '@styles/common/ticketsStyle';
 import theme from '@styles/theme';
 
-import { IssuedTicketModal } from './IssuedTicketModal';
-
-export const TicketIssued = () => {
+export const IssuedTicketList = () => {
   const { id } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const { data } = useSwrData<Ticket_issued_list>(location.pathname.replace('/center/', '')); // 수강권 부여 리스트
   const { data: ticketData, isLoading } = useSwrData<Ticket_response>(`tickets/${id}`); // 해당 수강권 정보
   const [issuedId, setIssuedId] = useState<number>(0);
@@ -24,7 +25,6 @@ export const TicketIssued = () => {
     datas,
     meta: { totalCount },
   } = data ?? { datas: [], meta: { totalCount: 0 } };
-  const navigate = useNavigate();
 
   return (
     <>
@@ -54,81 +54,46 @@ export const TicketIssued = () => {
                 const { id: resId, owners, privateTutor, remainingTimes, startAt, endAt } = v;
                 // 해당 아이디로 수강권 상세 조회
                 return (
-                  // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
-                  <div
-                    key={resId}
-                    className="table-row"
-                    onClick={() => {
-                      setIssuedId(resId);
-                      setIsOpen(true);
-                    }}
-                  >
-                    <p className="icon-box">
-                      <MemberIcon /> {owners[0].name}
-                    </p>
-                    <p>{owners[0].phone}</p>
-                    <p>{privateTutor.name}</p>
-                    <p>{remainingTimes ? `${remainingTimes}회` : '무제한'}</p>
-                    <p>{`${startAt} - ${endAt}`}</p>
-                    <DetailButton
-                      onClick={e => {
-                        e.stopPropagation();
-                      }}
-                      onMouseOver={e => {
-                        e.stopPropagation();
+                  <React.Fragment key={resId}>
+                    {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+                    <div
+                      className="table-row"
+                      onClick={() => {
+                        setIssuedId(resId);
+                        setIsOpen(true);
                       }}
                     >
-                      편집
-                    </DetailButton>
-                  </div>
+                      <p className="icon-box">
+                        <MemberIcon /> {owners[0].name}
+                      </p>
+                      <p>{owners[0].phone}</p>
+                      <p>{privateTutor.name}</p>
+                      <p>{remainingTimes ? `${remainingTimes}회` : '무제한'}</p>
+                      <p>{`${startAt} - ${endAt}`}</p>
+                      <DetailButton
+                        onClick={e => {
+                          e.stopPropagation();
+                          navigate(`/members/${owners[0].id}/tickets/${resId}/edit`);
+                        }}
+                        onMouseOver={e => {
+                          e.stopPropagation();
+                        }}
+                      >
+                        편집
+                      </DetailButton>
+                    </div>
+                    {isOpen && (
+                      <IssuedTicketDetailModal issuedId={issuedId} memberId={owners[0].id} setIsOpen={setIsOpen} />
+                    )}
+                  </React.Fragment>
                 );
               })}
           </div>
         </IssuedListWrap>
       </TicketContainer>
-      {isOpen && <IssuedTicketModal issuedId={issuedId} setIsOpen={setIsOpen} />}
     </>
   );
 };
-
-export const BackButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-
-  svg {
-    width: 6px;
-    fill: ${theme.colors.gray[500]};
-  }
-
-  font-size: ${theme.font.sub};
-  color: ${theme.colors.gray[500]};
-`;
-
-export const DetailButton = styled.button`
-  font-size: 14px;
-  padding-inline: 0.2rem;
-  padding-block: 0.3rem;
-  background-color: ${theme.colors.gray[800]};
-  color: ${theme.colors.gray[400]};
-  border-radius: 6px;
-  transition: all 0.4s;
-
-  &.pri {
-    background-color: ${theme.colors.pri[900]};
-    color: ${theme.colors.pri[500]};
-
-    &:hover {
-      font-weight: 600;
-      background-color: ${theme.colors.pri[800]};
-    }
-  }
-
-  &:hover {
-    font-weight: 600;
-    background-color: ${theme.colors.gray[700]};
-  }
-`;
 
 const IssuedListWrap = styled.div`
   font-size: 14px;

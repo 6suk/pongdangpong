@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
-import { isElementOfType } from 'react-dom/test-utils';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 
 import { mutate } from 'swr';
 
@@ -18,7 +17,7 @@ interface TicketItemProps {
   ticket: MemberIssuedTicketType;
 }
 export const TicketItem = ({ ticket }: TicketItemProps) => {
-  const navigate = useNavigate();
+  const { memberId } = useParams();
   const { pathname } = useLocation();
   const {
     id,
@@ -35,9 +34,9 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
   } = ticket;
   const { isErrorModalOpen, errorModal, handleModalNotice, closeErrorModal } = useErrorModal();
   const [isMoreViewOpen, setIsMoreViewOpen] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
   const { request } = useRequests();
   const mutatePath = pathname.replace('/', '');
-  const [isCompleted, setIsCompleted] = useState(false);
 
   const ticketAction = async (url: string, title: string, content: string) => {
     try {
@@ -167,7 +166,9 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
         </TS.TicketRight>
       </TS.Ticket>
 
-      {isMoreViewOpen && <IssuedTicketModal issuedId={id} setIsOpen={setIsMoreViewOpen} />}
+      {isMoreViewOpen && memberId && (
+        <IssuedTicketModal issuedId={id} memberId={parseInt(memberId)} setIsOpen={setIsMoreViewOpen} />
+      )}
       {isErrorModalOpen && <NoticeModal innerNotice={errorModal} setIsOpen={closeErrorModal} />}
     </>
   );

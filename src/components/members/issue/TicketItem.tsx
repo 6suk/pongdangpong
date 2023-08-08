@@ -16,7 +16,7 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
 
   return (
     <>
-      <TS.Ticket $isActive={true} className="select-ticket" onClick={() => navigate(`${id}/issue`)}>
+      <TS.Ticket $isActive={true} className="select-ticket" onClick={() => navigate(`${id}/new`)}>
         <TS.TicketLeft className="ticket-left">
           <TS.LeftTitle>
             <div className="title">

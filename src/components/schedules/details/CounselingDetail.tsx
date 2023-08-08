@@ -106,7 +106,7 @@ export const CounselingDetail = () => {
                       <button
                         type="button"
                         onClick={() => {
-                          navigate('/members/register');
+                          navigate(`/members/new?name=${client.name}&phone=${client.phone.replace('/-/g', '')}`);
                         }}
                       >
                         회원 정보 등록

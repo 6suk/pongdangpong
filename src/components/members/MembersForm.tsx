@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import styled from 'styled-components';
 
@@ -49,7 +49,8 @@ const errorCheckInput: ValidationProps[] = [
 export const MembersForm = () => {
   const navigate = useNavigate();
   const { request } = useRequests();
-  const [inputValues, onChange] = useInput({ ...memberForm });
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [inputValues, onChange, inputReset] = useInput({ ...memberForm });
   const { checkForErrors, updateValidationError, validationErrors, isSubmit } = useValidation();
   const [isOpen, setIsOpen] = useState(false);
   const [chips, setChips] = useState('FEMALE');
@@ -85,6 +86,18 @@ export const MembersForm = () => {
     setChips(value);
     updateValidationError('sex', false);
   };
+
+  useEffect(() => {
+    if (searchParams.size > 0) {
+      const initName = searchParams.get('name');
+      const initPhone = searchParams.get('phone');
+      inputReset({
+        ...inputValues,
+        name: initName || '',
+        phone: initPhone || '',
+      });
+    }
+  }, [searchParams]);
 
   return (
     <>

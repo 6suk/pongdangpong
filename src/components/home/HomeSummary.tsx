@@ -3,7 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
 import { MeSummaryType } from '@apis/authAPIs';
-import { UserColorIcon, BackIcon, MemberIcon } from '@assets/icons/indexIcons';
+import ad01 from '@assets/icons/home/ad01.svg';
+import ad02 from '@assets/icons/home/ad02.svg';
+import ad03 from '@assets/icons/home/ad03.svg';
+import { UserColorIcon } from '@assets/icons/indexIcons';
 import { useSwrData } from '@hooks/apis/useSwrData';
 import theme from '@styles/theme';
 
@@ -17,7 +20,33 @@ export const HomeSummary = () => {
   return (
     !isLoading && (
       <>
-        <SchedulesModalWrap>
+        <HomeSummaryWrap>
+          <div className="ad-wrapper">
+            <button
+              className="ad-btn"
+              type="button"
+              onClick={() => {
+                window.open('https://piehealthcare.notion.site/b9c6e60b1b7b4162a1669cf6efb424c8', '_blank');
+              }}
+              style={{ backgroundImage: `url(${ad01})` }}
+            ></button>
+            <button
+              className="ad-btn"
+              type="button"
+              onClick={() => {
+                window.open('https://cirius.or.kr/index.html', '_blank');
+              }}
+              style={{ backgroundImage: `url(${ad02})` }}
+            ></button>
+            <button
+              className="ad-btn"
+              type="button"
+              onClick={() => {
+                window.open('https://bbedashop.com/', '_blank');
+              }}
+              style={{ backgroundImage: `url(${ad03})` }}
+            ></button>
+          </div>
           <div className="btn-wrapper">
             <div className="btn-container">
               <span className="top-left-text">나의 오늘 일정</span>
@@ -73,17 +102,42 @@ export const HomeSummary = () => {
               </button>
             </div>
           </div>
-        </SchedulesModalWrap>
+        </HomeSummaryWrap>
       </>
     )
   );
 };
 
-const SchedulesModalWrap = styled.div`
+const HomeSummaryWrap = styled.div`
   display: flex;
   width: 100%;
   max-width: 1024px;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
 
+  .ad-wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 1rem;
+    margin-top: 3rem;
+    gap: 0.5rem;
+
+    .ad-btn {
+      display: flex;
+      width: 100%;
+      flex-direction: column;
+      padding: 1.25rem;
+      border-radius: 6px;
+      position: relative;
+      height: 90px;
+      transition: all 0.4s;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }
   .btn-wrapper {
     display: flex;
     gap: 1rem;
@@ -108,7 +162,6 @@ const SchedulesModalWrap = styled.div`
       .home-btn {
         display: flex;
         flex-direction: column;
-
         padding: 1.25rem;
         border-radius: 6px;
         border: 1px solid ${theme.colors.inputBorder};
@@ -154,8 +207,8 @@ const SchedulesModalWrap = styled.div`
         display: flex;
         margin: 1.25rem;
         align-items: center;
-        width: 40px; /* 동그라미의 너비 지정 */
-        height: 40px; /* 동그라미의 높이 지정 */
+        width: 40px;
+        height: 40px;
         justify-content: center;
         svg {
           height: 22px;

@@ -1,16 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
-import { styled } from 'styled-components';
-
 import { MemberDetailResponse, MemberIssuedTicketType, MemberTicketResponse, sexEnum } from '@apis/membersAPIs';
 import { BackIcon, Editicon, TicketIcon } from '@assets/icons/indexIcons';
-import { BackButton } from '@components/center/ticket/TicketIssued';
 import { Button } from '@components/common/Button';
 import { useSwrData } from '@hooks/apis/useSwrData';
-import { NoneDisplay, TicketContainer, TicketWrap, Top } from '@styles/center/ticketsStyle';
-import { SchedulesDetailWrap } from '@styles/SchedulesStyle';
-import theme from '@styles/theme';
+import { BackButton } from '@styles/common/buttonStyle';
+import { NoneDisplay, TicketContainer, TicketWrap, Top } from '@styles/common/ticketsStyle';
+import { DetailWrap } from '@styles/common/wrapStyle';
+import { MemberInfoBar } from '@styles/pages/memberStyle';
 import { formatTimestampDot } from '@utils/schedules/formatTimestamp';
 
 import { TicketItem } from './TicketItem';
@@ -53,7 +51,7 @@ export const MemberDetail = () => {
   return (
     data && (
       <>
-        <SchedulesDetailWrap>
+        <DetailWrap $marginTop="0">
           <div>
             <div className="header">
               <div className="title">
@@ -64,7 +62,7 @@ export const MemberDetail = () => {
                 <p>뒤로가기</p>
               </BackButton>
             </div>
-            <S.list>
+            <MemberInfoBar>
               <li>
                 <div className="pic">
                   <img alt="profile" src="/imgs/profile.png" />
@@ -98,7 +96,7 @@ export const MemberDetail = () => {
                   }}
                 />
               </li>
-            </S.list>
+            </MemberInfoBar>
           </div>
 
           <div>
@@ -129,7 +127,7 @@ export const MemberDetail = () => {
               </TicketWrap>
             </TicketContainer>
           </div>
-        </SchedulesDetailWrap>
+        </DetailWrap>
 
         {displayedList.length === 0 && (
           <>
@@ -144,115 +142,4 @@ export const MemberDetail = () => {
       </>
     )
   );
-};
-
-const S = {
-  list: styled.ul`
-    display: flex;
-    align-items: center;
-    padding: 1rem;
-    border: 1px solid ${theme.colors.gray[800]};
-    text-align: left;
-    border-radius: 6px;
-    font-size: 15px;
-    justify-content: space-between;
-
-    & > li {
-      display: flex;
-      align-items: center;
-
-      & > .pic {
-        margin-right: 10px;
-      }
-
-      & > p {
-        & > span {
-          color: gray;
-          margin-right: 10px;
-        }
-      }
-
-      & > p:nth-of-type(1) {
-        width: 140px;
-      }
-      & > p:nth-of-type(2) {
-        width: 180px;
-      }
-      & > p:nth-of-type(3) {
-        width: 170px;
-      }
-      & > p:nth-of-type(4) {
-        width: 80px;
-      }
-      & > p:nth-of-type(5) {
-        width: 200px;
-      }
-    }
-  `,
-
-  EditMemberInfo: styled.ul`
-    text-align: left;
-
-    & > li {
-      margin-bottom: 14px;
-    }
-  `,
-
-  ModalInfoTop: styled.div`
-    margin-top: 1.5rem;
-    margin-inline: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    .modal-tag {
-      font-size: ${theme.font.sub};
-      color: ${theme.colors.pri[500]};
-      background-color: ${theme.colors.pri[900]};
-      padding-inline: 0.6rem;
-      padding-block: 0.3rem;
-      border-radius: 6px;
-      width: fit-content;
-      margin-bottom: 0;
-    }
-
-    .modal-info-title {
-      text-align: left;
-      font-size: ${theme.font.subTitle};
-      margin-bottom: 0;
-    }
-  `,
-  ModalInfoStyle: styled.div`
-    display: grid;
-    gap: 10px;
-    margin-bottom: 2rem;
-    margin-top: 2rem;
-    text-align: left;
-
-    dt {
-      color: ${theme.colors.gray[500]};
-    }
-
-    dl {
-      display: grid;
-      grid-template-columns: 3fr 7fr;
-      padding: 1rem;
-      border-bottom: 1px solid ${theme.colors.gray[800]};
-      column-gap: 2.5rem;
-      font-size: 15px;
-    }
-    dl:first-child {
-      border-top: 1px solid ${theme.colors.gray[800]};
-    }
-
-    dd {
-      display: flex;
-      gap: 0.5rem;
-
-      svg {
-        width: 24px;
-        height: auto;
-      }
-    }
-  `,
 };

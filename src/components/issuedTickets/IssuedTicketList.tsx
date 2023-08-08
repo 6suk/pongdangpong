@@ -5,14 +5,14 @@ import { styled } from 'styled-components';
 
 import { Ticket_issued_list, Ticket_issued_list_datas, Ticket_response } from '@apis/ticketsAPIs';
 import { BackIcon, MemberIcon } from '@assets/icons/indexIcons';
+import { IssuedTicketDetailModal } from '@components/issuedTickets/IssuedTicketDetailModal';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
-import { TicketContainer, Top } from '@styles/center/ticketsStyle';
+import { BackButton, DetailButton } from '@styles/common/buttonStyle';
+import { TicketContainer, Top } from '@styles/common/ticketsStyle';
 import theme from '@styles/theme';
 
-import { IssuedTicketModal } from './IssuedTicketModal';
-
-export const TicketIssued = () => {
+export const IssuedTicketList = () => {
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -82,7 +82,9 @@ export const TicketIssued = () => {
                         편집
                       </DetailButton>
                     </div>
-                    {isOpen && <IssuedTicketModal issuedId={issuedId} memberId={owners[0].id} setIsOpen={setIsOpen} />}
+                    {isOpen && (
+                      <IssuedTicketDetailModal issuedId={issuedId} memberId={owners[0].id} setIsOpen={setIsOpen} />
+                    )}
                   </React.Fragment>
                 );
               })}
@@ -92,45 +94,6 @@ export const TicketIssued = () => {
     </>
   );
 };
-
-export const BackButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-
-  svg {
-    width: 6px;
-    fill: ${theme.colors.gray[500]};
-  }
-
-  font-size: ${theme.font.sub};
-  color: ${theme.colors.gray[500]};
-`;
-
-export const DetailButton = styled.button`
-  font-size: 14px;
-  padding-inline: 0.2rem;
-  padding-block: 0.3rem;
-  background-color: ${theme.colors.gray[800]};
-  color: ${theme.colors.gray[400]};
-  border-radius: 6px;
-  transition: all 0.4s;
-
-  &.pri {
-    background-color: ${theme.colors.pri[900]};
-    color: ${theme.colors.pri[500]};
-
-    &:hover {
-      font-weight: 600;
-      background-color: ${theme.colors.pri[800]};
-    }
-  }
-
-  &:hover {
-    font-weight: 600;
-    background-color: ${theme.colors.gray[700]};
-  }
-`;
 
 const IssuedListWrap = styled.div`
   font-size: 14px;

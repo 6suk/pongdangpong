@@ -6,11 +6,11 @@ import { mutate } from 'swr';
 import { MemberIssuedTicketType } from '@apis/membersAPIs';
 import { LessonTypeEnum } from '@apis/ticketsAPIs';
 import { TicketIcon } from '@assets/icons/indexIcons';
-import { IssuedTicketModal } from '@components/center/ticket/IssuedTicketModal';
 import { NoticeModal } from '@components/common/NoticeModal';
+import { IssuedTicketDetailModal } from '@components/issuedTickets/IssuedTicketDetailModal';
 import { useRequests } from '@hooks/apis/useRequests';
 import { useErrorModal } from '@hooks/utils/useErrorModal';
-import { TS } from '@styles/center/ticketsStyle';
+import { TS } from '@styles/common/ticketsStyle';
 import { extractDate, formatTimestampDot } from '@utils/schedules/formatTimestamp';
 
 interface TicketItemProps {
@@ -167,7 +167,7 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
       </TS.Ticket>
 
       {isMoreViewOpen && memberId && (
-        <IssuedTicketModal issuedId={id} memberId={parseInt(memberId)} setIsOpen={setIsMoreViewOpen} />
+        <IssuedTicketDetailModal issuedId={id} memberId={parseInt(memberId)} setIsOpen={setIsMoreViewOpen} />
       )}
       {isErrorModalOpen && <NoticeModal innerNotice={errorModal} setIsOpen={closeErrorModal} />}
     </>

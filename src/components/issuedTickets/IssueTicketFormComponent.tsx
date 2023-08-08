@@ -10,10 +10,10 @@ import {
   MemberTicketAddFormType,
   MemberTicketEditFormType,
 } from '@apis/membersAPIs';
-import { TermUnitEnum, Ticket_issued_detail_res, Ticket_response, ticket_defaultTermUnit } from '@apis/ticketsAPIs';
+import { TermUnitEnum, ticket_defaultTermUnit } from '@apis/ticketsAPIs';
 import { Button } from '@components/common/Button';
 import { MemberOrUserSearchButton } from '@components/common/FindUserButton';
-import { InputField, Unit } from '@components/common/InputField';
+import { InputField } from '@components/common/InputField';
 import { NoticeModal } from '@components/common/NoticeModal';
 import { useRequests } from '@hooks/apis/useRequests';
 import { useSwrData } from '@hooks/apis/useSwrData';
@@ -22,9 +22,9 @@ import useInput from '@hooks/utils/useInput';
 import { ValidationProps, useValidation } from '@hooks/utils/useValidation';
 import { setFindUser } from '@stores/findUsersSlice';
 import { RootState } from '@stores/store';
-import { FormButtonGroup, FormGridContainer, InputCountStyle, LabelNotice } from '@styles/center/ticketFormStyle';
-import { FormContentWrap, SC, TopTitleWrap } from '@styles/styles';
-import { extractTime } from '@utils/schedules/formatTimestamp';
+import { FormButtonGroup, FormGridContainer, InputCountStyle, LabelNotice, Unit } from '@styles/common/FormStyle';
+import { SC } from '@styles/common/inputsStyles';
+import { FormContentWrap, TopTitleWrap } from '@styles/common/wrapStyle';
 
 type InitialFormType<T extends boolean> = T extends true ? MemberTicketEditFormType : MemberTicketAddFormType;
 type RequestType<T extends boolean> = T extends true ? MemberEditTicketRequest : MemberAddTicketRequest;
@@ -178,7 +178,7 @@ export const IssueTicketFormComponent = <T extends boolean>({
                     disabled={isEditMode}
                     name="startAt"
                     type="date"
-                    value={ticket.startAt ? ticket.startAt : inputValues.startAt}
+                    value={(ticket.startAt as string) || (inputValues.startAt as string)}
                     onChange={onChange}
                   />
                   ~
@@ -186,7 +186,7 @@ export const IssueTicketFormComponent = <T extends boolean>({
                     className={validationErrors.endAt ? 'error' : ''}
                     name="endAt"
                     type="date"
-                    value={ticket.endAt ? ticket.endAt : inputValues.endAt}
+                    value={(ticket.endAt as string) || (inputValues.endAt as string)}
                     onChange={onChange}
                   />
                 </div>

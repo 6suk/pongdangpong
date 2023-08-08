@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { MemberListDatasType } from '@apis/membersAPIs';
 import { MemberIcon } from '@assets/icons/indexIcons';
-import { DetailButton } from '@components/center/ticket/TicketIssued';
+import { DetailButton } from '@styles/common/buttonStyle';
 import { formatTimestampDot } from '@utils/schedules/formatTimestamp';
 
 export const MemberListitem = ({ member }: { member: MemberListDatasType }) => {

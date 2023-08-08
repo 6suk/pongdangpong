@@ -1,6 +1,4 @@
-import { useEffect } from 'react';
-
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { useParams } from 'react-router-dom';
 
@@ -8,7 +6,6 @@ import { MemberTicketAddFormType } from '@apis/membersAPIs';
 import { Ticket_response } from '@apis/ticketsAPIs';
 import { useSwrData } from '@hooks/apis/useSwrData';
 import { ValidationProps } from '@hooks/utils/useValidation';
-import { setFindUser } from '@stores/findUsersSlice';
 import { RootState } from '@stores/store';
 import { formatDateString } from '@utils/schedules/formatTimestamp';
 import { getCurrentDate } from '@utils/schedules/getDate';

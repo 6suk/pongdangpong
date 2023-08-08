@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 import { useEventCount } from '@hooks/utils/useEventCount';
 import { setLastNextDates, setSelectedDate } from '@stores/selectedDateSlice';
 import { AppDispatch, RootState } from '@stores/store';
-import { StyleDayEvent, StyleDayNumber, StyledCalendar, StyledDay, StyledDayName } from '@styles/SchedulesStyle';
+import { StyleDayEvent, StyleDayNumber, StyledCalendar, StyledDay, StyledDayName } from '@styles/pages/SchedulesStyle';
 
 import { formatDateString } from '@utils/schedules/formatTimestamp';
 import { DayType, generateCalendar } from '@utils/schedules/generateCalendar';

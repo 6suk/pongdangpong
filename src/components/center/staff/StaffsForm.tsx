@@ -2,19 +2,18 @@ import { useEffect, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import { styled } from 'styled-components';
-
-import { Roles, staff_form } from '@apis/staffsAPIs';
+import { Roles, Roles_response, staff_form } from '@apis/staffsAPIs';
 import { Button } from '@components/common/Button';
 import { InputField } from '@components/common/InputField';
 import { useRequests } from '@hooks/apis/useRequests';
 import { useSwrData } from '@hooks/apis/useSwrData';
 import useCheckbox from '@hooks/utils/useCheckbox';
 import useInput from '@hooks/utils/useInput';
-import { FormButtonGroup } from '@styles/center/ticketFormStyle';
-import { FormContentWrap, TopTitleWrap } from '@styles/styles';
 
-import theme from '@styles/theme';
+import { ErrorMessage } from '@styles/common/errorMessageStyle';
+import { FormButtonGroup } from '@styles/common/FormStyle';
+import { FormContentWrap, TopTitleWrap } from '@styles/common/wrapStyle';
+import { RoleFlexContainer, RoleGridContainer, RolesWrap } from '@styles/pages/staffFormStyle';
 
 interface StaffFormErrorType {
   [key: string]: ErrorType;
@@ -45,7 +44,7 @@ export const StaffsForm = () => {
   const [inputValues, onChange] = useInput({ ...staff_form });
   const [checkedValues, onCheckboxChange] = useCheckbox(['1']);
   const { request, isLoading } = useRequests();
-  const { data: { roles } = { roles: [] }, isLoading: rolesIsLoading } = useSwrData('roles');
+  const { data: { roles } = { roles: [] }, isLoading: rolesIsLoading } = useSwrData<Roles_response>('roles');
   const [validationErrors, setValidationErrors] = useState<StaffFormErrorType>(initError);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -230,7 +229,6 @@ export const StaffsForm = () => {
             </div>
           </RoleGridContainer>
           <RolesWrap>
-            {/* <h3 className="roles-title">역할 선택 (중복선택 가능)</h3> */}
             <p className="roles-title">역할 선택 (중복선택 가능)</p>
             <p className="roles-desc">센터에서 설정한 역할을 등록하려는 직원에게 부여합니다.</p>
             <div className={`checkBox-wrap ${checkedValues.length < 1 && 'error'}`}>
@@ -270,103 +268,3 @@ export const StaffsForm = () => {
     </FormContentWrap>
   );
 };
-
-const RoleFlexContainer = styled.div`
-  display: flex;
-  gap: 3rem;
-  margin-top: 2rem;
-`;
-
-const RoleGridContainer = styled.div`
-  display: grid;
-  grid-template-rows: repeat(4, minmax(104px, 1fr));
-  grid-auto-flow: row;
-  row-gap: 0.5rem;
-  column-gap: 3rem;
-  width: 100%;
-
-  .row-input {
-    display: flex;
-    gap: 0.5rem;
-
-    :first-child {
-      flex: 7;
-    }
-    :last-child {
-      flex: 3;
-    }
-  }
-`;
-
-const RolesWrap = styled.div`
-  width: 100%;
-
-  h3.roles-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-  }
-
-  p.roles-title {
-    display: block;
-    /* margin-bottom: 0.5rem; */
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #4b5563;
-  }
-
-  .roles-title::after {
-    content: '*';
-    color: #4679fc;
-    margin-left: 0.1rem;
-  }
-
-  .roles-desc {
-    font-size: 14px;
-    color: ${theme.colors.gray[400]};
-    margin-bottom: 1rem;
-  }
-
-  .checkBox-wrap {
-    &.error {
-      border: 1px solid rgba(223, 41, 29, 0.7);
-      transition: all 0.3s;
-      border-radius: 6px;
-    }
-
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-
-    input[type='checkbox'] {
-      display: none;
-    }
-    input[type='checkbox']:checked + label {
-      background-color: ${theme.colors.pri[900]};
-      border: 1.5px solid ${theme.colors.pri[500]};
-    }
-
-    label {
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      border: 1px solid ${theme.colors.gray[600]};
-      border-radius: 6px;
-      transition: all 0.4s;
-
-      & :first-child {
-        font-weight: 600;
-        font-size: 16px;
-      }
-      & :last-child {
-        font-size: 14px;
-      }
-    }
-  }
-`;
-
-const ErrorMessage = styled.p`
-  margin-top: 0.5rem;
-  font-size: ${theme.font.sm} !important;
-  color: ${theme.colors.Error} !important;
-`;

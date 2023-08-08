@@ -6,7 +6,7 @@ import { TicketIcon } from '@assets/icons/indexIcons';
 import { Button } from '@components/common/Button';
 import { useRequests } from '@hooks/apis/useRequests';
 import { useSwrData } from '@hooks/apis/useSwrData';
-import { NoneDisplay, TicketContainer, TicketWrap, Top } from '@styles/center/ticketsStyle';
+import { NoneDisplay, TicketContainer, TicketWrap, Top } from '@styles/common/ticketsStyle';
 
 import { TicketItem } from './TicketItem';
 

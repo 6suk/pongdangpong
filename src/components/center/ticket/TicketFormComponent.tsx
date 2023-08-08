@@ -4,18 +4,21 @@ import { useNavigate } from 'react-router-dom';
 
 import { LessonTypeEnum, TermUnitEnum, Ticket_put_body, Tickets_request, tickets_create } from '@apis/ticketsAPIs';
 import { Button } from '@components/common/Button';
-import { InputField, Unit } from '@components/common/InputField';
+import { InputField } from '@components/common/InputField';
 import { SelectField } from '@components/common/SelectField';
 import useInput from '@hooks/utils/useInput';
 import { ValidationProps, useValidation } from '@hooks/utils/useValidation';
+
 import {
   FormButtonGroup,
   FormGridContainer,
   FormToggleWrap,
   InputCountStyle,
   LabelNotice,
-} from '@styles/center/ticketFormStyle';
-import { FormContentWrap, SC, TopTitleWrap } from '@styles/styles';
+  Unit,
+} from '@styles/common/FormStyle';
+import { SC } from '@styles/common/inputsStyles';
+import { FormContentWrap, TopTitleWrap } from '@styles/common/wrapStyle';
 
 export type TicketFormDataType = Tickets_request | Ticket_put_body;
 

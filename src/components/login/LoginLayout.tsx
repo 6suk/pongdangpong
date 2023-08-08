@@ -6,7 +6,7 @@ import { useAuth } from '@hooks/apis/useAuth';
 import { useRequests } from '@hooks/apis/useRequests';
 import useInput from '@hooks/utils/useInput';
 import { setUser } from '@stores/tokenSilce';
-import { ErrorAndFindWrap, InfoButtons, LoginFormStyle, LoginTop, LoginWrap } from '@styles/loginStyle';
+import { ErrorAndFindWrap, InfoButtons, LoginFormStyle, LoginTop, LoginWrap } from '@styles/pages/loginStyle';
 
 export interface loginFormType {
   loginId: string;

@@ -1,7 +1,7 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 
 import { useEventCount } from '@hooks/utils/useEventCount';
 import { setLastNextDates, setSelectedDate } from '@stores/selectedDateSlice';
@@ -10,6 +10,8 @@ import { StyleDayEvent, StyleDayNumber, StyledCalendar, StyledDay, StyledDayName
 
 import { formatDateString } from '@utils/schedules/formatTimestamp';
 import { DayType, generateCalendar } from '@utils/schedules/generateCalendar';
+
+import { getTodayCalendarRangePath } from '@utils/schedules/getDate';
 
 import { SchedulesProps } from './SchedulesHome';
 
@@ -30,10 +32,11 @@ export interface CalendarEventType {
 export const DAYOFWEEK_ENUM = ['일', '월', '화', '수', '목', '금', '토'];
 
 export const Calendar = ({ tutorId }: SchedulesProps) => {
-  const location = useLocation();
+  const { pathname, search } = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch<AppDispatch>();
   const selectedDate = useSelector((state: RootState) => state.calendar.checkDate);
-  const pathWithSearch = location.search ? location.pathname + location.search : null;
+  const pathWithSearch = search ? pathname + search : pathname + getTodayCalendarRangePath();
   const calendar = useMemo(() => generateCalendar(selectedDate), [selectedDate]);
   const { getEventCount } = useEventCount(pathWithSearch, tutorId);
 
@@ -45,13 +48,13 @@ export const Calendar = ({ tutorId }: SchedulesProps) => {
 
   /** 날짜 선택에 따라 가져올 데이터의 last, next 날짜 저장 */
   useEffect(() => {
-    dispatch(
-      setLastNextDates({
-        last: formatDateString(calendar[0][0]),
-        next: formatDateString(calendar[calendar.length - 1][6]),
-      })
-    );
-  }, [calendar, dispatch]);
+    if (searchParams.get('from') !== formatDateString(calendar[0][0])) {
+      setSearchParams({
+        from: formatDateString(calendar[0][0]),
+        to: formatDateString(calendar[calendar.length - 1][6]),
+      });
+    }
+  }, [selectedDate]);
 
   return (
     <StyledCalendar>

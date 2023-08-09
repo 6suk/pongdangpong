@@ -18,15 +18,6 @@ export const StaffsList = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [editId, setEditId] = useState(0);
 
-  useEffect(() => {
-    if (searchParams.size === 0) {
-      setSearchParams({
-        page: '1',
-        sort: 'createdAt,Desc',
-      });
-    }
-  }, [searchParams, setSearchParams]);
-
   return (
     <>
       <BasicContainer>

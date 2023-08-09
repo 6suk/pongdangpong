@@ -49,7 +49,7 @@ export const MemberDetail = () => {
               <div className="title">
                 <h3>회원 정보</h3>
               </div>
-              <BackButton onClick={() => navigate('/members')}>
+              <BackButton onClick={() => navigate(-1)}>
                 <BackIcon />
                 <p>뒤로가기</p>
               </BackButton>

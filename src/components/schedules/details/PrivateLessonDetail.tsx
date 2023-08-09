@@ -28,7 +28,7 @@ export const PrivateLessonDetail = () => {
   return (
     !isLoading && (
       <>
-        <DetailWrap>
+        <DetailWrap $marginTop="0">
           <div>
             <div className="header">
               <div className="title">

@@ -19,7 +19,7 @@ export const MemberDetail = () => {
   const { data } = useSwrData<MemberDetailResponse>(`members/${memberId}`);
   const { data: ticketData } = useSwrData<MemberTicketResponse>(`members/${memberId}/issued-tickets`);
   const [searchParams, setSearchParams] = useSearchParams();
-  const isActivePath = searchParams.get('isActive') === 'true';
+  const isActivePath = searchParams.get('isActive') === 'true' || searchParams.get('isActive') === null;
   const [tickets, setTickets] = useState<MemberIssuedTicketType[]>([]);
 
   const activeList = useMemo(
@@ -32,21 +32,13 @@ export const MemberDetail = () => {
   );
 
   const displayedList = useMemo(() => {
-    if (!isActivePath) return noneActiveList;
+    if (isActivePath === false) return noneActiveList;
     else return activeList;
   }, [isActivePath, activeList, noneActiveList]);
 
   useEffect(() => {
     setTickets(ticketData?.issuedTickets || []);
   }, [ticketData]);
-
-  useEffect(() => {
-    if (!searchParams.get('isActive')) {
-      setSearchParams({
-        isActive: 'true',
-      });
-    }
-  }, [searchParams, setSearchParams]);
 
   return (
     data && (

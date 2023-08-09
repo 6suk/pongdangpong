@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+import arrow from '@assets/icons/selectArrow.svg';
 import theme from '@styles/theme';
 
 const Label = styled.label`
@@ -27,10 +28,10 @@ const Select = styled.select`
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background-image: url(/imgs/selectArrow.png);
+  background-image: url(${arrow});
   background-repeat: no-repeat;
   background-position: calc(100% - 10px) center;
-  background-size: 12px;
+  background-size: 13px;
   padding: 0.625rem 40px 0.625rem 0.625rem;
 
   &#tutor,
@@ -50,7 +51,7 @@ const Select = styled.select`
     outline: none;
     border-color: ${theme.colors.pri[800]};
     box-shadow: 0 0 0 1px ${theme.colors.pri[900]};
-    background-image: url(/imgs/selectArrow.png);
+    background-image: url(${arrow});
   }
 
   &:disabled {

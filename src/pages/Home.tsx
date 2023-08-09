@@ -1,13 +1,15 @@
 import { Route, Routes } from 'react-router-dom';
 
 import { HomeSummary } from '@components/home/HomeSummary';
+import { SearchResult } from '@components/home/SearchResult';
 
 export const Home = () => {
   return (
     <>
       <Routes>
-        <Route path="">
+        <Route>
           <Route index element={<HomeSummary />} path="" />
+          <Route element={<SearchResult />} path="/search" />
         </Route>
       </Routes>
     </>

@@ -64,6 +64,10 @@ export const MemberList = () => {
   // 페이지네이션 및 정렬 컨트롤 & 검색 시
   useEffect(() => {
     if (isInitialLoad.current) {
+      if (search) {
+        setRequestPath(`${pathname}${search}`);
+        setCurrentPage(parseInt(searchParams.get('page') || '1'));
+      }
       isInitialLoad.current = false;
       return; // 초기 진입 시 searchParams 세팅하지 않음
     }

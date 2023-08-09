@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import { MemberDetailResponse, MemberIssuedTicketType, MemberTicketResponse, sexEnum } from '@apis/membersAPIs';
-import { BackIcon, Editicon, TicketIcon } from '@assets/icons/indexIcons';
+import { BackIcon, Editicon, MemberIcon, TicketIcon } from '@assets/icons/indexIcons';
 import { Button } from '@components/common/Button';
 import { useSwrData } from '@hooks/apis/useSwrData';
 import { BackButton } from '@styles/common/buttonStyle';
@@ -19,7 +19,7 @@ export const MemberDetail = () => {
   const { data } = useSwrData<MemberDetailResponse>(`members/${memberId}`);
   const { data: ticketData } = useSwrData<MemberTicketResponse>(`members/${memberId}/issued-tickets`);
   const [searchParams, setSearchParams] = useSearchParams();
-  const isActivePath = searchParams.get('isActive') === 'true';
+  const isActivePath = searchParams.get('isActive') === 'true' || searchParams.get('isActive') === null;
   const [tickets, setTickets] = useState<MemberIssuedTicketType[]>([]);
 
   const activeList = useMemo(
@@ -32,21 +32,13 @@ export const MemberDetail = () => {
   );
 
   const displayedList = useMemo(() => {
-    if (!isActivePath) return noneActiveList;
+    if (isActivePath === false) return noneActiveList;
     else return activeList;
   }, [isActivePath, activeList, noneActiveList]);
 
   useEffect(() => {
     setTickets(ticketData?.issuedTickets || []);
   }, [ticketData]);
-
-  useEffect(() => {
-    if (!searchParams.get('isActive')) {
-      setSearchParams({
-        isActive: 'true',
-      });
-    }
-  }, [searchParams, setSearchParams]);
 
   return (
     data && (
@@ -57,7 +49,7 @@ export const MemberDetail = () => {
               <div className="title">
                 <h3>회원 정보</h3>
               </div>
-              <BackButton onClick={() => navigate('/members')}>
+              <BackButton onClick={() => navigate(-1)}>
                 <BackIcon />
                 <p>뒤로가기</p>
               </BackButton>
@@ -65,7 +57,7 @@ export const MemberDetail = () => {
             <MemberInfoBar>
               <li>
                 <div className="pic">
-                  <img alt="profile" src="/imgs/profile.png" />
+                  <MemberIcon />
                 </div>
                 <p>
                   <span>이름</span>

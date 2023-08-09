@@ -1,13 +1,13 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { useSearchParams } from 'react-router-dom';
 
 import { Schedules_list_counseling, Schedules_list_private, SearchResponseType } from '@apis/schedulesAPIs';
 
 import { Button } from '@components/common/Button';
 
 import { SelectField } from '@components/common/SelectField';
+import { SchedulesFormModal } from '@components/schedules/form/SchedulesFormModal';
 import { useSwrData } from '@hooks/apis/useSwrData';
 import useInput from '@hooks/utils/useInput';
 import { setSelectedDate } from '@stores/selectedDateSlice';
@@ -17,11 +17,9 @@ import { CalendarContainer, DateStyle, SchedulesContainer, SchedulesTop } from '
 
 import { mapActiveStaffToLabelValue } from '@utils/mapActiveStaffToOption';
 import { formatDate } from '@utils/schedules/formatTimestamp';
-import { getLastDateOfMonth } from '@utils/schedules/getDate';
 
 import { Calendar } from './Calendar';
 import { Dashboard } from './Dashboard';
-import { SchedulesFormModal } from '../form/SchedulesFormModal';
 
 const initInput = {
   tutor: '',
@@ -39,25 +37,13 @@ export interface SchedulesProps {
 
 export const SchedulesHome = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const [searchParams, setSearchParams] = useSearchParams();
   const [inputValues, onChange] = useInput(initInput);
   const [isOpen, setIsOpen] = useState(false);
   const selectedDate = useSelector((state: RootState) => state.calendar.checkDate);
-  const lastNextDates = useSelector((state: RootState) => state.calendar.lastNextDates);
   const { data } = useSwrData<SearchResponseType>(`search?resource=USER`);
   const staffOption = useMemo(() => {
     return mapActiveStaffToLabelValue(data?.users);
   }, [data]);
-
-  // 초기 진입 시 셀렉트될 날짜
-  useEffect(() => {
-    const { formattedFirstDate, formattedLastDate } = getLastDateOfMonth(selectedDate);
-    const { last, next } = lastNextDates;
-    setSearchParams({
-      from: last !== '' ? last : formattedFirstDate,
-      to: next !== '' ? next : formattedLastDate,
-    });
-  }, [selectedDate, setSearchParams, lastNextDates]);
 
   /** 달력 검색 날짜 저장 */
   const handleChangeDate = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { MemberListResponse, MemberSearchResponse } from '@apis/membersAPIs';
@@ -26,13 +26,14 @@ const searchPath = (search: string) => {
 
 export const MemberList = () => {
   const navigate = useNavigate();
+  const isInitialLoad = useRef(true); // 초기 진입 체크
   const { pathname, search } = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [inputValues, onChange, inputReset] = useInput({ query: '', sort: 'createdAt,Desc' });
   const { query, sort } = inputValues;
   const [isSearch, setIsSearch] = useState(false);
   const [totalCount, setTotalCount] = useState<number>(0);
-  const [requestPath, setRequestPath] = useState<string>(`${pathname}${search}`);
+  const [requestPath, setRequestPath] = useState<string>(`${pathname}?page=1&size=15&sort=${sort}`);
   const { data } = useSwrData<MemberListResponse | MemberSearchResponse>(requestPath);
 
   // 페이지네이션
@@ -52,30 +53,37 @@ export const MemberList = () => {
     setRequestPath(searchPath(query));
   };
 
-  // 정렬 컨트롤
-  useEffect(() => {
-    setSearchParams({ sort: sort });
-  }, [sort]);
-
   // 검색 컨트롤
   useEffect(() => {
-    if (!query) setIsSearch(false);
+    if (!query) {
+      setIsSearch(false);
+      setRequestPath(`${pathname}?page=1&size=${itemsPerPage}&sort=${sort}`);
+    }
   }, [query]);
 
-  // 초기값 & 검색 시
+  // 페이지네이션 및 정렬 컨트롤 & 검색 시
   useEffect(() => {
+    if (isInitialLoad.current) {
+      if (search) {
+        setRequestPath(`${pathname}${search}`);
+        setCurrentPage(parseInt(searchParams.get('page') || '1'));
+      }
+      isInitialLoad.current = false;
+      return; // 초기 진입 시 searchParams 세팅하지 않음
+    }
+
     if (!isSearch) {
       searchParams.set('sort', sort || 'createdAt,Desc');
       searchParams.set('page', currentPage.toString() || '1');
       searchParams.set('size', itemsPerPage.toString());
-      setRequestPath(`${pathname}${search}`);
+      setSearchParams(searchParams);
     } else {
       searchParams.delete('page');
       searchParams.delete('sort');
       searchParams.delete('size');
+      setSearchParams(searchParams);
     }
-    setSearchParams(searchParams);
-  }, [isSearch, search, currentPage]);
+  }, [isSearch, currentPage, sort]);
 
   return (
     <>
@@ -102,7 +110,7 @@ export const MemberList = () => {
                     className="search-submit"
                     type="button"
                     onClick={() => {
-                      inputReset();
+                      inputReset({ ...inputValues, query: '' });
                       setCurrentPage(1);
                     }}
                   >

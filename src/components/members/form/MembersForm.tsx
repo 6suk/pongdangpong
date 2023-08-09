@@ -13,6 +13,8 @@ import { SC } from '@styles/common/inputsStyles';
 import { FormContentWrap, TopTitleWrap } from '@styles/common/wrapStyle';
 import { MemberModalWrap, ModalButton } from '@styles/modal/modalStyle';
 
+import GraphicMemberRegistered from '/imgs/Graphic_Member_registered.png';
+
 interface ErrorType {
   available: boolean;
   msg?: string;
@@ -109,7 +111,7 @@ export const MembersForm = () => {
               {inputValues.name}님의 회원 정보가 생성되었습니다. <br />
               문진을 바로 시작하시겠어요?
             </p>
-            <img alt="" src="/imgs/Graphic_Member_registered.png" />
+            <img alt="" src={GraphicMemberRegistered} />
             <div className="buttonWrapper">
               <ModalButton
                 $isPrimary={false}

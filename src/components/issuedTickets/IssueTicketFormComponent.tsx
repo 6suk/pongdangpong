@@ -123,7 +123,7 @@ export const IssueTicketFormComponent = <T extends boolean>({
       if (isEditMode) {
         navigate(-1);
       } else {
-        navigate(`members/${memberId}`);
+        navigate(`/members/${memberId}`);
       }
     } catch (error) {
       handleAxiosError(error, '수강권 부여 오류');

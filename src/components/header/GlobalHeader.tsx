@@ -6,7 +6,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 
 import { MeType } from '@apis/authAPIs';
-import { Logo, Notifications } from '@assets/icons/indexIcons';
+import { Logo, MemberIcon, Notifications } from '@assets/icons/indexIcons';
 import { useAuth } from '@hooks/apis/useAuth';
 import { RootState } from '@stores/store';
 import theme from '@styles/theme';
@@ -70,7 +70,7 @@ export const GlobalHeader = () => {
               {data ? (
                 <>
                   <div className="pic">
-                    <img alt="프로필 사진" src="/imgs/profile.png" />
+                    <MemberIcon width={'30px'} />
                   </div>
                   <span className="userName">{data.name} 님</span>
                   <button type="button" onClick={handleLogOutClick}>

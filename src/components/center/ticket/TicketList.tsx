@@ -14,17 +14,9 @@ export const TicketList = () => {
   const navigate = useNavigate();
   const { data, isError, isLoading } = useSwrData<{ tickets: Ticket_response[] }>(tickets_list.url);
   const [searchParams, setSearchParams] = useSearchParams();
-  const isActivePath = searchParams.get('isActive') === 'true';
+  const isActivePath = searchParams.get('isActive') === 'true' || searchParams.get('isActive') === null;
   const [tickets, setTickets] = useState<Ticket_response[]>([]);
   const { request } = useRequests();
-
-  useEffect(() => {
-    if (!searchParams.get('isActive')) {
-      setSearchParams({
-        isActive: 'true',
-      });
-    }
-  }, [searchParams, setSearchParams]);
 
   useEffect(() => {
     setTickets(data?.tickets || []);
@@ -34,7 +26,7 @@ export const TicketList = () => {
   const activeList = useMemo(() => tickets?.filter((v: Ticket_response) => v.isActive === true) || [], [tickets]);
   const noneActiveList = useMemo(() => tickets.filter((v: Ticket_response) => v.isActive !== true) || [], [tickets]);
   const displayedList = useMemo(() => {
-    if (!isActivePath) return noneActiveList;
+    if (isActivePath === false) return noneActiveList;
     else return activeList;
   }, [isActivePath, activeList, noneActiveList]);
 

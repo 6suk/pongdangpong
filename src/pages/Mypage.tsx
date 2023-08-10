@@ -7,6 +7,7 @@ import { MeType } from '@apis/authAPIs';
 import { BackIcon, MemberIcon } from '@assets/icons/indexIcons';
 import { RootState } from '@stores/store';
 import { BackButton } from '@styles/common/buttonStyle';
+import { DetailWrap } from '@styles/common/wrapStyle';
 import theme from '@styles/theme';
 
 export const Mypage = () => {
@@ -16,7 +17,7 @@ export const Mypage = () => {
 
   return (
     <>
-      <MyInfoWrap>
+      <DetailWrap $marginTop="0">
         <div>
           <div className="header">
             <div className="title">
@@ -63,37 +64,10 @@ export const Mypage = () => {
           </MyInfoBox>
         </div>
         <div></div>
-      </MyInfoWrap>
+      </DetailWrap>
     </>
   );
 };
-
-export const MyInfoWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 1024px;
-  gap: 3rem;
-
-  .header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-    margin-inline: 1rem;
-    justify-content: space-between;
-
-    .title {
-      display: flex;
-      align-items: center;
-      margin-inline: 1rem;
-    }
-
-    h3 {
-      font-size: ${theme.font.subTitle};
-      font-weight: 800;
-    }
-  }
-`;
 
 const MyInfoBar = styled.div`
   display: flex;

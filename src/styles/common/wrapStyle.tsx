@@ -257,8 +257,8 @@ export const HomeSummaryWrap = styled.div`
     justify-content: space-between;
 
     width: 100%;
-    margin-bottom: 1rem;
-    margin-top: 2rem;
+    margin-bottom: 2rem;
+    margin-top: 3rem;
 
     .ad-btn {
       display: flex;
@@ -365,7 +365,6 @@ export const SearchContainer = styled.div`
   display: flex;
   width: 100%;
   margin-inline: 1rem;
-  margin-top: -1rem;
 `;
 
 export const TopContainer = styled.div`

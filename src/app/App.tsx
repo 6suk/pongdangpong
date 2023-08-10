@@ -1,5 +1,5 @@
 import { Suspense, lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { ThemeProvider } from 'styled-components';
 
@@ -33,6 +33,7 @@ function App() {
                 <Route element={<Schedules />} path="schedules/*" />
               </Route>
             </Route>
+            <Route element={<Navigate to={'/home'} />} path="*" />
           </Routes>
         </Suspense>
       </ThemeProvider>

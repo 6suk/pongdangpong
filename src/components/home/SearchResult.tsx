@@ -1,52 +1,26 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { SearchResponse, SearchMemberType, SearchUserType } from '@apis/searchAPIs';
 import { ArrowIcon, BackIcon } from '@assets/icons/indexIcons';
+import { Loading } from '@components/common/Loading';
 import { useSwrData } from '@hooks/apis/useSwrData';
 import { usePagination } from '@hooks/utils/usePagination';
 import { BackButton } from '@styles/common/buttonStyle';
 import { Pagination } from '@styles/common/paginaionStyle';
-import { BasicContainer, SearchListWrap, TopContainer } from '@styles/common/wrapStyle';
+import { BasicContainer } from '@styles/common/wrapStyle';
+import { SearchListWrap, TopContainer } from '@styles/pages/homeStyle';
 import { MemberTopTitle } from '@styles/pages/memberStyle';
 
-import { MemberItem, UserItem, SearchMemberType, SearchUserType } from './SearchItem';
-
-type SearchResponse = {
-  searchParam: {
-    query: string;
-    resources: string[];
-  };
-  members: {
-    id: number;
-    name: string;
-    phone: string;
-    sex: string;
-    birthDate: string;
-    createdAt: string;
-    updatedAt: string;
-    visitedAt: string;
-  }[];
-  users: {
-    id: number;
-    type: string;
-    loginId: string;
-    name: string;
-    phone: string;
-    isActive: boolean;
-    createdAt: string;
-    updatedAt: string;
-    lastLoginedAt: string;
-  }[];
-  message: string;
-};
+import { MemberItem, UserItem } from './SearchItem';
 
 export const SearchResult = () => {
+  const navigate = useNavigate();
   const { pathname, search } = useLocation();
   const newPathname = pathname.replace('/home', '');
   const requestPath = `${newPathname}${search}`;
   const { data, isLoading, isError } = useSwrData<SearchResponse>(requestPath);
   const [totalCount, setTotalCount] = useState<number>(0);
-  const navigate = useNavigate();
 
   const itemsPerPage = 15;
   const { currentPage, totalPages, pageRange, setCurrentPage, updatePageRange } = usePagination(
@@ -55,9 +29,10 @@ export const SearchResult = () => {
     10
   );
 
-  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
   const allItems = [...(data?.members || []), ...(data?.users || [])];
   const paginatedItems = allItems.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   useEffect(() => {
     if (data) {
@@ -66,7 +41,7 @@ export const SearchResult = () => {
   }, [data]);
 
   if (isError) return <div>에러가 발생했습니다.</div>;
-  if (isLoading) return <div>로딩 중...</div>;
+  if (isLoading) return <Loading />;
   if (!data || (data?.members.length === 0 && data?.users.length === 0)) return <div>검색 결과가 없습니다.</div>;
 
   return (

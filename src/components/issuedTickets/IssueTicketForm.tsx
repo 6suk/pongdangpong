@@ -2,8 +2,7 @@ import { useSelector } from 'react-redux';
 
 import { useParams } from 'react-router-dom';
 
-import { MemberTicketAddFormType } from '@apis/membersAPIs';
-import { Ticket_response } from '@apis/ticketsAPIs';
+import { IssueTicketForMemberFormType, TicketListResponse } from '@apis/types/ticketsTypes';
 import { useSwrData } from '@hooks/apis/useSwrData';
 import { ValidationProps } from '@hooks/utils/useValidation';
 import { RootState } from '@stores/store';
@@ -18,7 +17,7 @@ const IssueTicketErrorForm: ValidationProps[] = [
   { name: 'privateTutorId', type: 'number' },
 ];
 
-const IssueTicketFormInitForm: MemberTicketAddFormType = {
+const IssueTicketFormInitForm: IssueTicketForMemberFormType = {
   serviceCount: 0,
   startAt: formatDateString(getCurrentDate()),
   endAt: formatDateString(getCurrentDate()),
@@ -32,7 +31,7 @@ const initialForm = {
 export const IssueTickeForm = () => {
   const { ticketId } = useParams();
   const user = useSelector((state: RootState) => state.tokens.user);
-  const { data } = useSwrData<Ticket_response>(`tickets/${ticketId}`);
+  const { data } = useSwrData<TicketListResponse>(`tickets/${ticketId}`);
   const requestInfo: requestInfoType = {
     url: `tickets/${ticketId}/issue`,
     method: 'post',

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import { Ticket_put_body, tickets_put } from '@apis/ticketsAPIs';
+import { TicketPutRequestBody } from '@apis/types/ticketsTypes';
 import { reqDataState } from '@hooks/apis/useRequests';
 import useInput from '@hooks/utils/useInput';
 
@@ -14,7 +14,7 @@ interface TicketUpdateProps extends TicketProps {
 export const STicketUpdate = ({ ticket, setIsEdit, request }: TicketUpdateProps) => {
   const navigate = useNavigate();
 
-  const initTicket: Ticket_put_body = {
+  const initTicket: TicketPutRequestBody = {
     defaultCount: ticket.defaultCount,
     defaultTerm: ticket.defaultTerm,
     defaultTermUnit: ticket.defaultTermUnit,
@@ -25,12 +25,10 @@ export const STicketUpdate = ({ ticket, setIsEdit, request }: TicketUpdateProps)
 
   const handleSubmit = (id: number) => async (e: React.FormEvent) => {
     e.preventDefault();
-    const { url, method } = tickets_put;
-
     try {
       await request({
-        url,
-        method,
+        url: 'tickets',
+        method: 'put',
         body: inputValues,
         path: `/${id}`,
       });

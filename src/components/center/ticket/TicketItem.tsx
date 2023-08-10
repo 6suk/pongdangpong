@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { LessonTypeEnum, TermUnitEnum, Ticket_response } from '@apis/ticketsAPIs';
+import { LessonTypeEnum, TermUnitEnum, TicketListResponse } from '@apis/types/ticketsTypes';
 import { TicketIcon } from '@assets/icons/indexIcons';
 import { Modal } from '@components/common/Modal';
 import { TS } from '@styles/common/ticketsStyle';
 import { ModalButton } from '@styles/modal/modalStyle';
 
 interface TicketItemProps {
-  ticket: Ticket_response;
+  ticket: TicketListResponse;
   ticketStatus: (id: number) => void;
   deleteTicket: (id: number) => void;
 }

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { StaffDetailResponseType } from '@apis/staffsAPIs';
+import { StaffsDetailResponse } from '@apis/types/staffsTypes';
 import { MemberIcon, UserIcon } from '@assets/icons/indexIcons';
 import { StaffsConfirmModal, StaffsResignModal } from '@components/center/staff/StaffResignModal';
 import { StaffsEditModal } from '@components/center/staff/StaffsEditModal';
@@ -13,7 +13,7 @@ import { StaffInfoBar, StaffListWrap } from '@styles/pages/staffDetailStyle';
 
 export const StaffsDetail = () => {
   const { id } = useParams();
-  const { data, isLoading } = useSwrData<StaffDetailResponseType>(`staffs/${id}`);
+  const { data, isLoading } = useSwrData<StaffsDetailResponse>(`staffs/${id}`);
   const { name, roles, phone, loginId, active, createdAt, members, updatedAt, memo } = data ?? {};
   const [isOpen, setIsOpen] = useState(false);
   const [isResignModalOpen, setIsResignModalOpen] = useState(false);

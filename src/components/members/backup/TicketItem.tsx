@@ -1,11 +1,11 @@
 import { memo, useState } from 'react';
 
-import { LessonTypeEnum, Ticket_response } from '@apis/ticketsAPIs';
+import { LessonTypeEnum, TicketListResponse } from '@apis/types/ticketsTypes';
 import { TicketIcon } from '@assets/icons/indexIcons';
 import { TS } from '@styles/common/ticketsStyle';
 
 interface TicketItemProps {
-  ticket: Ticket_response;
+  ticket: TicketListResponse;
 }
 
 const TicketItemMemo = ({

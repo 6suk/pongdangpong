@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
-import { MemberDetailResponse, MemberIssuedTicketType, MemberTicketResponse, sexEnum } from '@apis/membersAPIs';
+import { MemberDetailResponse, MemberIssuedTicketType, MemberTicketResponse, sexEnum } from '@apis/types/membersTypes';
 import { BackIcon, Editicon, MemberIcon, TicketIcon } from '@assets/icons/indexIcons';
 import { Button } from '@components/common/Button';
 import { useSwrData } from '@hooks/apis/useSwrData';

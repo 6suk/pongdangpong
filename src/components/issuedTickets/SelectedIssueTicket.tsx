@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import { Ticket_response } from '@apis/ticketsAPIs';
+import { TicketListResponse } from '@apis/types/ticketsTypes';
 import { BackIcon } from '@assets/icons/indexIcons';
 import { TicketItem } from '@components/issuedTickets/TicketItem';
 import { useSwrData } from '@hooks/apis/useSwrData';
@@ -11,7 +11,7 @@ import { DetailWrap } from '@styles/common/wrapStyle';
 
 export const SelectedIssueTicket = () => {
   const navigate = useNavigate();
-  const { data } = useSwrData<{ tickets: Ticket_response[] }>(`tickets`);
+  const { data } = useSwrData<{ tickets: TicketListResponse[] }>(`tickets`);
 
   return (
     <>
@@ -29,9 +29,9 @@ export const SelectedIssueTicket = () => {
           <TicketWrap>
             {data &&
               data.tickets
-                .filter((v: Ticket_response) => v.isActive === true)
+                .filter((v: TicketListResponse) => v.isActive === true)
                 .reverse()
-                .map((ticket: Ticket_response) => {
+                .map((ticket: TicketListResponse) => {
                   return <TicketItem key={ticket.id} ticket={ticket} />;
                 })}
           </TicketWrap>

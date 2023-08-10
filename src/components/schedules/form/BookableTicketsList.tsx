@@ -5,10 +5,10 @@ import { useSelector } from 'react-redux';
 import {
   AvailableTicketsOwnerType,
   AvailableTicketsType,
-  BookableTicketsRequest,
+  BookableTicketsResponse,
   PrivateLessonFormInputsType,
-  PrivateLessonInitInput,
-} from '@apis/schedulesAPIs';
+  PrivateLessonFormInit,
+} from '@apis/types/schedulesTypes';
 import { SelectField } from '@components/common/SelectField';
 import { useSwrData } from '@hooks/apis/useSwrData';
 
@@ -36,7 +36,7 @@ export const BookableTicketsList = ({
     MEMBER: { id: memberId },
   } = useSelector((state: RootState) => state.findUsers);
   const url = memberId && tutorId ? `/members/${memberId}/bookable-tickets?tutorId=${tutorId}` : null;
-  const { data, isLoading } = useSwrData<BookableTicketsRequest>(url);
+  const { data, isLoading } = useSwrData<BookableTicketsResponse>(url);
   const availableTickets = data?.availableTickets;
   const isData = availableTickets !== undefined && availableTickets.length > 0;
   const [optionData, setOptionData] = useState<{ value: number; label: string }[]>([]);
@@ -56,7 +56,7 @@ export const BookableTicketsList = ({
     if (!memberId || !tutorId) {
       setOwnerList(undefined);
       setOptionData([]);
-      inputReset({ ...inputValues, issuedTicketId: PrivateLessonInitInput.issuedTicketId });
+      inputReset({ ...inputValues, issuedTicketId: PrivateLessonFormInit.issuedTicketId });
     }
   }, [memberId, tutorId]);
 

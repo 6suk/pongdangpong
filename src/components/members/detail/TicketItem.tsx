@@ -3,8 +3,8 @@ import { useLocation, useParams } from 'react-router-dom';
 
 import { mutate } from 'swr';
 
-import { MemberIssuedTicketType } from '@apis/membersAPIs';
-import { LessonTypeEnum } from '@apis/ticketsAPIs';
+import { MemberIssuedTicketType } from '@apis/types/membersTypes';
+import { LessonTypeEnum } from '@apis/types/ticketsTypes';
 import { TicketIcon } from '@assets/icons/indexIcons';
 import { NoticeModal } from '@components/common/NoticeModal';
 import { IssuedTicketDetailModal } from '@components/issuedTickets/IssuedTicketDetailModal';

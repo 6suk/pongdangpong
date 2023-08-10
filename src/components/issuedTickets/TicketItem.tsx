@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 
-import { LessonTypeEnum, TermUnitEnum, Ticket_response } from '@apis/ticketsAPIs';
+import { LessonTypeEnum, TermUnitEnum, TicketListResponse } from '@apis/types/ticketsTypes';
 import { TicketIcon } from '@assets/icons/indexIcons';
 import { TS } from '@styles/common/ticketsStyle';
 
 interface TicketItemProps {
-  ticket: Ticket_response;
+  ticket: TicketListResponse;
 }
 export const TicketItem = ({ ticket }: TicketItemProps) => {
   const navigate = useNavigate();

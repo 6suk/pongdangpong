@@ -1,4 +1,4 @@
-import { AttendanceHistoriesType, SchedulesIssuedTicketType, StatusEnum } from '@apis/schedulesAPIs';
+import { AttendanceHistoriesType, PrivateLessonIssuedTicketType, StatusEnum } from '@apis/types/schedulesTypes';
 import { MemberIcon } from '@assets/icons/indexIcons';
 import { PrivateLessonCardItem, SchedulesTypeInfo } from '@styles/pages/SchedulesStyle';
 
@@ -6,7 +6,7 @@ import { StatusButton } from './StatusButton';
 
 export interface MemberCardItemProps {
   attendanceHistories: AttendanceHistoriesType[];
-  issuedTicket: SchedulesIssuedTicketType;
+  issuedTicket: PrivateLessonIssuedTicketType;
 }
 
 export const MemberCardItem = ({ attendanceHistories, issuedTicket }: MemberCardItemProps) => {

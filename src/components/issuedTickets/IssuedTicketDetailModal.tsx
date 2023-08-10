@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useCallback } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import { LessonTypeEnum, TermUnitEnum, Ticket_issued_detail_res } from '@apis/ticketsAPIs';
+import { LessonTypeEnum, TermUnitEnum, IssuedTicketDetailResponse } from '@apis/types/ticketsTypes';
 import { MemberIcon } from '@assets/icons/indexIcons';
 import { Button } from '@components/common/Button';
 import { Loading } from '@components/common/Loading';
@@ -17,7 +17,7 @@ interface IssuedTicketDetailProps {
 }
 
 export const IssuedTicketDetailModal = ({ setIsOpen, issuedId, memberId }: IssuedTicketDetailProps) => {
-  const { data, isLoading } = useSwrData<Ticket_issued_detail_res>(`issued-tickets/${issuedId}`);
+  const { data, isLoading } = useSwrData<IssuedTicketDetailResponse>(`issued-tickets/${issuedId}`);
   const handleClose = useCallback(() => setIsOpen(false), [setIsOpen]);
   const navigate = useNavigate();
 
@@ -51,7 +51,7 @@ export const IssuedTicketDetailModal = ({ setIsOpen, issuedId, memberId }: Issue
   }
 };
 
-const InformationList = ({ data }: { data: Ticket_issued_detail_res }) => {
+const InformationList = ({ data }: { data: IssuedTicketDetailResponse }) => {
   const {
     defaultCount,
     serviceCount,

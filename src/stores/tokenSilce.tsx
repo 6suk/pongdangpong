@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { MeType } from '@apis/authAPIs';
+import { MeType } from '@apis/types/authTypes';
 
 export interface TokensState {
   isLogin: boolean;

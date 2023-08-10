@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
-import { MemberListResponse, MemberSearchResponse } from '@apis/membersAPIs';
+import { MemberListResponse } from '@apis/types/membersTypes';
+import { SearchResponse } from '@apis/types/searchTypes';
 import { ArrowIcon, CloseIcon, SearchIcon } from '@assets/icons/indexIcons';
 import { Button } from '@components/common/Button';
 import { MemberListDefault } from '@components/members/list/MemberListDefault';
@@ -34,7 +35,7 @@ export const MemberList = () => {
   const [isSearch, setIsSearch] = useState(false);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [requestPath, setRequestPath] = useState<string>(`${pathname}?page=1&size=15&sort=${sort}`);
-  const { data } = useSwrData<MemberListResponse | MemberSearchResponse>(requestPath);
+  const { data } = useSwrData<MemberListResponse | SearchResponse>(requestPath);
 
   // 페이지네이션
   const itemsPerPage = 15;
@@ -171,7 +172,7 @@ export const MemberList = () => {
               )}
               {data && 'members' in data && isSearch && (
                 <MemberListSearch
-                  data={data as MemberSearchResponse}
+                  data={data as SearchResponse}
                   query={{ currentPage, itemsPerPage }}
                   setTotalCount={setTotalCount}
                 />

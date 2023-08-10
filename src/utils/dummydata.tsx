@@ -1,4 +1,4 @@
-import { MemberSearchType } from '@apis/schedulesAPIs';
+import { MemberSearchType } from '@apis/types/searchTypes';
 
 /** 모달 페이지네이션 테스트용 더미테이터 */
 export const dummyData = (count: number): MemberSearchType[] => {

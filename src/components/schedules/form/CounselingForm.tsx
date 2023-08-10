@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { CounselingInitInput, CounselingRequest, Schedules_detail_counseling } from '@apis/schedulesAPIs';
+import { CounselingInitInput, CounselingRequestBody, CounselingResponse } from '@apis/types/schedulesTypes';
 import { Button } from '@components/common/Button';
 import { MemberOrUserSearchButton } from '@components/common/FindUserButton';
 import { InputField } from '@components/common/InputField';
@@ -45,7 +45,7 @@ export const CounselingForm = ({ isEditMode = false }: SchedulesFormProps) => {
   const selectedDate = useSelector((state: RootState) => state.calendar.checkDate);
 
   /** 수정 시 전달받을 데이터 (edit) */
-  const editInitializeData = (data: Schedules_detail_counseling) => {
+  const editInitializeData = (data: CounselingResponse) => {
     const {
       startAt,
       endAt,
@@ -68,14 +68,14 @@ export const CounselingForm = ({ isEditMode = false }: SchedulesFormProps) => {
   const { data } = useEditMode(isEditMode, pathname, editInitializeData);
 
   /** 수정 시 변경값 검사 (edit) */
-  const editCounseling = async (requestValues: CounselingRequest) => {
+  const editCounseling = async (requestValues: CounselingRequestBody) => {
     const {
       startAt,
       endAt,
       memo,
       client: { name, phone },
       counselor: { id },
-    } = data as Schedules_detail_counseling;
+    } = data as CounselingResponse;
 
     // 데이터가 변경되지 않으면 전송하지 않도록
     if (
@@ -98,7 +98,7 @@ export const CounselingForm = ({ isEditMode = false }: SchedulesFormProps) => {
 
     const { date, startTime, endTime } = inputValues;
     if (USER.id !== undefined) {
-      const requestValues: CounselingRequest = {
+      const requestValues: CounselingRequestBody = {
         clientName: inputValues.clientName,
         clientPhone: inputValues.clientPhone,
         memo: inputValues.memo,
@@ -126,7 +126,7 @@ export const CounselingForm = ({ isEditMode = false }: SchedulesFormProps) => {
   }, []);
 
   /** 서버 전송 (new / edit) */
-  const requestServer = async (requestData: CounselingRequest) => {
+  const requestServer = async (requestData: CounselingRequestBody) => {
     try {
       await request({
         url: extractBasePath(pathname),

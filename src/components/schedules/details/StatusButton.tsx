@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import { mutate } from 'swr';
 
-import { StatusType } from '@apis/schedulesAPIs';
+import { StatusType } from '@apis/types/schedulesTypes';
 import { Modal } from '@components/common/Modal';
 import { NoticeModal } from '@components/common/NoticeModal';
 import { useRequests } from '@hooks/apis/useRequests';

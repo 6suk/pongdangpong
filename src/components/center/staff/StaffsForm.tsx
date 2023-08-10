@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import { Roles, Roles_response, staff_form } from '@apis/staffsAPIs';
+import { RolesRoleType, RolesResponse, StaffFormInit } from '@apis/types/staffsTypes';
 import { Button } from '@components/common/Button';
 import { InputField } from '@components/common/InputField';
 import { useRequests } from '@hooks/apis/useRequests';
@@ -41,10 +41,10 @@ const initError = {
 export const StaffsForm = () => {
   const isEditMode = false;
   const navigate = useNavigate();
-  const [inputValues, onChange] = useInput({ ...staff_form });
+  const [inputValues, onChange] = useInput({ ...StaffFormInit });
   const [checkedValues, onCheckboxChange] = useCheckbox(['1']);
   const { request, isLoading } = useRequests();
-  const { data: { roles } = { roles: [] }, isLoading: rolesIsLoading } = useSwrData<Roles_response>('roles');
+  const { data: { roles } = { roles: [] }, isLoading: rolesIsLoading } = useSwrData<RolesResponse>('roles');
   const [validationErrors, setValidationErrors] = useState<StaffFormErrorType>(initError);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -233,7 +233,7 @@ export const StaffsForm = () => {
             <p className="roles-desc">센터에서 설정한 역할을 등록하려는 직원에게 부여합니다.</p>
             <div className={`checkBox-wrap ${checkedValues.length < 1 && 'error'}`}>
               {!rolesIsLoading &&
-                roles.map((v: Roles) => {
+                roles.map((v: RolesRoleType) => {
                   const { id, name, description } = v;
                   return (
                     <div key={id}>

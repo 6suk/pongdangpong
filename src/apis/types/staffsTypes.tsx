@@ -1,6 +1,12 @@
-import { MemberListDatasType } from './membersAPIs';
+import { MemberListDatasType } from './membersTypes';
+/** Staff : 직원관리 */
 
-export interface staffs_list_type {
+/**
+ * - [get] 전체 직원 조회
+ * - /api/v1/staffs
+ * - [query] page, sort
+ */
+export interface StaffsListResponse {
   meta: {
     totalCount: number;
     size: number;
@@ -8,11 +14,11 @@ export interface staffs_list_type {
     page: number;
     hasMore: boolean;
   };
-  datas: Staffs_list_dats_type[];
+  datas: StaffsListDatasType[];
   message: string;
 }
 
-export interface Staffs_list_dats_type {
+export interface StaffsListDatasType {
   id: number;
   name: string;
   phone: string;
@@ -21,7 +27,11 @@ export interface Staffs_list_dats_type {
   memo: string;
 }
 
-interface Staffs_form_type {
+/**
+ * - [post] 직원 생성
+ * - /api/v1/staffs
+ */
+interface StaffsRequestBody {
   loginId: string;
   password: string;
   name: string;
@@ -29,7 +39,7 @@ interface Staffs_form_type {
   roles: number[];
 }
 
-export const staff_form: Staffs_form_type = {
+export const StaffFormInit: StaffsRequestBody = {
   loginId: '',
   password: '',
   name: '',
@@ -37,12 +47,16 @@ export const staff_form: Staffs_form_type = {
   roles: [],
 };
 
-export interface Roles_response {
-  roles: Roles[];
+/**
+ * - [get] 역할 조회
+ * - /api/v1/roles
+ */
+export interface RolesResponse {
+  roles: RolesRoleType[];
   message: string;
 }
 
-export interface Roles {
+export interface RolesRoleType {
   id: number;
   name: string;
   description: string;
@@ -54,12 +68,13 @@ export interface Roles {
   ];
 }
 
-/** 직원 디테일 */
-export type StaffType = 'ADMIN' | 'STAFF';
-
-export interface StaffDetailResponseType {
+/**
+ * - [get] 직원 상세 조회
+ * - /api/v1/staffs/{userId}
+ */
+export interface StaffsDetailResponse {
   id: number;
-  type: StaffType;
+  type: StaffTypesType;
   name: string;
   phone: string;
   active: boolean;
@@ -95,3 +110,5 @@ export interface StaffDetailResponseType {
   ];
   message: string;
 }
+
+export type StaffTypesType = 'ADMIN' | 'STAFF';

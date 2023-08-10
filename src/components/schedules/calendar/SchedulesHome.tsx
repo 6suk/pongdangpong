@@ -2,8 +2,9 @@ import { useMemo, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Schedules_list_counseling, Schedules_list_private, SearchResponseType } from '@apis/schedulesAPIs';
+import { SchedulesListCounselingsType, SchedulesListPrivateLessonsType } from '@apis/types/schedulesTypes';
 
+import { SearchResponse } from '@apis/types/searchTypes';
 import { Button } from '@components/common/Button';
 
 import { SelectField } from '@components/common/SelectField';
@@ -27,8 +28,8 @@ const initInput = {
 };
 
 export interface SchedulesPropsType {
-  counselingSchedules: Schedules_list_counseling[];
-  privateSchedules: Schedules_list_private[];
+  counselingSchedules: SchedulesListCounselingsType[];
+  privateSchedules: SchedulesListPrivateLessonsType[];
 }
 
 export interface SchedulesProps {
@@ -40,7 +41,7 @@ export const SchedulesHome = () => {
   const [inputValues, onChange] = useInput(initInput);
   const [isOpen, setIsOpen] = useState(false);
   const selectedDate = useSelector((state: RootState) => state.calendar.checkDate);
-  const { data } = useSwrData<SearchResponseType>(`search?resource=USER`);
+  const { data } = useSwrData<SearchResponse>(`search?resource=USER`);
   const staffOption = useMemo(() => {
     return mapActiveStaffToLabelValue(data?.users);
   }, [data]);

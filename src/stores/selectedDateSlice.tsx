@@ -1,6 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { Schedules_list_counseling, Schedules_list_private } from '@apis/schedulesAPIs';
+import { SchedulesListCounselingsType, SchedulesListPrivateLessonsType } from '@apis/types/schedulesTypes';
+
 import { CalendarEventType } from '@components/schedules/calendar/Calendar';
 import { getCurrentDate } from '@utils/schedules/getDate';
 
@@ -19,8 +20,8 @@ interface lastNextDatesState {
 }
 
 export type ScheduleType =
-  | { type: string; schedule: Schedules_list_counseling }
-  | { type: string; schedule: Schedules_list_private };
+  | { type: string; schedule: SchedulesListCounselingsType }
+  | { type: string; schedule: SchedulesListPrivateLessonsType };
 
 const initialState: CalendarState = {
   checkDate: `${curYear}-${curMonth < 10 ? '0' + curMonth : curMonth}-${curDate < 10 ? '0' + curDate : curDate}`,

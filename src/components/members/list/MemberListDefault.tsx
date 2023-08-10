@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react';
 
 import { useLocation } from 'react-router-dom';
 
-import { MemberListDatasType, MemberListResponse } from '@apis/membersAPIs';
+import { MemberListDatasType, MemberListResponse } from '@apis/types/membersTypes';
 
 import { MemberListitem } from './MemberListItem';
 

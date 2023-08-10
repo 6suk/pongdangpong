@@ -1,4 +1,5 @@
-import { Schedules_list_counseling, Schedules_list_private } from '@apis/schedulesAPIs';
+import { SchedulesListCounselingsType, SchedulesListPrivateLessonsType } from '@apis/types/schedulesTypes';
+
 import { CalendarEventType } from '@components/schedules/calendar/Calendar';
 
 import { extractDate, getDateDetails } from './formatTimestamp';
@@ -31,8 +32,8 @@ const getEventCountbyDateUtil = (schedules: Schedule[]): { [key: string]: Calend
 };
 
 /** 오버로딩 */
-export function getEventCountbyDate(schedules: Schedules_list_counseling[]): { [key: string]: CalendarEventType };
-export function getEventCountbyDate(schedules: Schedules_list_private[]): { [key: string]: CalendarEventType };
+export function getEventCountbyDate(schedules: SchedulesListCounselingsType[]): { [key: string]: CalendarEventType };
+export function getEventCountbyDate(schedules: SchedulesListPrivateLessonsType[]): { [key: string]: CalendarEventType };
 export function getEventCountbyDate(schedules: Schedule[]): { [key: string]: CalendarEventType };
 export function getEventCountbyDate(schedules: Schedule[]): { [key: string]: CalendarEventType } {
   return getEventCountbyDateUtil(schedules);

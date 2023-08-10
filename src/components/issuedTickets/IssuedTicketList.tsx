@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { styled } from 'styled-components';
 
-import { Ticket_issued_list, Ticket_issued_list_datas, Ticket_response } from '@apis/ticketsAPIs';
+import { IssuedTicketListReponse, IssuedTicketListDatasType, TicketListResponse } from '@apis/types/ticketsTypes';
 import { BackIcon, MemberIcon } from '@assets/icons/indexIcons';
 import { IssuedTicketDetailModal } from '@components/issuedTickets/IssuedTicketDetailModal';
 import { useSwrData } from '@hooks/apis/useSwrData';
@@ -16,8 +16,8 @@ export const IssuedTicketList = () => {
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const { data } = useSwrData<Ticket_issued_list>(location.pathname.replace('/center/', '')); // 수강권 부여 리스트
-  const { data: ticketData, isLoading } = useSwrData<Ticket_response>(`tickets/${id}`); // 해당 수강권 정보
+  const { data } = useSwrData<IssuedTicketListReponse>(location.pathname.replace('/center/', '')); // 수강권 부여 리스트
+  const { data: ticketData, isLoading } = useSwrData<TicketListResponse>(`tickets/${id}`); // 해당 수강권 정보
   const [issuedId, setIssuedId] = useState<number>(0);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -50,7 +50,7 @@ export const IssuedTicketList = () => {
               <p> </p>
             </div>
             {!isLoading &&
-              datas.map((v: Ticket_issued_list_datas) => {
+              datas.map((v: IssuedTicketListDatasType) => {
                 const { id: resId, owners, privateTutor, remainingTimes, startAt, endAt } = v;
                 // 해당 아이디로 수강권 상세 조회
                 return (

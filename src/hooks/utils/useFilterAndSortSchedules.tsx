@@ -1,12 +1,17 @@
 import { useMemo } from 'react';
 
-import { Schedules_list, Schedules_list_counseling, Schedules_list_private } from '@apis/schedulesAPIs';
+import {
+  SchedulesListResponse,
+  SchedulesListCounselingsType,
+  SchedulesListPrivateLessonsType,
+} from '@apis/types/schedulesTypes';
+
 import { useSwrData } from '@hooks/apis/useSwrData';
 
 export interface FilterAndSortSchedulesReturnType {
   sortedSchedules: (
-    | { type: string; schedule: Schedules_list_counseling }
-    | { type: string; schedule: Schedules_list_private }
+    | { type: string; schedule: SchedulesListCounselingsType }
+    | { type: string; schedule: SchedulesListPrivateLessonsType }
   )[];
   canceledCount: number;
   totalSchedules: number;
@@ -22,7 +27,7 @@ export const useFilterAndSortSchedules = (
   selectedDate: string,
   filterId: number = 0
 ): FilterAndSortSchedulesReturnType => {
-  const { data } = useSwrData<Schedules_list>(`schedules?from=${selectedDate}&to=${selectedDate}`);
+  const { data } = useSwrData<SchedulesListResponse>(`schedules?from=${selectedDate}&to=${selectedDate}`);
 
   const result = useMemo(() => {
     if (!data)

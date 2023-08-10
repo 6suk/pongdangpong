@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
-import { Ticket_response, tickets_list } from '@apis/ticketsAPIs';
+import { TicketListResponse } from '@apis/types/ticketsTypes';
 import { TicketIcon } from '@assets/icons/indexIcons';
 import { Button } from '@components/common/Button';
 import { useRequests } from '@hooks/apis/useRequests';
@@ -12,10 +12,10 @@ import { TicketItem } from './TicketItem';
 
 export const TicketList = () => {
   const navigate = useNavigate();
-  const { data, isError, isLoading } = useSwrData<{ tickets: Ticket_response[] }>(tickets_list.url);
+  const { data, isError, isLoading } = useSwrData<{ tickets: TicketListResponse[] }>('tickets');
   const [searchParams, setSearchParams] = useSearchParams();
   const isActivePath = searchParams.get('isActive') === 'true' || searchParams.get('isActive') === null;
-  const [tickets, setTickets] = useState<Ticket_response[]>([]);
+  const [tickets, setTickets] = useState<TicketListResponse[]>([]);
   const { request } = useRequests();
 
   useEffect(() => {
@@ -23,8 +23,8 @@ export const TicketList = () => {
   }, [data]);
 
   // 판매중, 판매종료로 받는 API가 없어 직접 데이터 조작
-  const activeList = useMemo(() => tickets?.filter((v: Ticket_response) => v.isActive === true) || [], [tickets]);
-  const noneActiveList = useMemo(() => tickets.filter((v: Ticket_response) => v.isActive !== true) || [], [tickets]);
+  const activeList = useMemo(() => tickets?.filter((v: TicketListResponse) => v.isActive === true) || [], [tickets]);
+  const noneActiveList = useMemo(() => tickets.filter((v: TicketListResponse) => v.isActive !== true) || [], [tickets]);
   const displayedList = useMemo(() => {
     if (isActivePath === false) return noneActiveList;
     else return activeList;
@@ -53,14 +53,14 @@ export const TicketList = () => {
   };
 
   const ticketStatus = async (id: number) => {
-    const ticket = tickets.find((ticket: Ticket_response) => ticket.id === id);
+    const ticket = tickets.find((ticket: TicketListResponse) => ticket.id === id);
     if (ticket?.isActive) {
       await deactivateTicket(id);
     } else {
       await activateTicket(id);
     }
 
-    const updatedTickets = tickets.map((ticket: Ticket_response) => {
+    const updatedTickets = tickets.map((ticket: TicketListResponse) => {
       if (ticket.id === id) {
         return {
           ...ticket,
@@ -78,7 +78,7 @@ export const TicketList = () => {
         url: `tickets/${ticketId}`,
         method: 'delete',
       });
-      const updatedTickets = tickets.filter((ticket: Ticket_response) => ticket.id !== ticketId);
+      const updatedTickets = tickets.filter((ticket: TicketListResponse) => ticket.id !== ticketId);
       setTickets(updatedTickets);
     } catch (error) {
       console.error('티켓 삭제 요청 실패:', error);
@@ -108,7 +108,7 @@ export const TicketList = () => {
         {!isLoading && (
           <TicketWrap>
             {Array.from({ length: displayedList.length }, (_, i) => displayedList[displayedList.length - 1 - i]).map(
-              (ticket: Ticket_response) => {
+              (ticket: TicketListResponse) => {
                 return (
                   <TicketItem key={ticket.id} deleteTicket={deleteTicket} ticket={ticket} ticketStatus={ticketStatus} />
                 );

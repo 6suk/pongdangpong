@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { MemberSearchType, SearchResponse, UserType, UsersSearchType } from '@apis/types/searchTypes';
 import { ArrowIcon, MemberIcon, SearchIcon } from '@assets/icons/indexIcons';
 import { Modal } from '@components/common/Modal';
 import { useSwrData } from '@hooks/apis/useSwrData';
@@ -16,14 +17,12 @@ import { ModalSearchTop, Searchbar } from '@styles/common/SearchBarStyle';
 import { ModalList, ModalListTop } from '@styles/modal/modalStyle';
 import { formatPhoneNumber } from '@utils/formatPhoneNumber';
 
-import { MemberSearchType, UserType, UsersSearchType } from '../../apis/schedulesAPIs';
-
 export interface MemberOrUserSearchModalProps {
   type: 'USER' | 'MEMBER';
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const dataGetKey = {
+const dataGetKey: Record<'USER' | 'MEMBER', keyof SearchResponse> = {
   MEMBER: 'members',
   USER: 'users',
 };
@@ -37,17 +36,13 @@ export const MemberOrUserSearchModal = ({ type, setIsOpen }: MemberOrUserSearchM
   const dispatch = useDispatch();
   const [requestURL, setrequestURL] = useState<string | null>(null);
   const [query, setQuery] = useState<string>('');
-  const { data, isLoading } = useSwrData(requestURL);
-  const requestData = data?.[dataGetKey[type]];
+  const { data, isLoading } = useSwrData<SearchResponse>(requestURL);
+  const requestData = data?.[dataGetKey[type]] as MemberSearchType[] | UsersSearchType[];
 
-  /* type이 'USER'일 때만 isActive가 true인 항목을 필터링 */
   const filteredData = requestData
-    ? requestData.filter((v: MemberSearchType | UsersSearchType) => {
-        if (type === 'USER' && isUsersSearchType(v)) {
-          return v.isActive;
-        }
-        return true;
-      })
+    ? type === 'USER'
+      ? (requestData as UsersSearchType[]).filter(v => isUsersSearchType(v) && v.isActive)
+      : (requestData as MemberSearchType[])
     : [];
 
   /* 페이지 네이션 */

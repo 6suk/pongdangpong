@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import { MemberListDatasType } from '@apis/membersAPIs';
+import { MemberListDatasType } from '@apis/types/membersTypes';
 import { MemberIcon } from '@assets/icons/indexIcons';
 import { DetailButton } from '@styles/common/buttonStyle';
 import { formatTimestampDot } from '@utils/schedules/formatTimestamp';

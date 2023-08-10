@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { AxiosError } from 'axios';
 import { mutate } from 'swr';
 
-import { auth_logout } from '@apis/authAPIs';
+import { AuthLogoutPath } from '@apis/types/authTypes';
 import axiosInstance from '@apis/axiosInstance';
 import { clearTokens, setTokens } from '@stores/tokenSilce';
 
@@ -44,7 +44,7 @@ export const useAuth = () => {
   const clearCache = () => mutate(() => true, undefined, { revalidate: false });
 
   const logout = useCallback(async () => {
-    const { url, method } = auth_logout;
+    const { url, method } = AuthLogoutPath;
     setIsLoading(true);
     try {
       await axiosInstance[method](url);

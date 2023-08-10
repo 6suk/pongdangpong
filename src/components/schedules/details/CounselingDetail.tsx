@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { Schedules_detail_counseling } from '@apis/schedulesAPIs';
+import { CounselingResponse } from '@apis/types/schedulesTypes';
 import { BackIcon, MemberIcon } from '@assets/icons/indexIcons';
 import { NoticeModal } from '@components/common/NoticeModal';
 import { useSwrData } from '@hooks/apis/useSwrData';
@@ -23,7 +23,7 @@ export const CounselingDetail = () => {
   const { data, isLoading } = useSwrData(pathname);
   const [isOpenCancelModal, setIsOpenCancelModal] = useState(false);
   const { createdAt, createdBy, startAt, endAt, memo, counselor, client, counselingRecord } =
-    (data as Schedules_detail_counseling) || {};
+    (data as CounselingResponse) || {};
   const [isRecordOpen, setIsRecordOpen] = useState(false);
   const { isErrorModalOpen, closeErrorModal, handleModalNotice, errorModal } = useErrorModal();
 
@@ -148,7 +148,7 @@ export const CounselingDetail = () => {
         {/* 상담기록 등록 모달 */}
         {isRecordOpen && (
           <CounselingRecordFormModal
-            data={data as Schedules_detail_counseling}
+            data={data as CounselingResponse}
             handleModalNotice={handleModalNotice}
             setIsOpen={setIsRecordOpen}
           />

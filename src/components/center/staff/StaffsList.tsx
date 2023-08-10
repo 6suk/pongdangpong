@@ -24,7 +24,7 @@ export const StaffsList = () => {
         <StaffsTop>
           <div>
             <h3>
-              직원 리스트 <span className="highlight">3</span>
+              직원 리스트 <span className="highlight">{data?.meta.totalCount || 0}</span>
             </h3>
           </div>
           <div className="sort-and-btn">

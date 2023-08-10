@@ -23,7 +23,7 @@
 
 <div align="center">
 
-| 🐱 고예림(6suk) | 🐹 방수빈(bang-wol) | 🐻‍❄️ 김형진(hjkimw) |
+| [🐱 고예림(6suk)](https://github.com/6suk) | [🐹 방수빈(bang-wol)](https://github.com/bang-wol) | [🐻‍❄️ 김형진(hjkimw)](https://github.com/hjkimw) |
 | --- | --- | --- |
 | <img src="https://avatars.githubusercontent.com/u/110910042?v=4" width="200"> | <img src="https://avatars.githubusercontent.com/u/102708198?v=4" width="200"> | <img src="https://avatars.githubusercontent.com/u/108564335?v=4" width="200"> |
 </div>
@@ -103,7 +103,7 @@ password: team13!!
 
 - **개인수업 / 상담 일정 추가**
   
-  ![개인수업 추가](https://github.com/hjkimw/pongdangpong-readme/assets/108564335/583f7c4d-a030-4f00-a888-49ed536d3742)
+  ![개인수업 추가](https://github.com/pie-sfac/1-13-pongDangPong/assets/108564335/911c67a2-9f8d-445b-8145-5b363675455c)
   ![상담일정 추가](https://github.com/hjkimw/pongdangpong-readme/assets/108564335/7274cc5a-b9c1-45f9-97c9-77cb49e4b585)
 <br/>
 

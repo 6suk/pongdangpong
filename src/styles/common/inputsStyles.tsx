@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import arrow from '@assets/icons/selectArrow.svg';
+import arrow from '@assets/icons/common/selectArrow.svg';
 import theme from '@styles/theme';
 
 const Label = styled.label`

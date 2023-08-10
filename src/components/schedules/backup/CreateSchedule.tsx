@@ -3,7 +3,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-import Profile from '@/assets/icons/Profile.svg';
+import Profile from '@/assets/icons/common/Profile.svg';
 import { MemberIcon, UserIcon } from '@assets/icons/indexIcons';
 import { Button } from '@components/common/Button';
 import { Modal } from '@components/common/Modal';

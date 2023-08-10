@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
 
-import Profile from '@/assets/icons/Profile.svg';
+import Profile from '@/assets/icons/common/Profile.svg';
 import theme from '@styles/theme';
 
 export const FormGridContainer = styled.div`

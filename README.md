@@ -4,7 +4,7 @@
   
 # 💧 Team Pongdangpong
 
-![Logo](https://github.com/hjkimw/pongdangpong-readme/assets/108564335/160b407b-944d-401f-8a51-19eabb60a05d)
+![Logo](https://github.com/pie-sfac/1-13-pongDangPong/assets/108564335/ba13fdbd-3950-4ecd-87b7-eb9eb0b7187e)
 <br/>
 
 `직원/회원관리`, `수강권 관리`, `수업/상담 예약 일정관리` 등 <br/>
@@ -77,7 +77,8 @@ password: team13!!
 <br/>
 
 ## 📈 프로젝트 다이어그램
-<img width="1920" alt="프로젝트 다이어그램" src="https://github.com/hjkimw/1-13-pongDangPong/assets/108564335/529b6320-eda9-47af-a717-9fe5e9aa7b97">
+
+<img width="1920" alt="프로젝트 다이어그램" src="https://github.com/pie-sfac/1-13-pongDangPong/assets/108564335/b6a62f66-ab7a-494d-b83b-f542d8b50c8f">
 
 <br/>
 <br/>
@@ -85,14 +86,14 @@ password: team13!!
 ## ⚙️ 페이지 기능
 
 ### 1. 홈
-  ![home](https://github.com/hjkimw/pongdangpong-readme/assets/108564335/257c606a-9cf7-467a-af8e-15107b11f259)
+  ![home](https://github.com/pie-sfac/1-13-pongDangPong/assets/108564335/9c0ae9cc-bb75-47cd-8ae6-a65e9a1d5bc4)
 <br/>
 <br/>
 
 ### 2. 🔓 로그인
-  ![logi](https://github.com/hjkimw/pongdangpong-readme/assets/108564335/e8d70e0b-02ba-46d2-9191-d96f449d7ae3)
 
----
+![login](https://github.com/pie-sfac/1-13-pongDangPong/assets/108564335/d3de29b2-7019-4ddb-8d9f-02c0ac662ee6)
+
 <br/>
 
 ### 3. 🗓️ 일정관리
@@ -104,7 +105,8 @@ password: team13!!
 - **개인수업 / 상담 일정 추가**
   
   ![개인수업 추가](https://github.com/pie-sfac/1-13-pongDangPong/assets/108564335/911c67a2-9f8d-445b-8145-5b363675455c)
-  ![상담일정 추가](https://github.com/hjkimw/pongdangpong-readme/assets/108564335/7274cc5a-b9c1-45f9-97c9-77cb49e4b585)
+
+  ![상담일정 추가](https://github.com/pie-sfac/1-13-pongDangPong/assets/108564335/4be968d6-9ffb-41ef-bbd6-5e8c5edc397f)  
 <br/>
 
 - **개인수업 - 출석 및 결석**
@@ -126,18 +128,20 @@ password: team13!!
 - **필수값 유효성 검사**
   
   ![필수값유효성검증](https://github.com/6suk/Today-I-Learned/assets/110910042/162db5af-7874-4e71-82c0-05c33f132fa3)
-
 ---
 <br/>
 
 ### 3. 💁 회원관리
 - **회원 검색조회 및 등록**
   
-  ![Aug-10-2023 18-50-47](https://github.com/hjkimw/pongdangpong-readme/assets/108564335/f0670732-0df1-42e8-acf8-677e7183a8ae)
+  ![회원 검색조회 및 등록](https://github.com/pie-sfac/1-13-pongDangPong/assets/108564335/12f0c6fd-a4be-452b-b6b7-cafeee4cc8f3)
 
 - **회원정보 수정, 회원 수강권 관리 및 부여**
   
-  ![회원관리 부여](https://github.com/hjkimw/pongdangpong-readme/assets/108564335/9866be68-2979-4d86-aeec-770b7593f429)
+  ![회원정보 수정](https://github.com/pie-sfac/1-13-pongDangPong/assets/108564335/69588b9e-59d1-4269-9746-a59f4776ce1d)
+  
+  ![회원 수강권 관리 및 부여 ](https://github.com/pie-sfac/1-13-pongDangPong/assets/108564335/3abbcc93-565d-4998-a26c-6f1d3ed4bcdd)
+
 ---
 <br/>
 
@@ -145,21 +149,22 @@ password: team13!!
  
 - **수강권 추가, 수정, 삭제 및 판매가능 여부 설정**
   
-  ![Aug-10-2023 19-23-47](https://github.com/hjkimw/pongdangpong-readme/assets/108564335/39875254-c099-4373-abf0-90d76d414c9f)
+  ![수강권 추가 수정 삭제 및 판매가능 여부](https://github.com/pie-sfac/1-13-pongDangPong/assets/108564335/27ad7507-54a4-43db-87e9-f42d0298fafd)
 
 - **직원 등록 및 편집**
   
-  ![ㅁㅇㅁ](https://github.com/hjkimw/pongdangpong-readme/assets/108564335/fb37aca6-ddc2-4b95-a911-bbc53c365335)
+  ![직원등록 및 편집](https://github.com/pie-sfac/1-13-pongDangPong/assets/108564335/e63b8457-d160-46df-b0b6-273a9d8fde79)
 
 - **센터관련 정보 표기**
   
-  ![Screen Shot 2023-08-10 at 16 14 11 PM](https://github.com/hjkimw/pongdangpong-readme/assets/108564335/263245ac-0710-4496-ab52-40c2618eb8ba)
+  ![센터관련 정보 표기](https://github.com/pie-sfac/1-13-pongDangPong/assets/108564335/c6a65125-2deb-46a8-aa9d-547d5d7c46a8)
+
 ---
 <br/>
 
 ### 6. 😄 마이페이지
 
-![Screen Shot 2023-08-10 at 17 50 39 PM](https://github.com/hjkimw/pongdangpong-readme/assets/108564335/1e53d399-1f58-4d6a-a2e8-ee072dcad903)
+![마이페이지](https://github.com/pie-sfac/1-13-pongDangPong/assets/108564335/9dd681e8-8b5d-431a-b53a-7bca2f397c58)
 
 <br/>
 

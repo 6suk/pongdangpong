@@ -1,92 +1,135 @@
-import { styled } from 'styled-components';
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
-import { Ticket_response } from '@apis/ticketsAPIs';
-import theme from '@styles/theme';
+import { TicketListResponse } from '@apis/types/ticketsTypes';
+import { TicketIcon } from '@assets/icons/indexIcons';
+import { Button } from '@components/common/Button';
+import { useRequests } from '@hooks/apis/useRequests';
+import { useSwrData } from '@hooks/apis/useSwrData';
+import { NoneDisplay, TicketContainer, TicketWrap, Top } from '@styles/common/ticketsStyle';
 
-import { TicketContainer, TicketItem, TicketWrap } from './TicketItem';
+import { TicketItem } from './TicketItem';
 
 export const TicketList = () => {
+  const navigate = useNavigate();
+  const { data, isError, isLoading } = useSwrData<{ tickets: TicketListResponse[] }>('tickets');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const isActivePath = searchParams.get('isActive') === 'true' || searchParams.get('isActive') === null;
+  const [tickets, setTickets] = useState<TicketListResponse[]>([]);
+  const { request } = useRequests();
+
+  useEffect(() => {
+    setTickets(data?.tickets || []);
+  }, [data]);
+
+  // 판매중, 판매종료로 받는 API가 없어 직접 데이터 조작
+  const activeList = useMemo(() => tickets?.filter((v: TicketListResponse) => v.isActive === true) || [], [tickets]);
+  const noneActiveList = useMemo(() => tickets.filter((v: TicketListResponse) => v.isActive !== true) || [], [tickets]);
+  const displayedList = useMemo(() => {
+    if (isActivePath === false) return noneActiveList;
+    else return activeList;
+  }, [isActivePath, activeList, noneActiveList]);
+
+  const activateTicket = async (ticketId: number) => {
+    try {
+      await request({
+        url: `tickets/${ticketId}/activate`,
+        method: 'post',
+      });
+    } catch (error) {
+      console.error('판매 가능 요청 실패:', error);
+    }
+  };
+
+  const deactivateTicket = async (ticketId: number) => {
+    try {
+      await request({
+        url: `tickets/${ticketId}/deactivate`,
+        method: 'post',
+      });
+    } catch (error) {
+      console.error('판매 종료 요청 실패:', error);
+    }
+  };
+
+  const ticketStatus = async (id: number) => {
+    const ticket = tickets.find((ticket: TicketListResponse) => ticket.id === id);
+    if (ticket?.isActive) {
+      await deactivateTicket(id);
+    } else {
+      await activateTicket(id);
+    }
+
+    const updatedTickets = tickets.map((ticket: TicketListResponse) => {
+      if (ticket.id === id) {
+        return {
+          ...ticket,
+          isActive: !ticket.isActive,
+        };
+      }
+      return ticket;
+    });
+    setTickets(updatedTickets);
+  };
+
+  const deleteTicket = async (ticketId: number) => {
+    try {
+      await request({
+        url: `tickets/${ticketId}`,
+        method: 'delete',
+      });
+      const updatedTickets = tickets.filter((ticket: TicketListResponse) => ticket.id !== ticketId);
+      setTickets(updatedTickets);
+    } catch (error) {
+      console.error('티켓 삭제 요청 실패:', error);
+    }
+  };
+
   return (
     <>
       <TicketContainer>
         <Top>
-          <div className="flex flex-row gap-2">
-            <p>판매중</p>
-            <p>판매종료</p>
+          <div className="ticket-active">
+            <Link className={isActivePath ? 'on' : ''} to="?isActive=true">{`판매중(${activeList.length})`}</Link>
+            <Link
+              className={!isActivePath ? 'on' : ''}
+              to="?isActive=false"
+            >{`판매종료(${noneActiveList.length})`}</Link>
           </div>
-          <Button>+ 수강권 추가</Button>
+          <Button
+            onClick={() => {
+              navigate('new');
+            }}
+          >
+            + 수강권 추가
+          </Button>
         </Top>
-        <TicketWrap>
-          {dummyData.map(ticket => {
-            return <TicketItem key={ticket.id} ticket={ticket} />;
-          })}
-        </TicketWrap>
+
+        {!isLoading && (
+          <TicketWrap>
+            {Array.from({ length: displayedList.length }, (_, i) => displayedList[displayedList.length - 1 - i]).map(
+              (ticket: TicketListResponse) => {
+                return (
+                  <TicketItem key={ticket.id} deleteTicket={deleteTicket} ticket={ticket} ticketStatus={ticketStatus} />
+                );
+              }
+            )}
+          </TicketWrap>
+        )}
+
+        {isError && <p>{isError.response?.data.message}</p>}
       </TicketContainer>
+
+      {displayedList.length === 0 && (
+        <>
+          <NoneDisplay>
+            <div className="none-d-icon">
+              <TicketIcon />
+            </div>
+            <div className="text">{isActivePath ? '판매 중인' : '판매 종료된'} 수강권이 없습니다!</div>
+          </NoneDisplay>
+        </>
+      )}
     </>
   );
 };
-
-const Button = styled.button`
-  transition: all 0.4s;
-  font-size: ${theme.font.sub};
-  background-color: ${theme.colors.pri[500]};
-  color: ${theme.colors.White};
-  width: 146px;
-  box-sizing: border-box;
-  padding-inline: 2rem;
-  padding-block: 0.8rem;
-  border-radius: 6px;
-
-  &:hover {
-    background-color: ${theme.colors.pri[400]};
-  }
-`;
-
-const Top = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding-block: 2rem;
-  align-items: center;
-  margin-inline: 1rem;
-  align-items: flex-end;
-`;
-
-const dummyData: Array<Ticket_response> = [
-  {
-    id: 0,
-    title: '[이벤트 특가] 설맞이 30%할인 [이벤트 특가] 설맞이 30%할인',
-    lessonType: 'SINGLE',
-    defaultCount: 3, // 기본 횟수
-    dailyCountLimit: 60, // 수업 시간 (분)
-    isActive: true, // 판매중
-    issuedTicketCount: 3, // 부여 (건)
-    defaultTerm: 1,
-    defaultTermUnit: 'DAY', // 수강권 기간
-    maxServiceCount: 0, // 서비스 횟수
-  },
-  {
-    id: 1,
-    title: '[이벤트 특가] 설맞이 30%할인',
-    lessonType: 'SINGLE',
-    defaultCount: 6, // 기본 횟수
-    dailyCountLimit: 120, // 수업 시간 (분)
-    isActive: true, // 판매중
-    issuedTicketCount: 1, // 부여 (건)
-    defaultTerm: 3,
-    defaultTermUnit: 'DAY', // 수강권 기간
-    maxServiceCount: 0, // 서비스 횟수
-  },
-  {
-    id: 2,
-    title: '[이벤트 특가] 설맞이 30%할인',
-    lessonType: 'SINGLE',
-    defaultCount: 4, // 기본 횟수
-    dailyCountLimit: 30, // 수업 시간 (분)
-    isActive: true, // 판매중
-    issuedTicketCount: 2, // 부여 (건)
-    defaultTerm: 2,
-    defaultTermUnit: 'DAY', // 수강권 기간
-    maxServiceCount: 0, // 서비스 횟수
-  },
-];

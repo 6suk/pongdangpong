@@ -1,19 +1,19 @@
 import { Link } from 'react-router-dom';
 
-import { Ticket_response, tickets_list } from '@apis/ticketsAPIs';
+import { TicketListResponse } from '@apis/types/ticketsTypes';
 import { STicketItem } from '@components/samples/STicketItem';
 
 import { useSwrData } from '@hooks/apis/useSwrData';
 
 export const STicketList = () => {
-  const { data, isError, isLoading } = useSwrData(tickets_list.url);
+  const { data, isError, isLoading } = useSwrData('tickets');
 
   return (
     <>
       <Link to={'/sample/create'}>{'티겟 생성 >'}</Link>
       <ul style={{ listStyle: 'none' }}>
         {!isLoading &&
-          data.tickets.map((ticket: Ticket_response) => {
+          data.tickets.map((ticket: TicketListResponse) => {
             return <STicketItem key={ticket.id} ticket={ticket} />;
           })}
       </ul>

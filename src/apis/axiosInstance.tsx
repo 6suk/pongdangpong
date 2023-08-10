@@ -2,12 +2,10 @@ import axios from 'axios';
 
 import { store } from '@stores/store';
 
-import { auth_admin_login, auth_logout, auth_refresh_tokens } from './authAPIs';
-
-export const BASE_URL = 'http://223.130.161.221/api/v1';
+import { AuthAdminLoginPath, AuthLogoutPath, AuthRefreshTokenPath, BasePath } from './types/authTypes';
 
 const axiosInstance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: BasePath,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -19,11 +17,11 @@ axiosInstance.interceptors.request.use(
 
     switch (config.url) {
       // id, pwd 필요
-      case auth_admin_login.url:
+      case AuthAdminLoginPath.url:
         break;
 
       // Refresh Token 필요
-      case auth_logout.url:
+      case AuthLogoutPath.url:
         if (refreshToken) config.headers.Authorization = `Bearer ${refreshToken}`;
         break;
 
@@ -36,16 +34,15 @@ axiosInstance.interceptors.request.use(
   },
   error => Promise.reject(error)
 );
-
 axiosInstance.interceptors.response.use(
   response => response,
 
   async error => {
-    const { url, method } = auth_refresh_tokens;
+    const { url, method } = AuthRefreshTokenPath;
     const originalRequest = error.config;
     const storeRefreshToken = store.getState().tokens.refreshToken;
 
-    if (error.response.status === 401 && storeRefreshToken && !originalRequest._retry) {
+    if (error.response && error.response.status === 401 && storeRefreshToken && !originalRequest._retry) {
       console.log('Token Expiration');
       try {
         const response = await axios[method](

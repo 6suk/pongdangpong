@@ -1,7 +1,9 @@
+import { useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
 
-import { PropsState } from '@/app/App';
+import { RootState } from '@stores/store';
 
-export const PublicRoute: React.FC<PropsState> = ({ isLogin }) => {
-  return isLogin ? <Navigate to={'/me'} /> : <Outlet />;
+export const PublicRoute = () => {
+  const isLogin = useSelector((state: RootState) => state.tokens.isLogin);
+  return isLogin ? <Navigate to={'/home'} /> : <Outlet />;
 };

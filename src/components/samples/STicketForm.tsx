@@ -2,23 +2,22 @@ import { useNavigate } from 'react-router-dom';
 
 import { AxiosError } from 'axios';
 
-import { tickets_create } from '@apis/ticketsAPIs';
+import { TicketFormInit } from '@apis/types/ticketsTypes';
 import { useRequests } from '@hooks/apis/useRequests';
 import useInput from '@hooks/utils/useInput';
 
 export const STicketForm = () => {
   const { request, isLoading, error } = useRequests();
-  const [inputValues, onChange, inputReset] = useInput({ ...tickets_create.body });
+  const [inputValues, onChange, inputReset] = useInput({ ...TicketFormInit });
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { url, method } = tickets_create;
 
     try {
       await request({
-        url,
-        method,
+        url: `tickets`,
+        method: 'post',
         body: inputValues,
       });
       navigate('/sample/list');

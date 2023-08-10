@@ -48,10 +48,15 @@ const colors = {
   'Gray-50': '#1d1d1d',
 
   Black: '#141212',
+  DarkGray: '#4b5563',
   Dim: '40, 40, 40',
   White: '#ffffff',
   Error: '#df291d',
+  ErrorRGB: '223, 41, 29',
   Positive: '#1fb881',
+  inputBorder: '#e5e7eb;',
+  RedBorder: '#DF291D',
+  RedBack: '#FF7B72',
 };
 
 const fontSize = {
@@ -68,6 +73,7 @@ const font = {
   title: '1.5rem', // 24
   subTitle: '1.125rem', // 18
   body: '1rem', // 16
+  subBody: '0.9375rem', //15
   sub: '.875rem', // 14
   sm: '.75rem', // 12
 };

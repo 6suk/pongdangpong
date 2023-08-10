@@ -4,8 +4,8 @@ import axiosInstance from '@apis/axiosInstance';
 
 const fetcher = (url: 'string') => axiosInstance.get(url).then(response => response.data);
 
-export const useSwrData = (url: string) => {
-  const { data, error } = useSWR(url, fetcher, {
+export function useSwrData<T>(url: string | null) {
+  const { data, error } = useSWR<T>(url, fetcher, {
     shouldRetryOnError: false,
   });
 
@@ -14,4 +14,4 @@ export const useSwrData = (url: string) => {
     isLoading: !error && !data,
     isError: error,
   };
-};
+}

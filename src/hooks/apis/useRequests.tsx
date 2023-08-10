@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react';
 import { AxiosError } from 'axios';
 import { mutate } from 'swr';
 
-import { method } from '@apis/apiInterfaces';
+import { method } from '@apis/types/apiInterfaces';
 import axiosInstance from '@apis/axiosInstance';
 
 export interface reqDataState {
@@ -23,18 +23,20 @@ export const useRequests = () => {
     setIsLoading(true);
     try {
       const requestPath = path ? url + path : url;
-
+      let response;
       switch (method) {
         case 'get':
         case 'delete':
-          await axiosInstance[method](requestPath);
+          response = await axiosInstance[method](requestPath);
           break;
         case 'put':
         case 'post':
-          await axiosInstance[method](requestPath, body);
+          response = await axiosInstance[method](requestPath, body);
           break;
       }
+      if (path) mutate(requestPath);
       mutate(url);
+      return response;
     } catch (error) {
       if (error instanceof AxiosError) setError(error);
       throw error;

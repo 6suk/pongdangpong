@@ -1,98 +1,89 @@
-import React,{useState, useEffect} from 'react';
+import { useEffect, useState } from 'react';
+
+import { useSelector } from 'react-redux';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+
 import { styled } from 'styled-components';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { PropsState } from '@/app/App';
+
+import { MeType } from '@apis/types/authTypes';
+import { Logo, MemberIcon, Notifications } from '@assets/icons/indexIcons';
 import { useAuth } from '@hooks/apis/useAuth';
-import { useSwrData } from '@hooks/apis/useSwrData';
-import { me_info, Me_info_response } from '@apis/meApis';
-import { Notifications } from '@assets/icons/indexIcons';
+import { RootState } from '@stores/store';
 import theme from '@styles/theme';
 
-export const GlobalHeader: React.FC<PropsState> = props => {
-  const { isLogin } = props;
-
-  const { url } = me_info;
-  const { data } = useSwrData(url);
-
+export const GlobalHeader = () => {
+  const data = useSelector((state: RootState) => state.tokens.user) as MeType;
   const { logout } = useAuth();
-
   const navigate = useNavigate();
-
   const handleLogOutClick = () => {
     logout();
   };
 
-  const {
-    name = '',
-  } = data ?? ({} as Me_info_response);
-
-  const globalMenu =[
-    {id:"Home",  content:"홈", path:"/"},
-    {id:"Schedule", content:"일정관리", path:"schedule"},
-    {id:"Member", content:"회원관리", path:"members"},
-    {id:"Center", content:"센터관리", path:"center", initPath:"center/tickets"},
-    {id:"Mypage", content:"마이페이지", path:"me"},
-  ]
+  const globalMenu = [
+    { id: 'Home', content: '홈', path: 'home' },
+    { id: 'Schedules', content: '일정관리', path: 'schedules' },
+    { id: 'Member', content: '회원관리', path: 'members' },
+    { id: 'Center', content: '센터관리', path: 'center', initPath: 'center/tickets' },
+    { id: 'Mypage', content: '마이페이지', path: 'mypage' },
+  ];
 
   const [active, setActive] = useState('');
+  const pathName = useLocation().pathname;
 
-  const pathName =  useLocation().pathname;
+  const checkActive = (path: string) => {
+    const target = active.split('/').filter(el => el);
 
-  const checkActive = (path: string) =>{
-    const target = active.split('/').filter(el=> el);
-    
-    if (path === "/" && !target.length) return "on";
-    else if (target.includes(path)) return "on";
-  }
+    if (path === '/' && !target.length) return 'on';
+    else if (target.includes(path)) return 'on';
+  };
 
-  useEffect(()=>{
-      setActive(pathName);      
-  },[active, pathName])
+  useEffect(() => {
+    setActive(pathName);
+  }, [active, pathName]);
 
-  const activeTarget = (path : string) => () => navigate(path);
+  const activeTarget = (path: string) => () => navigate(path);
 
   return (
     <S.header>
       <div className="container">
         <h1 className="logo">
           <Link to={'/'}>
-            <img src="/imgs/logo.png" alt="로고" />
+            <Logo />
           </Link>
         </h1>
 
-      <S.nav theme={theme}>
-        <S.menu>
-          {
-            isLogin && globalMenu.map(({id, content, path, initPath})=>{              
-              return(
-                <li key={id} onClick={activeTarget(initPath ? initPath : path)} className={checkActive(path)}>
-                  {content}
-                </li>
-              )
-            })
-          }
-        </S.menu>
+        <S.nav theme={theme}>
+          <S.menu>
+            {data &&
+              globalMenu.map(({ id, content, path, initPath }) => {
+                return (
+                  // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
+                  <li key={id} className={checkActive(path)} onClick={activeTarget(initPath ? initPath : path)}>
+                    {content}
+                  </li>
+                );
+              })}
+          </S.menu>
 
-        <ul>
-          <li className="user">
-            {isLogin ? 
-              <> 
-              <div className="pic">
-                <img src="/imgs/profile.png" alt="프로필 사진" />
-              </div>
-              <span className='userName'>
-                {name} 님 
-              </span>
-              <button type="button" onClick={handleLogOutClick} style={{cursor:"pointer"}} >          
-                로그아웃      
-              </button>
-              <Notifications style={{cursor:"pointer"}}/>
-              </> 
-              : 
-              <div>비로그인 상태</div>}
-          </li>
-        </ul>
-      </S.nav>
+          <ul>
+            <li className="user">
+              {data ? (
+                <>
+                  <div className="pic">
+                    <MemberIcon width={'30px'} />
+                  </div>
+                  <span className="userName">{data.name} 님</span>
+                  <button type="button" onClick={handleLogOutClick}>
+                    로그아웃
+                  </button>
+                  <Notifications style={{ cursor: 'pointer', width: '20px' }} />
+                </>
+              ) : (
+                <div></div>
+              )}
+            </li>
+          </ul>
+        </S.nav>
       </div>
     </S.header>
   );
@@ -103,7 +94,7 @@ const S = {
     width: 100%;
     height: 80px;
     background-color: #fff;
-    border-bottom: 2px solid #e7e7e7;
+    border-bottom: 1px solid #e7e7e7;
     position: sticky;
     left: 0;
     top: 0;
@@ -118,6 +109,13 @@ const S = {
       align-items: center;
       justify-content: space-between;
     }
+
+    .logo {
+      svg {
+        height: 25px;
+        width: auto;
+      }
+    }
   `,
   nav: styled.nav`
     width: 100%;
@@ -125,8 +123,8 @@ const S = {
     display: flex;
     align-items: center;
     justify-content: space-between;
-  
-    .user{
+
+    .user {
       height: 100%;
       display: flex;
       align-items: center;
@@ -143,17 +141,18 @@ const S = {
       }
 
       button {
-        padding: 6px 20px;
+        padding: 6px 12px;
         background-color: ${({ theme }) => theme.colors['Gray-800']};
         color: ${({ theme }) => theme.colors['Pri-400']};
         border-radius: 6px;
         margin-right: 40px;
         position: relative;
         transition: all 0.4s;
+        font-size: ${theme.font.sub};
 
         &:hover {
-          background-color: ${({ theme }) => theme.colors['Pri-400']};
-          color: ${({ theme }) => theme.colors['Gray-800']};
+          background-color: ${theme.colors.gray[700]};
+          font-weight: 600;
         }
 
         &::after {
@@ -169,20 +168,19 @@ const S = {
         }
       }
     }
-      
   `,
   menu: styled.ul`
     display: flex;
 
-    & > li{
+    & > li {
       margin: 0 14px;
-      cursor:pointer;
+      cursor: pointer;
       position: relative;
-          
-          &.on{
-            color: ${({theme})=> theme.colors["Pri-400"]};
-            font-weight: 600;
-          }
+
+      &.on {
+        color: ${({ theme }) => theme.colors['Pri-400']};
+        font-weight: 600;
+      }
     }
-  `
-}
+  `,
+};

@@ -1,16 +1,19 @@
-import { styled } from 'styled-components';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { LessonTypeEnum, TermUnitEnum, Ticket_response } from '@apis/ticketsAPIs';
-import ticketIcon from '@assets/icons/ticket/ticketIcon.svg';
-import ticketIcon_w from '@assets/icons/ticket/ticketIcon_w.svg';
-
-import { theme } from '@styles/theme';
+import { LessonTypeEnum, TermUnitEnum, TicketListResponse } from '@apis/types/ticketsTypes';
+import { TicketIcon } from '@assets/icons/indexIcons';
+import { Modal } from '@components/common/Modal';
+import { TS } from '@styles/common/ticketsStyle';
+import { ModalButton } from '@styles/modal/modalStyle';
 
 interface TicketItemProps {
-  ticket: Ticket_response;
+  ticket: TicketListResponse;
+  ticketStatus: (id: number) => void;
+  deleteTicket: (id: number) => void;
 }
-
-export const TicketItem = ({ ticket }: TicketItemProps) => {
+export const TicketItem = ({ ticket, ticketStatus, deleteTicket }: TicketItemProps) => {
+  const navigate = useNavigate();
   const {
     id,
     title,
@@ -18,10 +21,26 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
     isActive,
     issuedTicketCount,
     defaultCount,
-    dailyCountLimit,
     defaultTerm,
     defaultTermUnit,
+    bookableLessons,
   } = ticket;
+
+  const duration = bookableLessons[0].duration;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isCannotDeleteModalOpen, setIsCannotDeleteModalOpen] = useState(false);
+
+  const handleDelete = async (ticketId: number) => {
+    if (issuedTicketCount !== 0) {
+      setIsCannotDeleteModalOpen(true);
+      setIsDeleteModalOpen(false);
+      return;
+    }
+    await deleteTicket(ticketId);
+    setIsDeleteModalOpen(false);
+  };
+
   return (
     <>
       <TS.Ticket $isActive={isActive}>
@@ -32,7 +51,7 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
               <p className="tag">{LessonTypeEnum[lessonType]}</p>
             </div>
             <div className="icon">
-              <img alt="ticket-icon" src={isActive ? ticketIcon : ticketIcon_w} />
+              <TicketIcon />
             </div>
           </TS.LeftTitle>
           <TS.LeftInfo>
@@ -42,15 +61,17 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
             </dl>
             <dl>
               <dt>수강권 횟수</dt>
-              <dd>{`${defaultCount}회`}</dd>
+              <dd>{defaultCount ? `${defaultCount}회` : '무제한'}</dd>
             </dl>
             <dl>
               <dt>수업 시간</dt>
-              <dd>{`${dailyCountLimit}분`}</dd>
+              <dd>{`${duration}분`}</dd>
             </dl>
             <dl>
               <dt>수강권 기간</dt>
-              <dd>{`${defaultTerm}${TermUnitEnum[defaultTermUnit]}`}</dd>
+              <dd>
+                {defaultTerm && defaultTermUnit ? `${defaultTerm}${TermUnitEnum[defaultTermUnit]}` : '소진시 까지'}
+              </dd>
             </dl>
           </TS.LeftInfo>
         </TS.TicketLeft>
@@ -59,182 +80,108 @@ export const TicketItem = ({ ticket }: TicketItemProps) => {
           <button
             type="button"
             onClick={() => {
-              console.log(id + ' 수강권 부여내역 클릭');
+              navigate(`${id}/issued-tickets`);
             }}
           >
             수강권 부여내역
           </button>
+
+          {isActive ? (
+            <button
+              type="button"
+              onClick={e => {
+                e.stopPropagation();
+                setIsModalOpen(true);
+              }}
+            >
+              판매종료
+            </button>
+          ) : (
+            <>
+              {' '}
+              <button
+                type="button"
+                onClick={e => {
+                  e.stopPropagation();
+                  ticketStatus(id);
+                  navigate(`?isActive=true`);
+                }}
+              >
+                판매가능
+              </button>
+            </>
+          )}
+
           <button
             type="button"
             onClick={() => {
-              console.log(id + ' 판매종료 클릭');
+              navigate(`${id}/edit`);
             }}
           >
-            판매종료
+            수정
           </button>
           <button
             type="button"
             onClick={() => {
-              console.log(id + ' 수정/삭제');
+              setIsDeleteModalOpen(true);
             }}
           >
-            수정 / 삭제
+            삭제
           </button>
         </TS.TicketRight>
       </TS.Ticket>
+
+      {isModalOpen && (
+        <Modal setIsOpen={setIsModalOpen}>
+          <h3>수강권 판매 종료</h3>
+          <p>
+            해당 수강권을 판매 종료하시겠습니까?
+            <br />
+            새로운 회원에게 부여할 수 없습니다.
+          </p>
+          <div className="buttonWrapper">
+            <ModalButton
+              $isPrimary
+              onClick={() => {
+                ticketStatus(id);
+                navigate(`?isActive=false`);
+                setIsModalOpen(false);
+              }}
+            >
+              확인
+            </ModalButton>
+            <ModalButton onClick={() => setIsModalOpen(false)}>취소</ModalButton>
+          </div>
+        </Modal>
+      )}
+
+      {isDeleteModalOpen && (
+        <Modal setIsOpen={setIsDeleteModalOpen}>
+          <h3>수강권 삭제</h3>
+          <p>수강권을 삭제하시겠습니까?</p>
+          <div className="buttonWrapper">
+            <ModalButton $isPrimary onClick={() => handleDelete(id)}>
+              확인
+            </ModalButton>
+            <ModalButton onClick={() => setIsDeleteModalOpen(false)}>취소</ModalButton>
+          </div>
+        </Modal>
+      )}
+
+      {isCannotDeleteModalOpen && (
+        <Modal setIsOpen={setIsCannotDeleteModalOpen}>
+          <h3>삭제 불가</h3>
+          <p>
+            부여내역이 있는 수강권은 <br />
+            삭제할 수 없습니다.
+            <br />
+            판매 종료로 진행해 주세요.
+          </p>
+          <div className="buttonWrapper">
+            <ModalButton onClick={() => setIsCannotDeleteModalOpen(false)}>확인</ModalButton>
+          </div>
+        </Modal>
+      )}
     </>
   );
-};
-
-export const TicketContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  max-width: 1024px;
-  width: 100%;
-`;
-
-export const TicketWrap = styled.div`
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(430px, 480px));
-  gap: 2rem;
-  justify-content: center;
-  padding-inline: 1rem;
-`;
-
-export const TS = {
-  Ticket: styled.div<{ $isActive: boolean }>`
-    box-sizing: border-box;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    aspect-ratio: 12/6;
-    border: 1px solid ${theme.colors.gray[700]};
-    border-radius: 10px;
-    overflow: hidden;
-
-    * {
-      color: ${props => !props.$isActive && `${theme.colors.gray[500]} !important`};
-    }
-    .ticket-left {
-      background-color: ${props => !props.$isActive && `${theme.colors.gray[800]} !important`};
-    }
-    .ticket-right button {
-      background-color: ${props => !props.$isActive && `${theme.colors.gray[700]} !important`};
-      color: ${props => !props.$isActive && `${theme.colors.gray[400]} !important`};
-
-      &:hover {
-        background-color: ${props => !props.$isActive && `${theme.colors.gray[600]} !important`};
-      }
-    }
-    .tag,
-    .icon {
-      background-color: ${props => !props.$isActive && `${theme.colors.gray[700]} !important`};
-    }
-  `,
-
-  TicketLeft: styled.div`
-    box-sizing: border-box;
-    display: flex;
-    flex: 6.5;
-    justify-content: space-between;
-    flex-direction: column;
-    padding: 1.5rem;
-  `,
-
-  LeftTitle: styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-
-    .title {
-      max-width: 210px;
-      display: flex;
-      gap: 0.5rem;
-      flex-direction: column;
-      overflow: hidden;
-      min-width: 0;
-
-      h3 {
-        font-weight: 700;
-        font-size: ${theme.font.body};
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        width: 100%;
-      }
-
-      .tag {
-        font-size: ${theme.font.sm};
-        padding-block: 0.2rem;
-        padding-inline: 0.5rem;
-        border-radius: 5px;
-        background-color: ${theme.colors.pri[900]};
-        color: ${theme.colors.pri[500]};
-        width: fit-content;
-      }
-    }
-
-    .icon {
-      flex-shrink: 0;
-      background-color: ${theme.colors.pri[900]};
-      padding: 10px; // This controls the size of the circle
-      border-radius: 50%; // This makes it round
-      display: inline-flex; // This helps center the image in the circle
-      justify-content: center;
-      align-items: center;
-      aspect-ratio: 1 / 1;
-
-      img {
-        width: 100%; // Fill the parent
-      }
-    }
-  `,
-
-  LeftInfo: styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    font-size: ${theme.font.sub};
-
-    dl {
-    }
-
-    dt,
-    dd {
-      display: inline-block;
-    }
-
-    dt {
-      width: 100px;
-      color: ${theme.colors.gray[500]};
-    }
-  `,
-
-  TicketRight: styled.div`
-    box-sizing: border-box;
-    flex: 3.5;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 100%;
-    font-size: ${theme.font.sub};
-    border-left: 1px solid ${theme.colors.gray[700]};
-    min-width: 0;
-    flex-shrink: 0;
-
-    button {
-      flex: 1;
-      width: 100%;
-      background-color: ${theme.colors.pri[900]};
-      color: ${theme.colors.pri[400]};
-      transition: all 0.4s;
-    }
-
-    button:hover {
-      background-color: ${theme.colors.pri[800]};
-      font-weight: 600;
-    }
-  `,
 };

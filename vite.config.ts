@@ -8,6 +8,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), svgr()],
+  base: '/pongdongpong/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
@@ -18,6 +19,7 @@ export default defineConfig({
       '@hooks': path.resolve(__dirname, 'src/hooks'),
       '@app': path.resolve(__dirname, 'src/app'),
       '@styles': path.resolve(__dirname, 'src/styles'),
+      '@utils': path.resolve(__dirname, 'src/utils'),
     },
   },
 });

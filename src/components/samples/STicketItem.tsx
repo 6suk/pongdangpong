@@ -2,14 +2,14 @@ import { useCallback, useState } from 'react';
 
 import { Link } from 'react-router-dom';
 
-import { Ticket_response, tickets_delete } from '@apis/ticketsAPIs';
+import { TicketListResponse } from '@apis/types/ticketsTypes';
 
 import { useRequests } from '@hooks/apis/useRequests';
 
 import { STicketUpdate } from './STicketUpdate';
 
 export interface TicketProps {
-  ticket: Ticket_response;
+  ticket: TicketListResponse;
 }
 
 export const STicketItem = ({ ticket }: TicketProps) => {
@@ -30,10 +30,9 @@ export const STicketItem = ({ ticket }: TicketProps) => {
   const handleDelete = useCallback(
     (id: number) => async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      const { method, url } = tickets_delete;
       await request({
-        url,
-        method,
+        method: 'delete',
+        url: 'tickets',
         path: `/${id}`,
       });
     },

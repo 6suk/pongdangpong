@@ -69,12 +69,11 @@ export const Mypage = () => {
 };
 
 export const MyInfoWrap = styled.div`
-  width: 100%;
-  margin-top: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  width: 100%;
   max-width: 1024px;
+  gap: 3rem;
 
   .header {
     display: flex;
@@ -86,6 +85,7 @@ export const MyInfoWrap = styled.div`
     .title {
       display: flex;
       align-items: center;
+      margin-inline: 1rem;
     }
 
     h3 {
@@ -104,6 +104,7 @@ const MyInfoBar = styled.div`
   border-radius: 6px;
   font-size: 16px;
   justify-content: space-between;
+  margin-inline: 1rem;
 
   .infos {
     display: flex;
@@ -154,6 +155,7 @@ const MyInfoBar = styled.div`
   .data {
     font-size: 14px;
     color: ${theme.colors.pri[600]};
+    font-weight: 600;
   }
 `;
 
@@ -163,6 +165,7 @@ export const MyInfoBox = styled.div`
   border-radius: 6px;
   font-size: 15px;
   margin-top: -1rem;
+  margin-inline: 1rem;
 
   .table {
     width: 100%;

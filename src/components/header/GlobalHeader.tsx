@@ -20,7 +20,7 @@ export const GlobalHeader = () => {
   };
 
   const globalMenu = [
-    { id: 'Home', content: '홈', path: '/' },
+    { id: 'Home', content: '홈', path: 'home' },
     { id: 'Schedules', content: '일정관리', path: 'schedules' },
     { id: 'Member', content: '회원관리', path: 'members' },
     { id: 'Center', content: '센터관리', path: 'center', initPath: 'center/tickets' },

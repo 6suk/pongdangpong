@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 
-import { Ticket_issued_detail_res } from '@apis/ticketsAPIs';
+import { IssuedTicketDetailResponse } from '@apis/types/ticketsTypes';
 import { useSwrData } from '@hooks/apis/useSwrData';
 import { ValidationProps } from '@hooks/utils/useValidation';
 
@@ -13,7 +13,7 @@ const IssueTicketErrorForm: ValidationProps[] = [
 
 export const IssueTicketEditForm = () => {
   const { issuedTicketId } = useParams();
-  const { data } = useSwrData<Ticket_issued_detail_res>(`issued-tickets/${issuedTicketId}`);
+  const { data } = useSwrData<IssuedTicketDetailResponse>(`issued-tickets/${issuedTicketId}`);
   const requestInfo: requestInfoType = {
     url: `issued-tickets/${issuedTicketId}`,
     method: 'put',

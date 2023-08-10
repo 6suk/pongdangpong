@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import { MeSummaryType } from '@apis/authAPIs';
+import { MeSummaryType } from '@apis/types/authTypes';
 import ad01 from '@assets/icons/home/ad01.svg';
 import ad02 from '@assets/icons/home/ad02.svg';
 import ad03 from '@assets/icons/home/ad03.svg';
@@ -54,27 +54,27 @@ export const HomeSummary = () => {
         <div className="ad-wrapper">
           <button
             className="ad-btn"
+            style={{ backgroundImage: `url(${ad01})` }}
             type="button"
             onClick={() => {
               window.open('https://piehealthcare.notion.site/b9c6e60b1b7b4162a1669cf6efb424c8', '_blank');
             }}
-            style={{ backgroundImage: `url(${ad01})` }}
           ></button>
           <button
             className="ad-btn"
+            style={{ backgroundImage: `url(${ad02})` }}
             type="button"
             onClick={() => {
               window.open('https://cirius.or.kr/index.html', '_blank');
             }}
-            style={{ backgroundImage: `url(${ad02})` }}
           ></button>
           <button
             className="ad-btn"
+            style={{ backgroundImage: `url(${ad03})` }}
             type="button"
             onClick={() => {
               window.open('https://bbedashop.com/', '_blank');
             }}
-            style={{ backgroundImage: `url(${ad03})` }}
           ></button>
         </div>
         <div className="btn-wrapper">

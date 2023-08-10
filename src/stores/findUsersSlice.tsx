@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { AvailableTicketsOwnerType } from '@apis/schedulesAPIs';
+import { AvailableTicketsOwnerType } from '@apis/types/schedulesTypes';
 
 interface UserAndMemberState {
   id?: number;

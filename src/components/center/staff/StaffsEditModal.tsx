@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 import { mutate } from 'swr';
 
-import { StaffDetailResponseType } from '@apis/staffsAPIs';
+import { StaffsDetailResponse } from '@apis/types/staffsTypes';
 import { Button } from '@components/common/Button';
 import { InputField } from '@components/common/InputField';
 import { Modal } from '@components/common/Modal';
@@ -19,7 +19,7 @@ interface StaffEditPropsType {
 }
 
 export const StaffsEditModal = ({ setIsOpen, id }: StaffEditPropsType) => {
-  const { data, isLoading } = useSwrData<StaffDetailResponseType>(`staffs/${id}`);
+  const { data, isLoading } = useSwrData<StaffsDetailResponse>(`staffs/${id}`);
   const { name, phone, loginId } = data ?? {};
   const [inputValues, onChange, inputReset] = useInput({
     name: name || '',

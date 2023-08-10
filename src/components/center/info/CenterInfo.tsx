@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import { MeCenterType } from '@apis/authAPIs';
+import { MeCenterType } from '@apis/types/authTypes';
 import { MemberIcon, BackIcon } from '@assets/icons/indexIcons';
 import { useSwrData } from '@hooks/apis/useSwrData';
 import { BackButton } from '@styles/common/buttonStyle';

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { Schedules_detail_private } from '@apis/schedulesAPIs';
+import { PrivateLessonResponse } from '@apis/types/schedulesTypes';
 import { BackIcon } from '@assets/icons/indexIcons';
 import { NoticeModal } from '@components/common/NoticeModal';
 import { useSwrData } from '@hooks/apis/useSwrData';
@@ -21,7 +21,7 @@ export const PrivateLessonDetail = () => {
   const { data, isLoading } = useSwrData(pathname);
   const [isOpenCancelModal, setIsOpenCancelModal] = useState(false);
   const { createdAt, createdBy, startAt, endAt, attendanceHistories, tutor, issuedTicket, memo } =
-    (data as Schedules_detail_private) || {};
+    (data as PrivateLessonResponse) || {};
   const membersCount = attendanceHistories?.length || '0';
   const [isMemoModalOpen, setIsMemoModalOpen] = useState(false);
 

@@ -3,11 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import {
-  PrivateLessonInitInput,
-  PrivatelessonEditRequest,
-  PrivatelessonRequest,
-  Schedules_detail_private,
-} from '@apis/schedulesAPIs';
+  PrivateLessonFormInit,
+  PrivateLessonEditRequestBody,
+  PrivateLessonRequestBody,
+  PrivateLessonResponse,
+} from '@apis/types/schedulesTypes';
+
 import { Button } from '@components/common/Button';
 import { DisabledFindUserButton } from '@components/common/DisabledFindUserButton';
 import { MemberOrUserSearchButton } from '@components/common/FindUserButton';
@@ -49,14 +50,14 @@ export const PrivateLessonForm = ({ isEditMode = false }: SchedulesFormProps) =>
   const dispatch = useDispatch();
   const { request } = useRequests();
   const { pathname } = useLocation();
-  const [inputValues, onChange, inputReset] = useInput(PrivateLessonInitInput);
+  const [inputValues, onChange, inputReset] = useInput(PrivateLessonFormInit);
   const { validationErrors, checkForErrors, updateValidationError, isSubmit } = useValidation();
   const { USER, MEMBER } = useSelector((state: RootState) => state.findUsers);
   const selectedDate = useSelector((state: RootState) => state.calendar.checkDate);
   const { isErrorModalOpen, errorModal, handleAxiosError, handleModalNotice, closeErrorModal } = useErrorModal();
 
   /** 수정 시 전달받을 데이터 (edit) */
-  const editInitializeData = (data: Schedules_detail_private) => {
+  const editInitializeData = (data: PrivateLessonResponse) => {
     const {
       startAt,
       endAt,
@@ -83,9 +84,9 @@ export const PrivateLessonForm = ({ isEditMode = false }: SchedulesFormProps) =>
   /** 수정 시 전송할 데이터 (edit) */
   const editLesson = async () => {
     const { date, startTime, endTime, memo: inputMemo } = inputValues;
-    const { startAt, endAt, memo } = data as Schedules_detail_private;
+    const { startAt, endAt, memo } = data as PrivateLessonResponse;
 
-    const requestValues: PrivatelessonEditRequest = {
+    const requestValues: PrivateLessonEditRequestBody = {
       memo: inputMemo,
       startAt: combineDateTime(date, startTime),
       endAt: combineDateTime(date, endTime),
@@ -101,7 +102,7 @@ export const PrivateLessonForm = ({ isEditMode = false }: SchedulesFormProps) =>
   const createLesson = async () => {
     const { date, startTime, endTime } = inputValues;
     if (USER.id !== undefined && MEMBER.id !== undefined) {
-      const requestValues: PrivatelessonRequest = {
+      const requestValues: PrivateLessonRequestBody = {
         userId: USER.id,
         issuedTicketId: inputValues.issuedTicketId,
         startAt: combineDateTimeToISO(date, startTime),
@@ -126,7 +127,7 @@ export const PrivateLessonForm = ({ isEditMode = false }: SchedulesFormProps) =>
   };
 
   /** 서버 전송 (new / edit) */
-  const requestServer = async (requestData: PrivatelessonRequest | PrivatelessonEditRequest) => {
+  const requestServer = async (requestData: PrivateLessonRequestBody | PrivateLessonEditRequestBody) => {
     try {
       await request({
         url: extractBasePath(pathname),

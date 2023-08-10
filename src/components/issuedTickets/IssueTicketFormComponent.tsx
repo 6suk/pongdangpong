@@ -3,14 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { MemberDetailResponse } from '@apis/types/membersTypes';
 import {
-  MemberAddTicketRequest,
-  MemberDetailResponse,
-  MemberEditTicketRequest,
-  MemberTicketAddFormType,
-  MemberTicketEditFormType,
-} from '@apis/membersAPIs';
-import { TermUnitEnum, ticket_defaultTermUnit } from '@apis/ticketsAPIs';
+  IssueTicketForMemberRequest,
+  IssueTicketForMemberEditRequest,
+  IssueTicketForMemberFormType,
+  IssueTicketForMemberEditFormType,
+  TermUnitEnum,
+  TicketDefaultTermUnitType,
+} from '@apis/types/ticketsTypes';
 import { Button } from '@components/common/Button';
 import { MemberOrUserSearchButton } from '@components/common/FindUserButton';
 import { InputField } from '@components/common/InputField';
@@ -26,8 +27,10 @@ import { FormButtonGroup, FormGridContainer, InputCountStyle, LabelNotice, Unit 
 import { SC } from '@styles/common/inputsStyles';
 import { FormContentWrap, TopTitleWrap } from '@styles/common/wrapStyle';
 
-type InitialFormType<T extends boolean> = T extends true ? MemberTicketEditFormType : MemberTicketAddFormType;
-type RequestType<T extends boolean> = T extends true ? MemberEditTicketRequest : MemberAddTicketRequest;
+type InitialFormType<T extends boolean> = T extends true
+  ? IssueTicketForMemberEditFormType
+  : IssueTicketForMemberFormType;
+type RequestType<T extends boolean> = T extends true ? IssueTicketForMemberEditRequest : IssueTicketForMemberRequest;
 
 export interface requestInfoType {
   url: string;
@@ -49,7 +52,7 @@ export interface TicketInfo {
   defaultTerm: string | number;
   startAt?: string;
   endAt?: string;
-  defaultTermUnit: ticket_defaultTermUnit;
+  defaultTermUnit: TicketDefaultTermUnitType;
   defaultCount: string | number;
   maxServiceCount: number;
   serviceCount?: number;

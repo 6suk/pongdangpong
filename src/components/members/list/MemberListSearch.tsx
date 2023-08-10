@@ -1,11 +1,13 @@
 import { useEffect, useMemo } from 'react';
 
-import { MemberListDatasType, MemberSearchResponse } from '@apis/membersAPIs';
+import { MemberListDatasType } from '@apis/types/membersTypes';
+
+import { SearchResponse } from '@apis/types/searchTypes';
 
 import { MemberListitem } from './MemberListItem';
 
 interface MemberListSearchPropsType {
-  data: MemberSearchResponse;
+  data: SearchResponse;
   setTotalCount: React.Dispatch<React.SetStateAction<number>>;
   query: {
     currentPage: number;

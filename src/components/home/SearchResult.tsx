@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { SearchResponse, SearchMemberType, SearchUserType } from '@apis/searchAPIs';
+import { MemberSearchType, SearchResponse, UsersSearchType } from '@apis/types/searchTypes';
 import { ArrowIcon, BackIcon } from '@assets/icons/indexIcons';
 import { Loading } from '@components/common/Loading';
 import { useSwrData } from '@hooks/apis/useSwrData';
@@ -68,9 +68,9 @@ export const SearchResult = () => {
               </div>
               {paginatedItems.map(item => {
                 return 'loginId' in item ? (
-                  <UserItem key={item.id} user={item as SearchUserType} />
+                  <UserItem key={item.id} user={item as UsersSearchType} />
                 ) : (
-                  <MemberItem key={item.id} member={item as SearchMemberType} />
+                  <MemberItem key={item.id} member={item as MemberSearchType} />
                 );
               })}
               {totalPages > 1 && (

@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Ticket_response, tickets_put } from '@apis/ticketsAPIs';
+import { TicketListResponse } from '@apis/types/ticketsTypes';
 import { TicketFormComponent, TicketFormDataType } from '@components/center/ticket/TicketFormComponent';
 import { NoticeModal } from '@components/common/NoticeModal';
 import { useRequests } from '@hooks/apis/useRequests';
@@ -10,7 +10,7 @@ import { useErrorModal } from '@hooks/utils/useErrorModal';
 export const TicketEditForm = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { data, isLoading } = useSwrData<Ticket_response>(`tickets/${id}`);
+  const { data, isLoading } = useSwrData<TicketListResponse>(`tickets/${id}`);
   const { request } = useRequests();
   const { closeErrorModal, errorModal, handleAxiosError, isErrorModalOpen } = useErrorModal();
 
@@ -19,9 +19,8 @@ export const TicketEditForm = () => {
   }
 
   const onSubmit = async (data: TicketFormDataType) => {
-    const { url, method } = tickets_put;
     try {
-      await request({ url, method, path: `/${id}`, body: data });
+      await request({ url: 'tickets', method: 'put', path: `/${id}`, body: data });
       navigate('/center/tickets');
     } catch (error) {
       handleAxiosError(error, `티켓 수정 오류`);

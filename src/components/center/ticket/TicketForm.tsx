@@ -1,7 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 
-import { tickets_create } from '@apis/ticketsAPIs';
-
 import { TicketFormComponent, TicketFormDataType } from '@components/center/ticket/TicketFormComponent';
 import { NoticeModal } from '@components/common/NoticeModal';
 import { useRequests } from '@hooks/apis/useRequests';
@@ -17,11 +15,10 @@ export const TicketForm = () => {
   const { closeErrorModal, errorModal, handleAxiosError, isErrorModalOpen } = useErrorModal();
 
   const onSubmit = async (data: TicketFormDataType) => {
-    const { url, method } = tickets_create;
     try {
       await request({
-        url,
-        method,
+        url: `tickets`,
+        method: 'post',
         body: data,
       });
       navigate('/center/tickets');

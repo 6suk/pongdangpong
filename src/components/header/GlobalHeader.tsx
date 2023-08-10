@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { styled } from 'styled-components';
 
-import { MeType } from '@apis/authAPIs';
+import { MeType } from '@apis/types/authTypes';
 import { Logo, MemberIcon, Notifications } from '@assets/icons/indexIcons';
 import { useAuth } from '@hooks/apis/useAuth';
 import { RootState } from '@stores/store';

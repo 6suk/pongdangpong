@@ -1,4 +1,4 @@
-import { UsersSearchType } from '@apis/schedulesAPIs';
+import { UsersSearchType } from '@apis/types/searchTypes';
 
 /** 직원 리스트 필터
  * isActive = true

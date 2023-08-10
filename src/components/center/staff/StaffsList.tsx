@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
-import { Staffs_list_dats_type, staffs_list_type } from '@apis/staffsAPIs';
+import { StaffsListDatasType, StaffsListResponse } from '@apis/types/staffsTypes';
 import { MemberIcon } from '@assets/icons/indexIcons';
 import { StaffsEditModal } from '@components/center/staff/StaffsEditModal';
 import { Button } from '@components/common/Button';
@@ -12,7 +12,7 @@ import { StaffsTop } from '@styles/pages/staffListStyle';
 
 export const StaffsList = () => {
   const navigate = useNavigate();
-  const { data, isLoading } = useSwrData<staffs_list_type>(`staffs${window.location.search}`);
+  const { data, isLoading } = useSwrData<StaffsListResponse>(`staffs${window.location.search}`);
   const [searchParams, setSearchParams] = useSearchParams();
   const isActivePath = searchParams.get('sort') === 'createdAt,Desc';
   const [isOpen, setIsOpen] = useState(false);
@@ -52,7 +52,7 @@ export const StaffsList = () => {
               <p></p>
             </div>
             {!isLoading &&
-              data?.datas.map((v: Staffs_list_dats_type) => {
+              data?.datas.map((v: StaffsListDatasType) => {
                 const { id, name, phone, memberCount, rating, memo } = v;
                 return (
                   // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions

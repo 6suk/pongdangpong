@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState, useMemo } from 'react';
 
-import { Schedules_list } from '@apis/schedulesAPIs';
+import { SchedulesListResponse } from '@apis/types/schedulesTypes';
+
 import { CalendarEventType } from '@components/schedules/calendar/Calendar';
 import { useSwrData } from '@hooks/apis/useSwrData';
 import { formatDateString } from '@utils/schedules/formatTimestamp';
@@ -13,7 +14,7 @@ import { getEventCountbyDate } from '@utils/schedules/getEventCountbyDate';
  * @returns
  */
 export const useEventCount = (pathWithSearch: string | null, tutorId: number = 0) => {
-  const { data } = useSwrData<Schedules_list>(pathWithSearch);
+  const { data } = useSwrData<SchedulesListResponse>(pathWithSearch);
   const [events, setEvents] = useState<{ [key: string]: CalendarEventType }>({});
 
   const allSchedules = useMemo(() => {

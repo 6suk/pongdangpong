@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 import { mutate } from 'swr';
 
-import { Roles } from '@apis/staffsAPIs';
+import { RolesRoleType } from '@apis/types/staffsTypes';
 import { Button } from '@components/common/Button';
 import { Modal } from '@components/common/Modal';
 import { useRequests } from '@hooks/apis/useRequests';
@@ -75,7 +75,7 @@ export const StaffsRoleModal: React.FC<StaffsRoleModalProps> = ({ setIsOpen, set
           <h3>역할 설정</h3>
           <div className={`checkBox-wrap ${checkedValues.length < 1 && 'error'}`}>
             {!rolesIsLoading &&
-              roles.map((v: Roles) => {
+              roles.map((v: RolesRoleType) => {
                 const { id, name, description } = v;
                 return (
                   <div key={id} className="chekBox-item">

@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react';
 import { AxiosError } from 'axios';
 import { mutate } from 'swr';
 
-import { method } from '@apis/apiInterfaces';
+import { method } from '@apis/types/apiInterfaces';
 import axiosInstance from '@apis/axiosInstance';
 
 export interface reqDataState {

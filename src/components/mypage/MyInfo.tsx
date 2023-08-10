@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { MeType } from '@apis/authAPIs';
+import { MeType } from '@apis/types/authTypes';
 import { BackIcon, MemberIcon } from '@assets/icons/indexIcons';
 import { RootState } from '@stores/store';
 import { BackButton } from '@styles/common/buttonStyle';

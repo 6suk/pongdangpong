@@ -2,7 +2,13 @@ import { useEffect, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import { LessonTypeEnum, TermUnitEnum, Ticket_put_body, Tickets_request, tickets_create } from '@apis/ticketsAPIs';
+import {
+  LessonTypeEnum,
+  TermUnitEnum,
+  TicketFormInit,
+  TicketPutRequestBody,
+  TicketsRequestBody,
+} from '@apis/types/ticketsTypes';
 import { Button } from '@components/common/Button';
 import { InputField } from '@components/common/InputField';
 import { SelectField } from '@components/common/SelectField';
@@ -20,10 +26,10 @@ import {
 import { SC } from '@styles/common/inputsStyles';
 import { FormContentWrap, TopTitleWrap } from '@styles/common/wrapStyle';
 
-export type TicketFormDataType = Tickets_request | Ticket_put_body;
+export type TicketFormDataType = TicketsRequestBody | TicketPutRequestBody;
 
 export interface TicketFormProps {
-  initialData?: Tickets_request;
+  initialData?: TicketsRequestBody;
   onSubmit: (data: TicketFormDataType) => Promise<void> | void;
   isEditMode?: boolean;
 }
@@ -45,7 +51,7 @@ const errorCheckEditInput: ValidationProps[] = [
 ];
 
 export const TicketFormComponent: React.FC<TicketFormProps> = ({
-  initialData = tickets_create.body,
+  initialData = TicketFormInit,
   onSubmit,
   isEditMode = false,
 }) => {
@@ -71,9 +77,9 @@ export const TicketFormComponent: React.FC<TicketFormProps> = ({
           defaultTerm: inputValues.defaultTerm,
           defaultTermUnit: inputValues.defaultTermUnit,
           maxServiceCount: count,
-        } as Ticket_put_body;
+        } as TicketPutRequestBody;
       } else {
-        valuesCopy = { ...inputValues, maxServiceCount: count } as Tickets_request;
+        valuesCopy = { ...inputValues, maxServiceCount: count } as TicketsRequestBody;
       }
 
       const { termToggle, countToggle } = toggles;

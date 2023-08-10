@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useCallback, useEffect } from 'react';
 
 import { useLocation } from 'react-router-dom';
 
-import { CounselingRequest, Schedules_detail_counseling } from '@apis/schedulesAPIs';
+import { CounselingRequestBody, CounselingResponse } from '@apis/types/schedulesTypes';
 import { Button } from '@components/common/Button';
 import { Modal } from '@components/common/Modal';
 import { useRequests } from '@hooks/apis/useRequests';
@@ -16,7 +16,7 @@ const initCounselingRecordContent = {
 
 interface CounselingRecordFormProps {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-  data: Schedules_detail_counseling;
+  data: CounselingResponse;
   handleModalNotice: (title: string, content: string) => void;
 }
 
@@ -47,7 +47,7 @@ export const CounselingRecordFormModal = ({ setIsOpen, data, handleModalNotice }
   };
 
   const requestRecordContent = async () => {
-    const requestValues: CounselingRequest = {
+    const requestValues: CounselingRequestBody = {
       userId: counselor.id,
       clientName: client.name,
       clientPhone: client.phone,

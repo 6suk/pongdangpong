@@ -1,45 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { SearchResponse, SearchMemberType, SearchUserType } from '@apis/searchAPIs';
 import { ArrowIcon, BackIcon } from '@assets/icons/indexIcons';
 import { Loading } from '@components/common/Loading';
 import { useSwrData } from '@hooks/apis/useSwrData';
 import { usePagination } from '@hooks/utils/usePagination';
 import { BackButton } from '@styles/common/buttonStyle';
 import { Pagination } from '@styles/common/paginaionStyle';
-import { BasicContainer, SearchListWrap, TopContainer } from '@styles/common/wrapStyle';
+import { BasicContainer } from '@styles/common/wrapStyle';
+import { SearchListWrap, TopContainer } from '@styles/pages/homeStyle';
 import { MemberTopTitle } from '@styles/pages/memberStyle';
 
-import { MemberItem, UserItem, SearchMemberType, SearchUserType } from './SearchItem';
-
-type SearchResponse = {
-  searchParam: {
-    query: string;
-    resources: string[];
-  };
-  members: {
-    id: number;
-    name: string;
-    phone: string;
-    sex: string;
-    birthDate: string;
-    createdAt: string;
-    updatedAt: string;
-    visitedAt: string;
-  }[];
-  users: {
-    id: number;
-    type: string;
-    loginId: string;
-    name: string;
-    phone: string;
-    isActive: boolean;
-    createdAt: string;
-    updatedAt: string;
-    lastLoginedAt: string;
-  }[];
-  message: string;
-};
+import { MemberItem, UserItem } from './SearchItem';
 
 export const SearchResult = () => {
   const navigate = useNavigate();

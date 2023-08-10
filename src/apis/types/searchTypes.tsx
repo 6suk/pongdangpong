@@ -10,9 +10,9 @@ export interface SearchResponse {
     query: string;
     resources: ['USER' | 'MEMBER'];
   };
-  members?: MemberSearchType[];
-  users?: UsersSearchType[];
-  message?: string;
+  members: MemberSearchType[];
+  users: UsersSearchType[];
+  message: string;
 }
 
 /** 회원 통합 검색 - USER */

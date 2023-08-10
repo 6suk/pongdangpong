@@ -9,7 +9,7 @@ import { useSwrData } from '@hooks/apis/useSwrData';
 import useInput from '@hooks/utils/useInput';
 import { SC } from '@styles/common/inputsStyles';
 import { Searchbar } from '@styles/common/SearchBarStyle';
-import { HomeSummaryWrap, SearchContainer } from '@styles/common/wrapStyle';
+import { HomeSummaryWrap, SearchContainer } from '@styles/pages/homeStyle';
 
 export const HomeSummary = () => {
   const { data, isLoading } = useSwrData(`me/summary`);

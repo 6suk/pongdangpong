@@ -41,12 +41,7 @@ npm install
 npm run dev
 ```
 
-<<<<<<< HEAD
-<br/>
-=======
-<br/>
-
-> > > > > > > 9560ca93e6706706a71b038c89758e98ca66df54
+  <br/>
 
 ## 🧪 테스트 계정
 
@@ -101,16 +96,9 @@ password: team13!!
 
 ![login](https://github.com/pie-sfac/1-13-pongDangPong/assets/108564335/d3de29b2-7019-4ddb-8d9f-02c0ac662ee6)
 
-<<<<<<< HEAD
-<br/>
-<br/>
-<br/>
-=======
-<br/>
-<br/>
-<br/>
-
-> > > > > > > 9560ca93e6706706a71b038c89758e98ca66df54
+  <br/>
+  <br/>
+  <br/>
 
 ## 3. 🗓️ 일정관리
 
@@ -124,16 +112,7 @@ password: team13!!
 
 ![개인수업 추가](https://github.com/pie-sfac/1-13-pongDangPong/assets/108564335/911c67a2-9f8d-445b-8145-5b363675455c)
 
-<<<<<<< HEAD
-<br/>
-=======
-<br/>
-
-![상담일정 추가](https://github.com/pie-sfac/1-13-pongDangPong/assets/108564335/4be968d6-9ffb-41ef-bbd6-5e8c5edc397f)
-
-<br/><br/>
-
-> > > > > > > 9560ca93e6706706a71b038c89758e98ca66df54
+  <br/>
 
 ![상담일정 추가](https://github.com/pie-sfac/1-13-pongDangPong/assets/108564335/4be968d6-9ffb-41ef-bbd6-5e8c5edc397f)
 

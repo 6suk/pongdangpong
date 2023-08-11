@@ -1,18 +1,25 @@
+<div align="center">
+
 # 💧 Team Pongdangpong
 
-<br/>
+  <br/>
 
-- 👋🏻 실제 서비스 중인 통증 관리 전문가들을 위한 올인원 고객 관리 전문 <a href = "https://play.google.com/store/apps/details?id=kr.piehealthcare.point.therapist&hl=ko&gl=KR">**포인티**( <img src="https://github.com/pie-sfac/1-13-pongDangPong/assets/108564335/ba13fdbd-3950-4ecd-87b7-eb9eb0b7187e" height='20px'> )</a> 앱의<br> **직원 / 회원관리**, **수강권 관리**, **수업 / 상담 예약 일정관리** 등의 전반적인 시스템을 **PC용 웹 서비스** 형태로 개발한 프로젝트입니다.
-- 🔗 [~~배포 URL~~](https://6suk.github.io/pongdangpong/) - `준비 중입니다!`
-- 📚 [**퐁당퐁 DOCS**](https://6suk.notion.site/65771394f5874be4a166db71e7e1e666?v=fc3e39784fd44538b46e9fc6ac98f2a5&pvs=4)
+실제 서비스 중인 통증 관리 전문가들을 위한 올인원 고객 관리 전문 <a href = "https://play.google.com/store/apps/details?id=kr.piehealthcare.point.therapist&hl=ko&gl=KR">**포인티**( <img src="https://github.com/pie-sfac/1-13-pongDangPong/assets/108564335/ba13fdbd-3950-4ecd-87b7-eb9eb0b7187e" height='20px'> )</a> 앱의<br> **직원 / 회원관리**, **수강권 관리**, **수업 / 상담 예약 일정관리** 등의 전반적인 시스템을<br>**PC용 웹 서비스** 형태로 개발한 프로젝트입니다.<br/><br/>
+🔗 [~~배포 URL (준비중)~~](https://6suk.github.io/pongdangpong/) / 📚 [**퐁당퐁 DOCS**](https://6suk.notion.site/65771394f5874be4a166db71e7e1e666?v=fc3e39784fd44538b46e9fc6ac98f2a5&pvs=4)
 
 <br/><br/><br/>
 
-## 😆 퐁당퐁 팀원 구성원
+  </div>
+
+  <div align="center">
+  
+### 😆 퐁당퐁 팀원 구성원
 
 | [🐱 고예림(6suk)](https://github.com/6suk)                                    | [🐹 방수빈(bang-wol)](https://github.com/bang-wol)                            | [🐻‍❄️ 김형진(hjkimw)](https://github.com/hjkimw)                                |
 | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
 | <img src="https://avatars.githubusercontent.com/u/110910042?v=4" width="200"> | <img src="https://avatars.githubusercontent.com/u/102708198?v=4" width="200"> | <img src="https://avatars.githubusercontent.com/u/108564335?v=4" width="200"> |
+
+  </div>
 
 <br/><br/><br/>
 
@@ -34,7 +41,7 @@ npm install
 npm run dev
 ```
 
-<br/>
+  <br/>
 
 ## 🧪 테스트 계정
 
@@ -72,7 +79,7 @@ password: team13!!
 
 ## 📈 프로젝트 다이어그램
 
-<img width="1920" alt="프로젝트 다이어그램" src="https://github.com/pie-sfac/1-13-pongDangPong/assets/108564335/b6a62f66-ab7a-494d-b83b-f542d8b50c8f">
+  <img width="1920" alt="프로젝트 다이어그램" src="https://github.com/pie-sfac/1-13-pongDangPong/assets/108564335/b6a62f66-ab7a-494d-b83b-f542d8b50c8f">
 
 <br/><br/>
 
@@ -89,9 +96,9 @@ password: team13!!
 
 ![login](https://github.com/pie-sfac/1-13-pongDangPong/assets/108564335/d3de29b2-7019-4ddb-8d9f-02c0ac662ee6)
 
-<br/>
-<br/>
-<br/>
+  <br/>
+  <br/>
+  <br/>
 
 ## 3. 🗓️ 일정관리
 
@@ -105,7 +112,7 @@ password: team13!!
 
 ![개인수업 추가](https://github.com/pie-sfac/1-13-pongDangPong/assets/108564335/911c67a2-9f8d-445b-8145-5b363675455c)
 
-<br/>
+  <br/>
 
 ![상담일정 추가](https://github.com/pie-sfac/1-13-pongDangPong/assets/108564335/4be968d6-9ffb-41ef-bbd6-5e8c5edc397f)
 

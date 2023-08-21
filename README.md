@@ -68,7 +68,7 @@ $ npm run dev
 
 ## 📈 프로젝트 다이어그램
 
-  <img width="1920" alt="프로젝트 다이어그램" src="https://github.com/pie-sfac/1-13-pongDangPong/assets/108564335/b6a62f66-ab7a-494d-b83b-f542d8b50c8f">
+  <img alt="프로젝트 다이어그램" src="https://github.com/pie-sfac/1-13-pongDangPong/assets/110910042/55dc4463-4bf7-46bc-a738-00f7a3f3d492">
 
 <br/><br/>
 

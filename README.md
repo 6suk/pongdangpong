@@ -7,12 +7,12 @@
 ### ◻ 기술 스택
 <img alt="" src ="https://img.shields.io/badge/TypeScript-3178C6.svg?&style=for-the-badge&logo=TypeScript&logoColor=white"/> <img alt="" src ="https://img.shields.io/badge/JavaScript-F7DF1E.svg?&style=for-the-badge&logo=JavaScript&logoColor=white"/> <img alt="" src ="https://img.shields.io/badge/react-61DAFB.svg?&style=for-the-badge&logo=react&logoColor=white"/> <img alt="" src ="https://img.shields.io/badge/redux-764ABC.svg?&style=for-the-badge&logo=redux&logoColor=white"/> <img alt="" src ="https://img.shields.io/badge/html5-E34F26.svg?&style=for-the-badge&logo=html5&logoColor=white"/> <img alt="" src ="https://img.shields.io/badge/css3-1572B6.svg?&style=for-the-badge&logo=css3&logoColor=white"/><br> <img alt="" src ="https://img.shields.io/badge/styledcomponents-DB7093.svg?&style=for-the-badge&logo=styledcomponents&logoColor=white"/> <img alt="" src ="https://img.shields.io/badge/ESLint-4B32C3.svg?&style=for-the-badge&logo=ESLint&logoColor=white"/> <img alt="" src ="https://img.shields.io/badge/vite-646CFF.svg?&style=for-the-badge&logo=vite&logoColor=white"/>
 ### ◻ 프로젝트 문서
-[**퐁당퐁 DOCS 노션**](https://6suk.notion.site/65771394f5874be4a166db71e7e1e666?v=fc3e39784fd44538b46e9fc6ac98f2a5&pvs=4)
+[**퐁당퐁 DOCS 노션**](https://6suk.notion.site/65771394f5874be4a166db71e7e1e666?v=fc3e39784fd44538b46e9fc6ac98f2a5&pvs=4) / [**퐁당퐁 Project**](https://github.com/orgs/pie-sfac/projects/2/views/1?groupedBy%5BcolumnId%5D=Assignees)
 </div>
 
 <br><br><br>
 
-## 🔗 배포 사이트 및 테스트 계정
+<!-- ## 🔗 배포 사이트 및 테스트 계정
 ### ◻ 배포 URL
 - [pongdangpong.vercel.app](https://pongdangpong.vercel.app/)
 ### ◻ 서버 통신을 위해 체크해주세요!
@@ -20,7 +20,7 @@
     ```
     chrome://settings/content/siteDetails?site=https://pongdangpong.vercel.app
     ```
-   
+
   - **방법 2** : 브라우저 `설정` 진입
     ```
     개인 정보 및 보안 > 하단 '추가 콘텐츠 설정' > 안전하지 않은 콘텐츠 > 'pongdangpong.vercel.app' 추가
@@ -38,20 +38,18 @@ $ npm install
 $ npm run dev
 ```
 
+<br/><br/><br/> -->
 
-
-
-<br/><br/><br/>
-  
 ## ⏰ 개발 기간 및 작업 관리
 
 - **1주차** : 다이어그램 작성, 태블릿에서 PC로 전환되는 디자인 전략 기획
 - **2주차** : 사용자 인증, API 커스텀 훅, 공통 컴포넌트 제작
 - **3주차** : 회원관리, 일정 및 상담 추가 기능 구현
 - **4주차** : 일정관리, 회원관리, 센터관리, 마이페이지 기능 구현 및 리팩토링
-<br/>
+  <br/>
 
 ## 📝 주요 개발 기능
+
 - 관리자 / 직원 로그인 기능
 - 회원 / 센터 수강권 / 회원 수강권 관리기능
 - 캘린더 및 일정 관리 기능
@@ -61,11 +59,10 @@ $ npm run dev
 
 ## 👋🏻 퐁당퐁 팀원 구성원 및 역할
 
-| 🐱 고예림 | 🐹 방수빈 | 🐻‍❄️ 김형진 |
-| :---: | :---: | :---: |
+|                                                    🐱 고예림                                                     |                             🐹 방수빈                              |                                                    🐻‍❄️ 김형진                                                    |
+| :--------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------: |
 | <img src="https://github.com/pie-sfac/1-13-pongDangPong/assets/110910042/6808128c-4d68-4d28-8cfb-9dbd2c6dffc4" > | <img src="https://avatars.githubusercontent.com/u/102708198?v=4" > | <img src="https://github.com/pie-sfac/1-13-pongDangPong/assets/110910042/0f725ffa-3dd0-44aa-ab22-2616a30ebcbc"> |
-| 로그인<br/>센터관리<br/>일정관리<br/>회원관리 | 홈<br/>센터관리<br/>일정관리<br/>마이페이지 | 회원관리<br/>공통네비 |
-
+|                                  로그인<br/>센터관리<br/>일정관리<br/>회원관리                                   |            홈<br/>센터관리<br/>일정관리<br/>마이페이지             |                                              회원관리<br/>공통네비                                              |
 
 <br/><br/><br/>
 

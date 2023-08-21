@@ -1,7 +1,10 @@
 # Created by https://www.toptal.com/developers/gitignore/api/node,window,macos,webstorm,vscode
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,window,macos,webstorm,vscode
 
-/dist
+dist/
+samples/
+.eslintignore
+.prettierignore
 
 ### macOS ###
 # General
@@ -9,6 +12,7 @@
 .AppleDouble
 .LSOverride
 .vscode
+dummydata.tsx
 
 # Icon must end with two \r
 Icon

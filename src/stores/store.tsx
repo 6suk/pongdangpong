@@ -1,12 +1,11 @@
 import { AnyAction, Middleware, combineReducers, configureStore } from '@reduxjs/toolkit';
-import logger from 'redux-logger';
-import { persistReducer } from 'redux-persist';
-import sessionStorage from 'redux-persist/lib/storage/session';
 
-import { counterReducer } from '@stores/counterSlice';
 import { menuReducer } from '@stores/menuSlice';
 import { calendarReducer } from '@stores/selectedDateSlice';
 import { tokenReducer } from '@stores/tokenSilce';
+import logger from 'redux-logger';
+import { persistReducer } from 'redux-persist';
+import sessionStorage from 'redux-persist/lib/storage/session';
 
 import { findUsersReducer } from './findUsersSlice';
 
@@ -17,7 +16,6 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 const reducers = combineReducers({
-  counter: counterReducer,
   tokens: tokenReducer,
   menu: menuReducer,
   calendar: calendarReducer,
